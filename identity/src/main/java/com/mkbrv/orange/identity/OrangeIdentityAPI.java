@@ -13,7 +13,7 @@ public class OrangeIdentityAPI {
     public static class Constants {
         static final String PARAM_RESPONSE_TYPE = "response_type";
         static final String PARAM_CLIENT_ID = "client_id";
-        static final String PARAM_REDIRECT_URI = "redirect_urI";
+        static final String PARAM_REDIRECT_URI = "redirect_uri";
         static final String PARAM_SCOPE = "scope";
         static final String PARAM_STATE = "state";
         static final String PARAM_PROMPT = "prompt";
@@ -31,20 +31,35 @@ public class OrangeIdentityAPI {
                 .append(orangeContext.getOrangeContext().getOrangeURLs().getDomain())
                 .append(orangeContext.getOrangeContext().getOrangeURLs().getOauthAuthorize());
 
-        url.append("?").append(Constants.PARAM_RESPONSE_TYPE).append("=code");
 
+        url.append("?").append(Constants.PARAM_RESPONSE_TYPE).append("=code");
 
         this.appendVariableToURL(url, Constants.PARAM_SCOPE, buildScope(orangeContext));
         this.appendVariableToURL(url, Constants.PARAM_CLIENT_ID,
-                orangeContext.getOrangeContext().getOrangeClientConfiguration().getAppKey());
-        this.appendVariableToURL(url, Constants.PARAM_REDIRECT_URI,
-                this.sanitizeUrl(orangeContext.getOrangeContext().getOrangeClientConfiguration().getAppRedirectURL()));
+                orangeContext.getOrangeContext().getOrangeClientConfiguration().getClientId());
         this.appendVariableToURL(url, Constants.PARAM_STATE,
                 orangeContext.getState());
         this.appendVariableToURL(url, Constants.PARAM_PROMPT,
-                orangeContext.getPrompt().toString());
+                this.buildPrompt(orangeContext));
+        this.appendVariableToURL(url, Constants.PARAM_REDIRECT_URI,
+                this.sanitizeUrl(orangeContext.getOrangeContext().getOrangeClientConfiguration().getAppRedirectURL()));
 
         return url.toString();
+    }
+
+    private String buildPrompt(final OrangeIdentityContext orangeIdentityContext) {
+        if (orangeIdentityContext.getPromptList().isEmpty()) {
+            throw new OrangeIdentityException("At least one prompt required for oauth");
+        }
+        StringBuilder promptBuilder = new StringBuilder();
+        Iterator<OrangePrompt> scopeIterator = orangeIdentityContext.getPromptList().listIterator();
+        while (scopeIterator.hasNext()) {
+            promptBuilder.append(scopeIterator.next().toString());
+            if (scopeIterator.hasNext()) {
+                promptBuilder.append("%20");
+            }
+        }
+        return promptBuilder.toString();
     }
 
     private String buildScope(final OrangeIdentityContext orangeContext) {

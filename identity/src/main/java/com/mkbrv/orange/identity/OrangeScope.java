@@ -9,6 +9,6 @@ public enum OrangeScope {
     offline_access,
     openid,
     profile,
-    cloud
+    cloudfullread
 
 }

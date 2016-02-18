@@ -6,32 +6,41 @@ package com.mkbrv.orange.configuration;
  */
 public class OrangeClientConfiguration {
 
-    private final String appKey;
+    private final String appId;
 
-    private final String appSecret;
+    private final String clientSecret;
+
+    private final String clientId;
 
     private final String appRedirectURL;
 
     /**
-     * @param appKey
-     * @param appSecret
+     * @param appId
+     * @param clientId
+     * @param clientSecret
      * @param appRedirectURL
      */
-    public OrangeClientConfiguration(final String appKey, final String appSecret, final String appRedirectURL) {
-        this.appKey = appKey;
-        this.appSecret = appSecret;
+    public OrangeClientConfiguration(final String appId, final String clientId,
+                                     final String clientSecret, final String appRedirectURL) {
+        this.appId = appId;
+        this.clientId = clientId;
+        this.clientSecret = clientSecret;
         this.appRedirectURL = appRedirectURL;
     }
 
-    public String getAppKey() {
-        return appKey;
+    public String getAppId() {
+        return appId;
     }
 
-    public String getAppSecret() {
-        return appSecret;
+    public String getClientSecret() {
+        return clientSecret;
     }
 
     public String getAppRedirectURL() {
         return appRedirectURL;
+    }
+
+    public String getClientId() {
+        return clientId;
     }
 }

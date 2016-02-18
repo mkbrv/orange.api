@@ -3,6 +3,7 @@ package com.mkbrv.orange.identity;
 import com.mkbrv.orange.client.OrangeContext;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -13,10 +14,10 @@ public class OrangeIdentityContext {
     private OrangeContext orangeContext;
 
     private List<OrangeScope> orangeScopeList = new ArrayList<>();
+    private List<OrangePrompt> promptList = new ArrayList<>();
 
     private String state;
 
-    private OrangePrompt prompt;
 
     public OrangeIdentityContext(final OrangeContext orangeContext) {
         this.orangeContext = orangeContext;
@@ -32,7 +33,7 @@ public class OrangeIdentityContext {
     }
 
     public List<OrangeScope> getOrangeScopeList() {
-        return orangeScopeList;
+        return Collections.unmodifiableList(orangeScopeList);
     }
 
     public OrangeIdentityContext addScope(final OrangeScope orangeScope) {
@@ -49,15 +50,12 @@ public class OrangeIdentityContext {
         return this;
     }
 
-    public OrangePrompt getPrompt() {
-        if (this.prompt == null) {
-            prompt = OrangePrompt.none;
-        }
-        return prompt;
+    public List<OrangePrompt> getPromptList() {
+        return Collections.unmodifiableList(promptList);
     }
 
-    public OrangeIdentityContext setPrompt(final OrangePrompt prompt) {
-        this.prompt = prompt;
+    public OrangeIdentityContext addPrompt(final OrangePrompt orangePrompt) {
+        this.promptList.add(orangePrompt);
         return this;
     }
 

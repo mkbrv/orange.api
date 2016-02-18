@@ -22,7 +22,8 @@ public class OrangeIdentityAPITest {
 
     @Before
     public void init() {
-        orangeClientConfiguration = new OrangeClientConfiguration("appKey", "appSecret", "http://AppRedirect.com");
+        orangeClientConfiguration = new OrangeClientConfiguration("appId", "clientId",
+                "clientSecret", "http://AppRedirect.com");
         orangeContext = new OrangeContext().setOrangeURLs(OrangeURLs.DEFAULT)
                 .setOrangeClientConfiguration(orangeClientConfiguration);
     }
@@ -35,12 +36,13 @@ public class OrangeIdentityAPITest {
     @Test
     public void canBuildAuthorizeURL() {
         OrangeIdentityContext orangeIdentityContext = new OrangeIdentityContext(orangeContext);
-        orangeIdentityContext.addScope(OrangeScope.cloud).addScope(OrangeScope.offline_access);
+        orangeIdentityContext.addScope(OrangeScope.cloudfullread).addScope(OrangeScope.offline_access);
+        orangeIdentityContext.addPrompt(OrangePrompt.login);
 
         String authorizeUrl = orangeIdentityAPI.buildOauthAuthorizeURL(orangeIdentityContext);
         assertNotNull(authorizeUrl);
         assertTrue(authorizeUrl.length() > 0);
-        assertTrue(authorizeUrl.contains(orangeClientConfiguration.getAppKey()));
+        assertTrue(authorizeUrl.contains(orangeClientConfiguration.getClientId()));
         //the url is sanitized
         assertTrue(authorizeUrl.contains(orangeClientConfiguration.getAppRedirectURL().substring(10)));
 
