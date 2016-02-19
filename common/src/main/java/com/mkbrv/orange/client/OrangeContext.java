@@ -14,12 +14,6 @@ public class OrangeContext {
 
     private OrangeURLs orangeURLs;
 
-    private String scope;
-
-    private String state;
-
-    private String prompt;
-
     public OrangeClientConfiguration getOrangeClientConfiguration() {
         return orangeClientConfiguration;
     }

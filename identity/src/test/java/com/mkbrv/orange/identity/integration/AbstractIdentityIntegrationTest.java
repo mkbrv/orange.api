@@ -14,7 +14,8 @@ import com.mkbrv.orange.AbstractIntegrationTest;
 import com.mkbrv.orange.client.OrangeContext;
 import com.mkbrv.orange.configuration.OrangeURLs;
 import com.mkbrv.orange.identity.OrangeIdentityAPI;
-import com.mkbrv.orange.identity.OrangeIdentityContext;
+import com.mkbrv.orange.identity.impl.OrangeIdentityAPIImpl;
+import com.mkbrv.orange.identity.model.OrangeIdentityContext;
 import org.junit.Before;
 
 import java.io.IOException;
@@ -25,7 +26,7 @@ import java.net.URL;
  */
 public class AbstractIdentityIntegrationTest extends AbstractIntegrationTest {
 
-    protected final OrangeIdentityAPI orangeIdentityAPI = new OrangeIdentityAPI();
+    protected final OrangeIdentityAPI orangeIdentityAPI = new OrangeIdentityAPIImpl();
 
     protected OrangeContext orangeContext;
 

@@ -1,8 +1,9 @@
 package com.mkbrv.orange.identity.integration;
 
-import com.mkbrv.orange.identity.OrangeIdentityContext;
-import com.mkbrv.orange.identity.OrangePrompt;
-import com.mkbrv.orange.identity.OrangeScope;
+import com.mkbrv.orange.client.security.OrangeAccessToken;
+import com.mkbrv.orange.identity.model.OrangeIdentityContext;
+import com.mkbrv.orange.identity.model.OrangePrompt;
+import com.mkbrv.orange.identity.model.OrangeScope;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.HttpClientBuilder;
@@ -45,7 +46,7 @@ public class ITOrangeIdentityAPI extends AbstractIdentityIntegrationTest {
         assertTrue(response.getStatusLine().getStatusCode() < 400);
         assertTrue(response.getStatusLine().getStatusCode() >= 200);
 
-        System.out.println(authorizeUrl);
+        System.out.println("AuthorizationURL : " + authorizeUrl);
     }
 
 
@@ -55,6 +56,20 @@ public class ITOrangeIdentityAPI extends AbstractIdentityIntegrationTest {
         orangeIdentityContext.addPrompt(OrangePrompt.login);
         orangeIdentityContext.addScope(OrangeScope.cloudfullread).addScope(OrangeScope.offline_access);
         //String accessToken = this.obtainInitialAccessTokenForUser(orangeIdentityContext);
+    }
+
+    @Test
+    public void canGenerateAccessTokenAndRefreshToken() {
+        //we were unable to generate this dynamically based on user & pwd. so we can only use temporary ones
+        if (this.orangeAccountAccessToken == null || this.orangeAccountAccessToken.length() == 0) {
+            return;
+        }
+
+        OrangeAccessToken initialToken = new OrangeAccessToken(this.orangeAccountAccessToken);
+        OrangeAccessToken orangeAccessToken = orangeIdentityAPI.generateAccessAndRefreshTokenFromInitial(orangeContext, initialToken);
+        assertNotNull(orangeAccessToken);
+
+        System.out.println("Access Token: " + orangeAccessToken.toString());
     }
 
 }

@@ -4,22 +4,32 @@ import com.mkbrv.orange.client.exception.OrangeException;
 import com.mkbrv.orange.client.request.OrangeRequest;
 import com.mkbrv.orange.client.response.OrangeResponse;
 import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.message.BasicNameValuePair;
+import org.slf4j.Logger;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
  * Created by mikibrv on 16/02/16.
  */
 public class SimpleHttpClient implements OrangeHttpClient {
+
+    private static final Logger LOG = org.slf4j.LoggerFactory.getLogger(SimpleHttpClient.class);
+
     /**
      * Actual HttpClient;
      */
@@ -42,6 +52,16 @@ public class SimpleHttpClient implements OrangeHttpClient {
     public OrangeResponse doPost(final OrangeRequest request) {
         HttpPost httpPost = new HttpPost(request.getUrl());
         request.getHeaders().forEach(httpPost::addHeader);
+
+        try {
+            List<NameValuePair> requestParameters = new ArrayList<>();
+            request.getParameters().forEach((key, value) -> requestParameters.add(new BasicNameValuePair(key, value)));
+            httpPost.setEntity(new UrlEncodedFormEntity(requestParameters));
+        } catch (UnsupportedEncodingException e) {
+            LOG.warn(e.getMessage());
+        }
+
+
         return executeRequestAndReadResponse(httpPost);
     }
 

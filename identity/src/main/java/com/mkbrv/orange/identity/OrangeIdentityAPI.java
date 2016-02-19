@@ -1,24 +1,13 @@
 package com.mkbrv.orange.identity;
 
-import com.mkbrv.orange.identity.exception.OrangeIdentityException;
-
-import java.util.Iterator;
+import com.mkbrv.orange.client.OrangeContext;
+import com.mkbrv.orange.client.security.OrangeAccessToken;
+import com.mkbrv.orange.identity.model.OrangeIdentityContext;
 
 /**
- * Created by mikibrv on 17/02/16.
+ * Created by mikibrv on 18/02/16.
  */
-public class OrangeIdentityAPI {
-
-
-    public static class Constants {
-        static final String PARAM_RESPONSE_TYPE = "response_type";
-        static final String PARAM_CLIENT_ID = "client_id";
-        static final String PARAM_REDIRECT_URI = "redirect_uri";
-        static final String PARAM_SCOPE = "scope";
-        static final String PARAM_STATE = "state";
-        static final String PARAM_PROMPT = "prompt";
-    }
-
+public interface OrangeIdentityAPI {
 
     /**
      * Builds the auth URL based on the orange context contained in the request;
@@ -26,71 +15,28 @@ public class OrangeIdentityAPI {
      * @param orangeContext uses the context inside;
      * @return URL
      */
-    public String buildOauthAuthorizeURL(final OrangeIdentityContext orangeContext) {
-        StringBuilder url = new StringBuilder()
-                .append(orangeContext.getOrangeContext().getOrangeURLs().getDomain())
-                .append(orangeContext.getOrangeContext().getOrangeURLs().getOauthAuthorize());
+    String buildOauthAuthorizeURL(OrangeIdentityContext orangeContext);
 
+    /**
+     * Will generate an access token based on the initial token provided by the OAUTH redirect
+     * Also contains a refresh token
+     *
+     * @return accessToken with a refresh token;
+     */
+    OrangeAccessToken generateAccessAndRefreshTokenFromInitial(final OrangeContext orangeContext,
+                                                               final OrangeAccessToken initialToken);
 
-        url.append("?").append(Constants.PARAM_RESPONSE_TYPE).append("=code");
+    void generateAccessTokenFromRefreshToken();
 
-        this.appendVariableToURL(url, Constants.PARAM_SCOPE, buildScope(orangeContext));
-        this.appendVariableToURL(url, Constants.PARAM_CLIENT_ID,
-                orangeContext.getOrangeContext().getOrangeClientConfiguration().getClientId());
-        this.appendVariableToURL(url, Constants.PARAM_STATE,
-                orangeContext.getState());
-        this.appendVariableToURL(url, Constants.PARAM_PROMPT,
-                this.buildPrompt(orangeContext));
-        this.appendVariableToURL(url, Constants.PARAM_REDIRECT_URI,
-                this.sanitizeUrl(orangeContext.getOrangeContext().getOrangeClientConfiguration().getAppRedirectURL()));
-
-        return url.toString();
+    /**
+     * Constants related to the API call
+     */
+    class Constants {
+        public static final String PARAM_RESPONSE_TYPE = "response_type";
+        public static final String PARAM_CLIENT_ID = "client_id";
+        public static final String PARAM_REDIRECT_URI = "redirect_uri";
+        public static final String PARAM_SCOPE = "scope";
+        public static final String PARAM_STATE = "state";
+        public static final String PARAM_PROMPT = "prompt";
     }
-
-    private String buildPrompt(final OrangeIdentityContext orangeIdentityContext) {
-        if (orangeIdentityContext.getPromptList().isEmpty()) {
-            throw new OrangeIdentityException("At least one prompt required for oauth");
-        }
-        StringBuilder promptBuilder = new StringBuilder();
-        Iterator<OrangePrompt> scopeIterator = orangeIdentityContext.getPromptList().listIterator();
-        while (scopeIterator.hasNext()) {
-            promptBuilder.append(scopeIterator.next().toString());
-            if (scopeIterator.hasNext()) {
-                promptBuilder.append("%20");
-            }
-        }
-        return promptBuilder.toString();
-    }
-
-    private String buildScope(final OrangeIdentityContext orangeContext) {
-        if (orangeContext.getOrangeScopeList().isEmpty()) {
-            throw new OrangeIdentityException("At least one scope required for oauth");
-        }
-        StringBuilder scopeBuilder = new StringBuilder();
-        Iterator<OrangeScope> scopeIterator = orangeContext.getOrangeScopeList().listIterator();
-        while (scopeIterator.hasNext()) {
-            scopeBuilder.append(scopeIterator.next().toString());
-            if (scopeIterator.hasNext()) {
-                scopeBuilder.append("%20");
-            }
-        }
-        return scopeBuilder.toString();
-    }
-
-    private String sanitizeUrl(final String url) {
-        return url.replace("://", "%3A%2F%2F");
-    }
-
-    private void appendVariableToURL(final StringBuilder url, final String variable, final String value) {
-        url.append("&").append(variable).append("=").append(value);
-    }
-
-    public void obtainAccessToken() {
-
-    }
-
-    public void generateAccessTokenFromRefreshToken() {
-
-    }
-
 }

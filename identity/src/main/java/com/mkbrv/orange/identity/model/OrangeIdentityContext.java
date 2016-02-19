@@ -1,7 +1,8 @@
-package com.mkbrv.orange.identity;
+package com.mkbrv.orange.identity.model;
 
 import com.mkbrv.orange.client.OrangeContext;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -9,13 +10,13 @@ import java.util.List;
 /**
  * Created by mikibrv on 17/02/16.
  */
-public class OrangeIdentityContext {
+public class OrangeIdentityContext implements Serializable {
+
+    private static final long serialVersionUID = 42L;
 
     private OrangeContext orangeContext;
-
     private List<OrangeScope> orangeScopeList = new ArrayList<>();
     private List<OrangePrompt> promptList = new ArrayList<>();
-
     private String state;
 
 

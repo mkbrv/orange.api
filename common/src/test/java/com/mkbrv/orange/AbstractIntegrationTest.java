@@ -18,6 +18,10 @@ public abstract class AbstractIntegrationTest {
 
     protected String orangeAccountPassword;
 
+    protected String orangeAccountAccessToken;
+
+    protected String orangeAccountRefreshToken;
+
     @Before
     public void loadProperties() throws IOException {
 
@@ -33,7 +37,8 @@ public abstract class AbstractIntegrationTest {
 
             this.orangeAccountEmail = properties.getProperty("orange.account.email");
             this.orangeAccountPassword = properties.getProperty("orange.account.password");
-
+            this.orangeAccountAccessToken = properties.getProperty("orange.account.accesstoken");
+            this.orangeAccountRefreshToken = properties.getProperty("orange.account.refreshtoken");
 
         } catch (Exception e) {
             //failed to load from here, try from System properties
@@ -45,6 +50,10 @@ public abstract class AbstractIntegrationTest {
 
             this.orangeAccountEmail = System.getProperty("orange.account.email");
             this.orangeAccountPassword = System.getProperty("orange.account.password");
+
+            this.orangeAccountAccessToken = System.getProperty("orange.account.accesstoken");
+            this.orangeAccountRefreshToken = System.getProperty("orange.account.refreshtoken");
+
 
             if (orangeClientConfiguration.getAppId() == null ||
                     orangeClientConfiguration.getAppRedirectURL() == null ||
