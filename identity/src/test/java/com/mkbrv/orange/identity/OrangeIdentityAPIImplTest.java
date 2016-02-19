@@ -2,8 +2,10 @@ package com.mkbrv.orange.identity;
 
 import com.mkbrv.orange.client.OrangeContext;
 import com.mkbrv.orange.client.OrangeHttpClient;
+import com.mkbrv.orange.client.exception.OrangeException;
 import com.mkbrv.orange.client.response.OrangeResponse;
 import com.mkbrv.orange.client.security.OrangeAccessToken;
+import com.mkbrv.orange.client.security.OrangeRefreshToken;
 import com.mkbrv.orange.configuration.OrangeClientConfiguration;
 import com.mkbrv.orange.configuration.OrangeURLs;
 import com.mkbrv.orange.identity.impl.OrangeIdentityAPIImpl;
@@ -17,6 +19,7 @@ import org.mockito.Mockito;
 
 import java.util.Date;
 
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -28,7 +31,7 @@ public class OrangeIdentityAPIImplTest {
 
     private OrangeIdentityAPI orangeIdentityAPI;
 
-    private OrangeContext orangeContext;
+    private OrangeIdentityContext orangeContext;
 
     private OrangeClientConfiguration orangeClientConfiguration;
 
@@ -37,13 +40,16 @@ public class OrangeIdentityAPIImplTest {
     @Before
     public void init() {
         orangeHttpClient = Mockito.mock(OrangeHttpClient.class);
-        orangeIdentityAPI = new OrangeIdentityAPIImpl(orangeHttpClient);
 
         orangeClientConfiguration = new OrangeClientConfiguration("appId", "clientId",
                 "clientSecret", "http://AppRedirect.com");
 
-        orangeContext = new OrangeContext().setOrangeURLs(OrangeURLs.DEFAULT)
+        orangeContext = new OrangeIdentityContext();
+        orangeContext.addScope(OrangeScope.cloudfullread).addScope(OrangeScope.offline_access);
+        orangeContext.addPrompt(OrangePrompt.login);
+        orangeContext.setOrangeURLs(OrangeURLs.DEFAULT)
                 .setOrangeClientConfiguration(orangeClientConfiguration);
+        orangeIdentityAPI = new OrangeIdentityAPIImpl(orangeContext, orangeHttpClient);
     }
 
     /**
@@ -53,18 +59,15 @@ public class OrangeIdentityAPIImplTest {
 
     @Test
     public void canBuildAuthorizeURL() {
-        OrangeIdentityContext orangeIdentityContext = new OrangeIdentityContext(orangeContext);
-        orangeIdentityContext.addScope(OrangeScope.cloudfullread).addScope(OrangeScope.offline_access);
-        orangeIdentityContext.addPrompt(OrangePrompt.login);
 
-        String authorizeUrl = orangeIdentityAPI.buildOauthAuthorizeURL(orangeIdentityContext);
+        String authorizeUrl = orangeIdentityAPI.buildOauthAuthorizeURL();
         assertNotNull(authorizeUrl);
         assertTrue(authorizeUrl.length() > 0);
         assertTrue(authorizeUrl.contains(orangeClientConfiguration.getClientId()));
         //the url is sanitized
         assertTrue(authorizeUrl.contains(orangeClientConfiguration.getAppRedirectURL().substring(10)));
 
-        orangeIdentityContext.getOrangeScopeList()
+        orangeContext.getOrangeScopeList()
                 .forEach(orangeScope -> assertTrue(authorizeUrl.contains(orangeScope.toString())));
 
 
@@ -93,12 +96,37 @@ public class OrangeIdentityAPIImplTest {
 
         OrangeAccessToken initialToken = new OrangeAccessToken("whatever");
         OrangeAccessToken orangeAccessToken = orangeIdentityAPI
-                .generateAccessAndRefreshTokenFromInitial(orangeContext, initialToken);
+                .generateAccessAndRefreshTokenFromInitial(initialToken);
 
         assertNotNull(orangeAccessToken);
         assertTrue("Missing access token", StringUtils.isNotEmpty(orangeAccessToken.getToken()));
         assertTrue("Refresh token was not recovered", StringUtils.isNotEmpty(orangeAccessToken.getRefreshToken().getToken()));
         assertTrue(orangeAccessToken.getExpirationTime().after(new Date()));
+    }
+
+    @Test
+    public void canParseRefreshedToken() {
+        when(orangeHttpClient.doPost(any())).thenReturn(new OrangeResponse() {
+            {
+                setBody("{\n" +
+                        "  \"token_type\": \"Bearer\",\n" +
+                        "  \"access_token\": \"OFR-1eab8052dda2c5e3f761987a33c84579d308afa20f5e9e704ce2be12a0674c7fa726c53aa24fe13c4abe3e349737c8e392e3\",\n" +
+                        "  \"expires_in\": 3600\n" +
+                        "}");
+                setStatus(200);
+            }
+        });
+
+        OrangeRefreshToken refreshToken = new OrangeRefreshToken("whatever");
+        OrangeAccessToken orangeAccessToken = orangeIdentityAPI
+                .generateAccessTokenFromRefreshToken(refreshToken);
+
+        assertNotNull(orangeAccessToken);
+        assertTrue("Missing access token", StringUtils.isNotEmpty(orangeAccessToken.getToken()));
+        assertEquals("Refresh token is not the same as used before",
+                refreshToken.getToken(), orangeAccessToken.getRefreshToken().getToken());
+        assertTrue(orangeAccessToken.getExpirationTime().after(new Date()));
+
     }
 
 

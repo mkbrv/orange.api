@@ -24,10 +24,10 @@ public class OrangeContext {
     }
 
     public OrangeURLs getOrangeURLs() {
-        if (orangeURLs == null) {
+        if (this.orangeURLs == null) {
             this.orangeURLs = OrangeURLs.DEFAULT;
         }
-        return orangeURLs;
+        return this.orangeURLs;
     }
 
     public OrangeContext setOrangeURLs(final OrangeURLs orangeURLs) {

@@ -2,13 +2,13 @@ package com.mkbrv.orange.identity.impl;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.mkbrv.orange.client.OrangeContext;
+import com.mkbrv.orange.client.ExceptionAwareHttpClient;
 import com.mkbrv.orange.client.OrangeHttpClient;
 import com.mkbrv.orange.client.SimpleHttpClient;
 import com.mkbrv.orange.client.request.OrangeRequest;
 import com.mkbrv.orange.client.response.OrangeResponse;
 import com.mkbrv.orange.client.security.OrangeAccessToken;
-import com.mkbrv.orange.configuration.OrangeURLs;
+import com.mkbrv.orange.client.security.OrangeRefreshToken;
 import com.mkbrv.orange.identity.OrangeIdentityAPI;
 import com.mkbrv.orange.identity.exception.OrangeIdentityException;
 import com.mkbrv.orange.identity.model.OrangeAccessTokenDeserializer;
@@ -24,46 +24,52 @@ import java.util.Iterator;
  */
 public class OrangeIdentityAPIImpl implements OrangeIdentityAPI {
 
-    private OrangeHttpClient orangeHttpClient;
+    private final OrangeIdentityContext orangeContext;
 
-    private Gson gson = new GsonBuilder().registerTypeAdapter(OrangeAccessToken.class,
+    private final OrangeHttpClient orangeHttpClient;
+
+    private final Gson gson = new GsonBuilder().registerTypeAdapter(OrangeAccessToken.class,
             new OrangeAccessTokenDeserializer()).create();
 
     /**
-     *
+     * @param orangeContext
      */
-    public OrangeIdentityAPIImpl() {
-        this.orangeHttpClient = new SimpleHttpClient();
+    public OrangeIdentityAPIImpl(final OrangeIdentityContext orangeContext) {
+        this.orangeContext = orangeContext;
+        this.orangeHttpClient = new ExceptionAwareHttpClient(new SimpleHttpClient());
     }
 
     /**
+     * @param orangeContext
      * @param orangeHttpClient
      */
-    public OrangeIdentityAPIImpl(final OrangeHttpClient orangeHttpClient) {
+    public OrangeIdentityAPIImpl(final OrangeIdentityContext orangeContext, final OrangeHttpClient orangeHttpClient) {
+        this.orangeContext = orangeContext;
         this.orangeHttpClient = orangeHttpClient;
     }
+
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public String buildOauthAuthorizeURL(final OrangeIdentityContext orangeContext) {
+    public String buildOauthAuthorizeURL() {
         StringBuilder url = new StringBuilder()
-                .append(orangeContext.getOrangeContext().getOrangeURLs().getDomain())
-                .append(orangeContext.getOrangeContext().getOrangeURLs().getOauthAuthorize());
+                .append(orangeContext.getOrangeURLs().getDomain())
+                .append(orangeContext.getOrangeURLs().getOauthAuthorize());
 
 
         url.append("?").append(Constants.PARAM_RESPONSE_TYPE).append("=code");
 
-        this.appendVariableToURL(url, Constants.PARAM_SCOPE, buildScope(orangeContext));
+        this.appendVariableToURL(url, Constants.PARAM_SCOPE, buildScope(this.orangeContext));
         this.appendVariableToURL(url, Constants.PARAM_CLIENT_ID,
-                orangeContext.getOrangeContext().getOrangeClientConfiguration().getClientId());
+                orangeContext.getOrangeClientConfiguration().getClientId());
         this.appendVariableToURL(url, Constants.PARAM_STATE,
-                orangeContext.getState());
+                this.orangeContext.getState());
         this.appendVariableToURL(url, Constants.PARAM_PROMPT,
-                this.buildPrompt(orangeContext));
+                this.buildPrompt(this.orangeContext));
         this.appendVariableToURL(url, Constants.PARAM_REDIRECT_URI,
-                this.sanitizeUrl(orangeContext.getOrangeContext().getOrangeClientConfiguration().getAppRedirectURL()));
+                this.sanitizeUrl(orangeContext.getOrangeClientConfiguration().getAppRedirectURL()));
 
         return url.toString();
     }
@@ -132,27 +138,48 @@ public class OrangeIdentityAPIImpl implements OrangeIdentityAPI {
     }
 
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public OrangeAccessToken generateAccessAndRefreshTokenFromInitial(final OrangeContext orangeContext,
-                                                                      final OrangeAccessToken initialToken) {
+    public OrangeAccessToken generateAccessAndRefreshTokenFromInitial(final OrangeAccessToken initialToken) {
         OrangeRequest orangeRequest = new OrangeRequest()
                 .setUrl(orangeContext.getOrangeURLs().getOauthToken())
                 .setOrangeAccessToken(initialToken)
                 .setOrangeContext(orangeContext)
-                .addHeader("Authorization", "Basic " + new String(Base64.encodeBase64(
-                        (orangeContext.getOrangeClientConfiguration().getClientId() + ":"
-                                + orangeContext.getOrangeClientConfiguration().getClientSecret()).getBytes())))
-                .addParameter("grant_type", "authorization_code")
-                .addParameter("code", initialToken.getToken())
-                .addParameter("redirect_uri", orangeContext.getOrangeClientConfiguration().getAppRedirectURL());
+                .addHeader(Constants.HEADER_AUTHORIZATION,
+                        Constants.HEADER_AUTHORIZATION_BASIC + " "
+                                + new String(Base64.encodeBase64((orangeContext.getOrangeClientConfiguration().getClientId()
+                                + ":" + orangeContext.getOrangeClientConfiguration().getClientSecret()).getBytes())))
+                .addParameter(Constants.PARAM_GRANT_TYPE, Constants.PARAM_AUTH_CODE)
+                .addParameter(Constants.PARAM_CODE, initialToken.getToken())
+                .addParameter(Constants.PARAM_REDIRECT_URI, orangeContext.getOrangeClientConfiguration().getAppRedirectURL());
 
         OrangeResponse orangeResponse = orangeHttpClient.doPost(orangeRequest);
         return gson.fromJson(orangeResponse.getBody().toString(), OrangeAccessToken.class);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public void generateAccessTokenFromRefreshToken() {
+    public OrangeAccessToken generateAccessTokenFromRefreshToken(final OrangeRefreshToken orangeRefreshToken) {
+        OrangeRequest orangeRequest = new OrangeRequest()
+                .setUrl(orangeContext.getOrangeURLs().getOauthToken())
+                .addParameter(Constants.PARAM_GRANT_TYPE, Constants.PARAM_REFRESH_TOKEN)
+                .addParameter(Constants.PARAM_REFRESH_TOKEN, orangeRefreshToken.getToken())
+                //.addParameter(Constants.PARAM_SCOPE, this.buildScope(orangeContext)) fails - has to be checked
+                .addParameter(Constants.PARAM_REDIRECT_URI, orangeContext.getOrangeClientConfiguration().getAppRedirectURL())
+                .addHeader(Constants.HEADER_AUTHORIZATION,
+                        Constants.HEADER_AUTHORIZATION_BASIC + " " + new String(Base64.encodeBase64(
+                                (orangeContext.getOrangeClientConfiguration().getClientId() + ":"
+                                        + orangeContext.getOrangeClientConfiguration().getClientSecret()).getBytes())));
 
+
+        OrangeResponse orangeResponse = orangeHttpClient.doPost(orangeRequest);
+        OrangeAccessToken orangeAccessToken = gson.fromJson(orangeResponse.getBody().toString(), OrangeAccessToken.class);
+        orangeAccessToken.setRefreshToken(orangeRefreshToken);
+        return orangeAccessToken;
     }
 
 }

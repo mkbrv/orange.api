@@ -16,6 +16,8 @@ import com.mkbrv.orange.configuration.OrangeURLs;
 import com.mkbrv.orange.identity.OrangeIdentityAPI;
 import com.mkbrv.orange.identity.impl.OrangeIdentityAPIImpl;
 import com.mkbrv.orange.identity.model.OrangeIdentityContext;
+import com.mkbrv.orange.identity.model.OrangePrompt;
+import com.mkbrv.orange.identity.model.OrangeScope;
 import org.junit.Before;
 
 import java.io.IOException;
@@ -26,16 +28,20 @@ import java.net.URL;
  */
 public class AbstractIdentityIntegrationTest extends AbstractIntegrationTest {
 
-    protected final OrangeIdentityAPI orangeIdentityAPI = new OrangeIdentityAPIImpl();
+    protected OrangeIdentityAPI orangeIdentityAPI;
 
-    protected OrangeContext orangeContext;
+    protected OrangeIdentityContext orangeContext;
 
 
     @Before
     public void init() throws IOException {
         this.loadProperties();
-        orangeContext = new OrangeContext()
-                .setOrangeClientConfiguration(orangeClientConfiguration).setOrangeURLs(OrangeURLs.DEFAULT);
+        orangeContext = new OrangeIdentityContext();
+        orangeContext.addScope(OrangeScope.cloudfullread).addScope(OrangeScope.offline_access);
+        orangeContext.addPrompt(OrangePrompt.login);
+        orangeContext.setOrangeURLs(OrangeURLs.DEFAULT)
+                .setOrangeClientConfiguration(orangeClientConfiguration);
+        this.orangeIdentityAPI = new OrangeIdentityAPIImpl(this.orangeContext);
     }
 
 
@@ -43,12 +49,11 @@ public class AbstractIdentityIntegrationTest extends AbstractIntegrationTest {
      * An attempt to get an access token dynamically.
      * Not yet working.
      *
-     * @param orangeIdentityContext
      * @return
      * @throws IOException
      */
-    private String obtainInitialAccessTokenForUser(final OrangeIdentityContext orangeIdentityContext) throws IOException {
-        String authorizeUrl = orangeIdentityAPI.buildOauthAuthorizeURL(orangeIdentityContext);
+    private String obtainInitialAccessTokenForUser() throws IOException {
+        String authorizeUrl = orangeIdentityAPI.buildOauthAuthorizeURL();
 
         final WebClient webClient = new WebClient();
         webClient.getOptions().setJavaScriptEnabled(true);

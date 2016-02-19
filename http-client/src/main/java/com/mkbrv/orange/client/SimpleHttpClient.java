@@ -60,8 +60,6 @@ public class SimpleHttpClient implements OrangeHttpClient {
         } catch (UnsupportedEncodingException e) {
             LOG.warn(e.getMessage());
         }
-
-
         return executeRequestAndReadResponse(httpPost);
     }
 

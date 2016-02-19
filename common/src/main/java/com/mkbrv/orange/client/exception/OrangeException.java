@@ -9,8 +9,6 @@ public class OrangeException extends RuntimeException {
 
     private String name;
 
-    private String message;
-
     private String description;
 
     /**
@@ -46,13 +44,9 @@ public class OrangeException extends RuntimeException {
 
     @Override
     public String getMessage() {
-        return message;
+        return this.getName() + ":" + this.getDescription();
     }
 
-    public OrangeException setMessage(String message) {
-        this.message = message;
-        return this;
-    }
 
     public String getDescription() {
         return description;
@@ -61,6 +55,16 @@ public class OrangeException extends RuntimeException {
     public OrangeException setDescription(String description) {
         this.description = description;
         return this;
+    }
+
+    @Override
+    public String toString() {
+        return "OrangeException{" +
+                "code=" + code +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", clientException=" + clientException +
+                '}';
     }
 
     public Exception getClientException() {

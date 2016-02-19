@@ -35,10 +35,10 @@ public abstract class AbstractIntegrationTest {
                     properties.getProperty("orange.app.redirecturl")
             );
 
-            this.orangeAccountEmail = properties.getProperty("orange.account.email");
-            this.orangeAccountPassword = properties.getProperty("orange.account.password");
-            this.orangeAccountAccessToken = properties.getProperty("orange.account.accesstoken");
-            this.orangeAccountRefreshToken = properties.getProperty("orange.account.refreshtoken");
+            this.orangeAccountEmail = properties.getProperty("orange.account.email").trim();
+            this.orangeAccountPassword = properties.getProperty("orange.account.password").trim();
+            this.orangeAccountAccessToken = properties.getProperty("orange.account.accesstoken").trim();
+            this.orangeAccountRefreshToken = properties.getProperty("orange.account.refreshtoken").trim();
 
         } catch (Exception e) {
             //failed to load from here, try from System properties

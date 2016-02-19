@@ -9,6 +9,6 @@ public class OrangeIdentityException extends OrangeException {
 
 
     public OrangeIdentityException(final String message) {
-        this.setMessage(message);
+        this.setName(message);
     }
 }

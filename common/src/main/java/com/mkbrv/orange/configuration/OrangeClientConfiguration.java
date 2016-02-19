@@ -22,10 +22,10 @@ public class OrangeClientConfiguration {
      */
     public OrangeClientConfiguration(final String appId, final String clientId,
                                      final String clientSecret, final String appRedirectURL) {
-        this.appId = appId;
-        this.clientId = clientId;
-        this.clientSecret = clientSecret;
-        this.appRedirectURL = appRedirectURL;
+        this.appId = appId.trim();
+        this.clientId = clientId.trim();
+        this.clientSecret = clientSecret.trim();
+        this.appRedirectURL = appRedirectURL.trim();
     }
 
     public String getAppId() {

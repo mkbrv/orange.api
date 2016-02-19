@@ -10,28 +10,14 @@ import java.util.List;
 /**
  * Created by mikibrv on 17/02/16.
  */
-public class OrangeIdentityContext implements Serializable {
+public class OrangeIdentityContext extends OrangeContext implements Serializable {
 
     private static final long serialVersionUID = 42L;
 
-    private OrangeContext orangeContext;
-    private List<OrangeScope> orangeScopeList = new ArrayList<>();
-    private List<OrangePrompt> promptList = new ArrayList<>();
+    private final List<OrangeScope> orangeScopeList = new ArrayList<>();
+    private final List<OrangePrompt> promptList = new ArrayList<>();
     private String state;
 
-
-    public OrangeIdentityContext(final OrangeContext orangeContext) {
-        this.orangeContext = orangeContext;
-    }
-
-    public OrangeContext getOrangeContext() {
-        return orangeContext;
-    }
-
-    public OrangeIdentityContext setOrangeContext(OrangeContext orangeContext) {
-        this.orangeContext = orangeContext;
-        return this;
-    }
 
     public List<OrangeScope> getOrangeScopeList() {
         return Collections.unmodifiableList(orangeScopeList);

@@ -26,4 +26,12 @@ public class OrangeRefreshToken {
         this.createdDate = createdDate;
         return this;
     }
+
+    @Override
+    public String toString() {
+        return "OrangeRefreshToken{" +
+                "token='" + token + '\'' +
+                ", createdDate=" + createdDate +
+                '}';
+    }
 }

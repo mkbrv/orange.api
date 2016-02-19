@@ -1,7 +1,6 @@
 package com.mkbrv.orange.identity.model;
 
 import com.google.gson.*;
-import com.mkbrv.orange.client.OrangeJsonParser;
 import com.mkbrv.orange.client.security.OrangeAccessToken;
 import com.mkbrv.orange.client.security.OrangeRefreshToken;
 
@@ -13,8 +12,6 @@ import java.util.Date;
  */
 public class OrangeAccessTokenDeserializer implements
         JsonDeserializer<OrangeAccessToken> {
-
-    final GsonBuilder builder = new GsonBuilder();
 
     public static class Params {
         public static final String TOKEN_TYPE = "token_type";
@@ -34,11 +31,18 @@ public class OrangeAccessTokenDeserializer implements
         OrangeAccessToken orangeAccessToken = new OrangeAccessToken(jsonObject.get(Params.ACCESS_TOKEN).getAsString())
                 .setTokenType(jsonObject.get(Params.TOKEN_TYPE).getAsString());
 
-        OrangeRefreshToken orangeRefreshToken = new OrangeRefreshToken(jsonObject.get(Params.REFRESH_TOKEN).getAsString())
-                .setCreatedDate(new Date());
-        orangeAccessToken.setRefreshToken(orangeRefreshToken);
+
+        orangeAccessToken.setRefreshToken(this.addRefreshToken(jsonObject));
         orangeAccessToken.setExpirationTime(this.computeExpirationTime(jsonObject.get(Params.EXPIRES_IN).getAsLong()));
         return orangeAccessToken;
+    }
+
+    private OrangeRefreshToken addRefreshToken(final JsonObject jsonObject) {
+        if (jsonObject.has(Params.REFRESH_TOKEN)) {
+            return new OrangeRefreshToken(jsonObject.get(Params.REFRESH_TOKEN).getAsString())
+                    .setCreatedDate(new Date());
+        }
+        return null;
     }
 
     /**
@@ -48,7 +52,7 @@ public class OrangeAccessTokenDeserializer implements
      * @return Date of expiration
      */
     private Date computeExpirationTime(long providedExpiresIn) {
-        return new Date(System.currentTimeMillis() + providedExpiresIn * 1000L);
+        return new Date(System.currentTimeMillis() + (providedExpiresIn * 1000L));
     }
 
 }

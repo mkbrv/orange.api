@@ -50,4 +50,14 @@ public class OrangeAccessToken {
     public String getTokenType() {
         return tokenType;
     }
+
+    @Override
+    public String toString() {
+        return "OrangeAccessToken{" +
+                "token='" + token + '\'' +
+                ", tokenType='" + tokenType + '\'' +
+                ", refreshToken=" + refreshToken +
+                ", expirationTime=" + expirationTime +
+                '}';
+    }
 }
