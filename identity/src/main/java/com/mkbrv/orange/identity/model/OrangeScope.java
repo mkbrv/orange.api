@@ -1,4 +1,4 @@
-package com.mkbrv.orange.identity;
+package com.mkbrv.orange.identity.model;
 
 /**
  * The API scope your application needs. It tells the Authorization API what kind of permissions to asks for when displaying the consent form to the end-user.
@@ -9,6 +9,6 @@ public enum OrangeScope {
     offline_access,
     openid,
     profile,
-    cloud
+    cloudfullread
 
 }

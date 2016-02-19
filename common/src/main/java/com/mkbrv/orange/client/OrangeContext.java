@@ -14,12 +14,6 @@ public class OrangeContext {
 
     private OrangeURLs orangeURLs;
 
-    private String scope;
-
-    private String state;
-
-    private String prompt;
-
     public OrangeClientConfiguration getOrangeClientConfiguration() {
         return orangeClientConfiguration;
     }
@@ -30,10 +24,10 @@ public class OrangeContext {
     }
 
     public OrangeURLs getOrangeURLs() {
-        if (orangeURLs == null) {
+        if (this.orangeURLs == null) {
             this.orangeURLs = OrangeURLs.DEFAULT;
         }
-        return orangeURLs;
+        return this.orangeURLs;
     }
 
     public OrangeContext setOrangeURLs(final OrangeURLs orangeURLs) {

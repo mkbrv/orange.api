@@ -1,4 +1,4 @@
-package com.mkbrv.orange.identity;
+package com.mkbrv.orange.identity.model;
 
 /**
  * You can set this parameter in case you want to force the login and/or the consent page display.

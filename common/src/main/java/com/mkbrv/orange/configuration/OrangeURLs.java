@@ -44,7 +44,7 @@ public class OrangeURLs {
     }
 
     public String getOauthToken() {
-        return oauthToken;
+        return this.domain + oauthToken;
     }
 
     public OrangeURLs setOauthToken(final String oauthToken) {

@@ -1,81 +1,71 @@
 package com.mkbrv.orange.identity;
 
-import com.mkbrv.orange.identity.exception.OrangeIdentityException;
-
-import java.util.Iterator;
+import com.mkbrv.orange.client.security.OrangeAccessToken;
+import com.mkbrv.orange.client.security.OrangeRefreshToken;
+import com.mkbrv.orange.identity.impl.OrangeIdentityAPIImpl;
+import com.mkbrv.orange.identity.model.OrangeIdentityContext;
 
 /**
- * Created by mikibrv on 17/02/16.
+ * Created by mikibrv on 18/02/16.
  */
-public class OrangeIdentityAPI {
+public interface OrangeIdentityAPI {
 
-
-    public static class Constants {
-        static final String PARAM_RESPONSE_TYPE = "response_type";
-        static final String PARAM_CLIENT_ID = "client_id";
-        static final String PARAM_REDIRECT_URI = "redirect_urI";
-        static final String PARAM_SCOPE = "scope";
-        static final String PARAM_STATE = "state";
-        static final String PARAM_PROMPT = "prompt";
+    /**
+     * default implementation
+     *
+     * @param orangeContext orange context required
+     * @return
+     */
+    static OrangeIdentityAPI newInstance(final OrangeIdentityContext orangeContext) {
+        return new OrangeIdentityAPIImpl(orangeContext);
     }
-
 
     /**
      * Builds the auth URL based on the orange context contained in the request;
+     * <p>
+     * uses the context inside;
      *
-     * @param orangeContext uses the context inside;
      * @return URL
      */
-    public String buildOauthAuthorizeURL(final OrangeIdentityContext orangeContext) {
-        StringBuilder url = new StringBuilder()
-                .append(orangeContext.getOrangeContext().getOrangeURLs().getDomain())
-                .append(orangeContext.getOrangeContext().getOrangeURLs().getOauthAuthorize());
+    String buildOauthAuthorizeURL();
 
-        url.append("?").append(Constants.PARAM_RESPONSE_TYPE).append("=code");
+    /**
+     * Will generate an access token based on the initial token provided by the OAUTH redirect
+     * Also contains a refresh token
+     *
+     * @param initialToken initial token from Orange OAUTH
+     * @return accessToken with a refresh token;
+     */
+    OrangeAccessToken generateAccessAndRefreshTokenFromInitial(
+            final OrangeAccessToken initialToken);
+
+    /**
+     * Generates an access token based on a refresh token.
+     *
+     * @param orangeRefreshToken refresh token used to generate the access
+     * @return OrangeAccessToken
+     */
+    OrangeAccessToken generateAccessTokenFromRefreshToken(final OrangeRefreshToken orangeRefreshToken);
+
+    /**
+     * Constants related to the API call
+     */
+    class Constants {
+        public static final String PARAM_RESPONSE_TYPE = "response_type";
+        public static final String PARAM_CLIENT_ID = "client_id";
+        public static final String PARAM_REDIRECT_URI = "redirect_uri";
+        public static final String PARAM_SCOPE = "scope";
+        public static final String PARAM_STATE = "state";
+        public static final String PARAM_PROMPT = "prompt";
+
+        public static final String PARAM_GRANT_TYPE = "grant_type";
+        public static final String PARAM_CODE = "code";
+        public static final String PARAM_AUTH_CODE = "authorization_code";
+        public static final String PARAM_REFRESH_TOKEN = "refresh_token";
 
 
-        this.appendVariableToURL(url, Constants.PARAM_SCOPE, buildScope(orangeContext));
-        this.appendVariableToURL(url, Constants.PARAM_CLIENT_ID,
-                orangeContext.getOrangeContext().getOrangeClientConfiguration().getAppKey());
-        this.appendVariableToURL(url, Constants.PARAM_REDIRECT_URI,
-                this.sanitizeUrl(orangeContext.getOrangeContext().getOrangeClientConfiguration().getAppRedirectURL()));
-        this.appendVariableToURL(url, Constants.PARAM_STATE,
-                orangeContext.getState());
-        this.appendVariableToURL(url, Constants.PARAM_PROMPT,
-                orangeContext.getPrompt().toString());
-
-        return url.toString();
-    }
-
-    private String buildScope(final OrangeIdentityContext orangeContext) {
-        if (orangeContext.getOrangeScopeList().isEmpty()) {
-            throw new OrangeIdentityException("At least one scope required for oauth");
-        }
-        StringBuilder scopeBuilder = new StringBuilder();
-        Iterator<OrangeScope> scopeIterator = orangeContext.getOrangeScopeList().listIterator();
-        while (scopeIterator.hasNext()) {
-            scopeBuilder.append(scopeIterator.next().toString());
-            if (scopeIterator.hasNext()) {
-                scopeBuilder.append("%20");
-            }
-        }
-        return scopeBuilder.toString();
-    }
-
-    private String sanitizeUrl(final String url) {
-        return url.replace("://", "%3A%2F%2F");
-    }
-
-    private void appendVariableToURL(final StringBuilder url, final String variable, final String value) {
-        url.append("&").append(variable).append("=").append(value);
-    }
-
-    public void obtainAccessToken() {
+        public static final String HEADER_AUTHORIZATION = "Authorization";
+        public static final String HEADER_AUTHORIZATION_BASIC = "Basic";
 
     }
-
-    public void generateAccessTokenFromRefreshToken() {
-
-    }
-
 }
