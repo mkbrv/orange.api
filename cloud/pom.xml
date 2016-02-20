@@ -11,5 +11,54 @@
 
     <artifactId>cloud</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.mkbrv.orange</groupId>
+            <artifactId>common</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.mkbrv.orange</groupId>
+            <artifactId>http-client</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.mkbrv.orange</groupId>
+            <artifactId>common</artifactId>
+            <version>${project.parent.version}</version>
+            <type>test-jar</type>
+            <scope>test</scope>
+        </dependency>
+
+
+        <dependency>
+            <groupId>com.mkbrv.orange</groupId>
+            <artifactId>identity</artifactId>
+            <version>${project.parent.version}</version>
+            <type>test-jar</type>
+            <scope>test</scope>
+        </dependency>
+
+
+        <dependency>
+            <groupId>com.mkbrv.orange</groupId>
+            <artifactId>identity</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
+
 
 </project>

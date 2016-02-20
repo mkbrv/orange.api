@@ -54,10 +54,8 @@ public class ITOrangeIdentityAPI extends AbstractIdentityIntegrationTest {
 
     @Test
     public void canObtainInitialAccessToken() throws IOException {
-        OrangeIdentityContext orangeIdentityContext = new OrangeIdentityContext();
-        orangeIdentityContext.addPrompt(OrangePrompt.login);
-        orangeIdentityContext.addScope(OrangeScope.cloudfullread).addScope(OrangeScope.offline_access);
-        //String accessToken = this.obtainInitialAccessTokenForUser(orangeIdentityContext);
+        String accessToken = this.obtainInitialAccessTokenForUser();
+        assertNotNull(accessToken);
     }
 
     @Test

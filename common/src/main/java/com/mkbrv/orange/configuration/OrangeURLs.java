@@ -16,6 +16,8 @@ public class OrangeURLs {
 
     protected String oauthToken;
 
+    protected String freeSpace;
+
     public String getDomain() {
         return domain;
     }
@@ -52,6 +54,13 @@ public class OrangeURLs {
         return this;
     }
 
+    public String getFreeSpace() {
+        return this.domain + freeSpace;
+    }
+
+    public void setFreeSpace(String freeSpace) {
+        this.freeSpace = freeSpace;
+    }
 
     public static final OrangeURLs DEFAULT = new OrangeURLs() {
 
@@ -60,11 +69,14 @@ public class OrangeURLs {
         public static final String DEFAULT_OAUTHORIZE = "/oauth/v2/authorize";
         public static final String DEFAULT_OAUTH_TOKEN = "/oauth/v2/token";
 
+        public static final String DEFAULT_FREESPACE = "/cloud/v1/freespace";
+
         {
             this.domain = DEFAULT_DOMAIN;
             this.resStatus = DEFAULT_RES_STATUS;
             this.oauthAuthorize = DEFAULT_OAUTHORIZE;
             this.oauthToken = DEFAULT_OAUTH_TOKEN;
+            this.freeSpace = DEFAULT_FREESPACE;
         }
     };
 

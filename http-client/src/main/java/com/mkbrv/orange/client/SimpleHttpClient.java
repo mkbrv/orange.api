@@ -42,6 +42,7 @@ public class SimpleHttpClient implements OrangeHttpClient {
      */
     public OrangeResponse doGet(final OrangeRequest request) {
         HttpGet httpGet = new HttpGet(request.getUrl());
+        this.addAuthParameterToHeaderIfRequired(request);
         request.getHeaders().forEach(httpGet::addHeader);
         return executeRequestAndReadResponse(httpGet);
     }
@@ -52,6 +53,7 @@ public class SimpleHttpClient implements OrangeHttpClient {
     public OrangeResponse doPost(final OrangeRequest request) {
         HttpPost httpPost = new HttpPost(request.getUrl());
         request.getHeaders().forEach(httpPost::addHeader);
+        this.addAuthParameterToHeaderIfRequired(request);
 
         try {
             List<NameValuePair> requestParameters = new ArrayList<>();
@@ -68,8 +70,24 @@ public class SimpleHttpClient implements OrangeHttpClient {
      */
     public OrangeResponse delete(final OrangeRequest request) {
         HttpDelete httpDelete = new HttpDelete(request.getUrl());
+        this.addAuthParameterToHeaderIfRequired(request);
         request.getHeaders().forEach(httpDelete::addHeader);
         return executeRequestAndReadResponse(httpDelete);
+    }
+
+    final String AUTHORIZATION = "Authorization";
+    final String BEARER = "Bearer";
+
+    /**
+     * @param orangeRequest
+     */
+    protected void addAuthParameterToHeaderIfRequired(final OrangeRequest orangeRequest) {
+        if (orangeRequest.getHeaders().containsKey(AUTHORIZATION)) {
+            return;
+        } else if (orangeRequest.getOrangeAccessToken() != null &&
+                orangeRequest.getOrangeAccessToken().getToken() != null) {
+            orangeRequest.addHeader(AUTHORIZATION, BEARER + " " + orangeRequest.getOrangeAccessToken().getToken());
+        }
     }
 
 
