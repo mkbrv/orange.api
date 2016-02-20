@@ -34,4 +34,20 @@ public class OrangeRefreshToken {
                 ", createdDate=" + createdDate +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        OrangeRefreshToken that = (OrangeRefreshToken) o;
+
+        return token.equals(that.token);
+
+    }
+
+    @Override
+    public int hashCode() {
+        return token.hashCode();
+    }
 }
