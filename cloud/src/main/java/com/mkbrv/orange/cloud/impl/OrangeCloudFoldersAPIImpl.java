@@ -10,6 +10,7 @@ import com.mkbrv.orange.client.request.OrangeRequest;
 import com.mkbrv.orange.client.response.OrangeResponse;
 import com.mkbrv.orange.client.security.OrangeAccessToken;
 import com.mkbrv.orange.cloud.OrangeCloudFoldersAPI;
+import com.mkbrv.orange.cloud.model.OrangeFolder;
 import com.mkbrv.orange.cloud.model.OrangeFreeSpace;
 import com.mkbrv.orange.cloud.model.OrangeFreeSpaceDeserializer;
 
@@ -42,5 +43,30 @@ public class OrangeCloudFoldersAPIImpl implements OrangeCloudFoldersAPI {
                 .setOrangeAccessToken(orangeAccessToken);
         OrangeResponse orangeResponse = this.orangeHttpClient.doGet(orangeRequest);
         return gson.fromJson(orangeResponse.getBody().toString(), OrangeFreeSpace.class);
+    }
+
+    @Override
+    public OrangeFolder getRootFolder(OrangeAccessToken orangeAccessToken) {
+        return null;
+    }
+
+    @Override
+    public OrangeFolder getFolder(OrangeAccessToken orangeAccessToken, OrangeFolder orangeFolder) {
+        return null;
+    }
+
+    @Override
+    public OrangeFolder createFolder(OrangeAccessToken orangeAccessToken, OrangeFolder orangeFolder) {
+        return null;
+    }
+
+    @Override
+    public OrangeFolder updateFolder(OrangeAccessToken orangeAccessToken, OrangeFolder orangeFolder) {
+        return null;
+    }
+
+    @Override
+    public void deleteFolder(OrangeAccessToken orangeAccessToken, OrangeFolder orangeFolder) {
+
     }
 }
