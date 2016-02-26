@@ -11,7 +11,6 @@ import com.mkbrv.orange.identity.model.OrangeScope;
 import org.junit.Before;
 
 import java.io.IOException;
-import java.net.URL;
 
 /**
  * Created by mikibrv on 18/02/16.

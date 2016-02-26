@@ -24,6 +24,7 @@
         <module>http-client</module>
         <module>identity</module>
         <module>cloud</module>
+        <module>integration-tests</module>
     </modules>
 
 
@@ -44,6 +45,12 @@
             <dependency>
                 <groupId>com.mkbrv.orange</groupId>
                 <artifactId>identity</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.mkbrv.orange</groupId>
+                <artifactId>cloud</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

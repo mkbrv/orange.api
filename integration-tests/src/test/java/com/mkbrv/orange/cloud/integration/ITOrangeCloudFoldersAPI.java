@@ -6,13 +6,11 @@ import com.mkbrv.orange.cloud.OrangeCloudFoldersAPI;
 import com.mkbrv.orange.cloud.impl.OrangeCloudFoldersAPIImpl;
 import com.mkbrv.orange.cloud.model.OrangeFreeSpace;
 import com.mkbrv.orange.identity.integration.ITOrangeIdentityAPI;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
-
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 
 /**
@@ -39,12 +37,11 @@ public class ITOrangeCloudFoldersAPI extends ITOrangeIdentityAPI {
         OrangeRefreshToken orangeRefreshToken = new OrangeRefreshToken(this.orangeAccountRefreshToken);
         OrangeAccessToken orangeAccessToken = orangeIdentityAPI.generateAccessTokenFromRefreshToken(orangeRefreshToken);
 
-        assertNotNull(orangeAccessToken);
+        Assert.assertNotNull(orangeAccessToken);
         OrangeFreeSpace orangeFreeSpace = orangeCloudFoldersAPI.getAvailableSpace(orangeAccessToken);
         System.out.println(orangeFreeSpace);
-        assertNotNull(orangeFreeSpace);
-        assertTrue(orangeFreeSpace.getAvailableSpace() > 0L);
-
+        Assert.assertNotNull(orangeFreeSpace);
+        Assert.assertTrue(orangeFreeSpace.getAvailableSpace() > 0L);
     }
 
 

@@ -46,22 +46,26 @@ public class OrangeCloudFoldersAPIImpl implements OrangeCloudFoldersAPI {
     }
 
     @Override
-    public OrangeFolder getRootFolder(OrangeAccessToken orangeAccessToken) {
+    public OrangeFolder getRootFolder(final OrangeAccessToken orangeAccessToken) {
+        OrangeRequest orangeRequest = new OrangeRequest()
+                .setUrl(this.orangeContext.getOrangeURLs().getRootFolder())
+                .setOrangeAccessToken(orangeAccessToken);
+        OrangeResponse orangeResponse = this.orangeHttpClient.doGet(orangeRequest);
+        return gson.fromJson(orangeResponse.getBody().toString(), OrangeFolder.class);
+    }
+
+    @Override
+    public OrangeFolder getFolder(final OrangeAccessToken orangeAccessToken, final OrangeFolder orangeFolder) {
         return null;
     }
 
     @Override
-    public OrangeFolder getFolder(OrangeAccessToken orangeAccessToken, OrangeFolder orangeFolder) {
+    public OrangeFolder createFolder(final OrangeAccessToken orangeAccessToken, final OrangeFolder orangeFolder) {
         return null;
     }
 
     @Override
-    public OrangeFolder createFolder(OrangeAccessToken orangeAccessToken, OrangeFolder orangeFolder) {
-        return null;
-    }
-
-    @Override
-    public OrangeFolder updateFolder(OrangeAccessToken orangeAccessToken, OrangeFolder orangeFolder) {
+    public OrangeFolder updateFolder(final OrangeAccessToken orangeAccessToken, final OrangeFolder orangeFolder) {
         return null;
     }
 
