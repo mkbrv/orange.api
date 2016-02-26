@@ -1,6 +1,8 @@
 package com.mkbrv.orange.client.response;
 
 
+import com.mkbrv.orange.client.request.OrangeRequest;
+
 import java.io.Serializable;
 
 /**
@@ -10,9 +12,20 @@ public class OrangeResponse implements Serializable {
 
     private static final long serialVersionUID = 42L;
 
-    Integer status;
+    private Integer status;
 
     private String body;
+
+    private OrangeRequest orangeRequest;
+
+    public OrangeResponse() {
+    }
+
+
+    public OrangeResponse setOrangeRequest(final OrangeRequest orangeRequest) {
+        this.orangeRequest = orangeRequest;
+        return this;
+    }
 
     public OrangeResponse setStatus(final Integer status) {
         this.status = status;
@@ -30,5 +43,9 @@ public class OrangeResponse implements Serializable {
     public OrangeResponse setBody(String body) {
         this.body = body;
         return this;
+    }
+
+    public OrangeRequest getOrangeRequest() {
+        return orangeRequest;
     }
 }

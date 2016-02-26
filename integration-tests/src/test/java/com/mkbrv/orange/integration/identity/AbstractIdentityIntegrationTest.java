@@ -1,7 +1,7 @@
-package com.mkbrv.orange.identity.integration;
+package com.mkbrv.orange.integration.identity;
 
 
-import com.mkbrv.orange.AbstractIntegrationTest;
+import com.mkbrv.orange.integration.AbstractIntegrationTest;
 import com.mkbrv.orange.configuration.OrangeURLs;
 import com.mkbrv.orange.identity.OrangeIdentityAPI;
 import com.mkbrv.orange.identity.impl.OrangeIdentityAPIImpl;

@@ -62,10 +62,10 @@ public class OrangeURLs {
 
 
     public String getRootFolder() {
-        return rootFolder;
+        return this.domain + rootFolder;
     }
 
-    public void setRootFolder(String rootFolder) {
+    public void setRootFolder(final String rootFolder) {
         this.rootFolder = rootFolder;
     }
 
@@ -79,9 +79,10 @@ public class OrangeURLs {
         public static final String DEFAULT_RES_STATUS = "/res/status";
         public static final String DEFAULT_OAUTHORIZE = "/oauth/v2/authorize";
         public static final String DEFAULT_OAUTH_TOKEN = "/oauth/v2/token";
-        public static final String DEFAULT_ROOT_FOLDER = "/folders";
 
         public static final String DEFAULT_FREESPACE = "/cloud/v1/freespace";
+        public static final String DEFAULT_ROOT_FOLDER = "/cloud/v1/folders";
+
 
         {
             this.domain = DEFAULT_DOMAIN;

@@ -1,4 +1,4 @@
-package com.mkbrv.orange.identity.integration;
+package com.mkbrv.orange.integration.identity;
 
 import com.mkbrv.orange.client.exception.OrangeException;
 import com.mkbrv.orange.client.security.OrangeAccessToken;
