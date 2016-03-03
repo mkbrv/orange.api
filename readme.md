@@ -2,8 +2,32 @@
 
 Provides a java client for the Orange Cloud API as defined in: https://developer.orange.com/apis
 
+**_-work in progress-_**
 
-*work in progress*
+
+## Project structure
+**Maven**modules:
+ - common
+    > Contains common classes and interfaces used in the project.
+
+ - http-client
+    > Contains an implementation of the http client interface which uses internally the apache http client.
+    It also contains an exception aware client, which parses and throws exceptions.
+
+ - identity
+    > Contains the interface and implementation of the Orange Identity API.
+    Has the http client as a provided dependency, allowint it to be replaced.
+
+ - cloud
+     > Contains the interface and implementation of the Orange Identity Cloud API.
+     Has the http client as a provided dependency, allowint it to be replaced.
+
+ - client
+    > Contains dependencies to all previous modules, being a simple way of using the entire project.
+
+ - integration-tests
+    > Contains integration tests.
+
 
 
 ## to do:

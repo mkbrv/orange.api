@@ -28,6 +28,7 @@
         <module>identity</module>
         <module>cloud</module>
         <module>integration-tests</module>
+        <module>client</module>
     </modules>
 
 
