@@ -2,6 +2,7 @@ package com.mkbrv.orange.cloud.impl;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializer;
 import com.mkbrv.orange.client.ExceptionAwareHttpClient;
 import com.mkbrv.orange.client.OrangeContext;
 import com.mkbrv.orange.client.OrangeHttpClient;
@@ -10,9 +11,11 @@ import com.mkbrv.orange.client.request.OrangeRequest;
 import com.mkbrv.orange.client.response.OrangeResponse;
 import com.mkbrv.orange.client.security.OrangeAccessToken;
 import com.mkbrv.orange.cloud.OrangeCloudFoldersAPI;
-import com.mkbrv.orange.cloud.model.OrangeFolder;
-import com.mkbrv.orange.cloud.model.OrangeFreeSpace;
-import com.mkbrv.orange.cloud.model.OrangeFreeSpaceDeserializer;
+import com.mkbrv.orange.cloud.model.*;
+import com.mkbrv.orange.cloud.request.OrangeFolderRequestParams;
+
+import java.lang.reflect.Type;
+import java.util.Map;
 
 /**
  * Created by mikibrv on 20/02/16.
@@ -23,8 +26,11 @@ public class OrangeCloudFoldersAPIImpl implements OrangeCloudFoldersAPI {
 
     private final OrangeHttpClient orangeHttpClient;
 
-    private final Gson gson = new GsonBuilder().registerTypeAdapter(OrangeFreeSpace.class,
-            new OrangeFreeSpaceDeserializer()).create();
+    private Gson gson = new GsonBuilder()
+            .registerTypeAdapter(OrangeFreeSpace.class, new OrangeFreeSpaceDeserializer())
+            .registerTypeAdapter(OrangeFolder.class, new OrangeFolderDeserializer())
+            .registerTypeAdapter(OrangeFile.class, new OrangeFileDeserializer())
+            .create();
 
     public OrangeCloudFoldersAPIImpl(final OrangeContext orangeContext) {
         this.orangeContext = orangeContext;
@@ -45,8 +51,10 @@ public class OrangeCloudFoldersAPIImpl implements OrangeCloudFoldersAPI {
         return gson.fromJson(orangeResponse.getBody().toString(), OrangeFreeSpace.class);
     }
 
+
     @Override
-    public OrangeFolder getRootFolder(final OrangeAccessToken orangeAccessToken) {
+    public OrangeFolder getRootFolder(final OrangeAccessToken orangeAccessToken,
+                                      final OrangeFolderRequestParams orangeFolderRequestParams) {
         OrangeRequest orangeRequest = new OrangeRequest()
                 .setUrl(this.orangeContext.getOrangeURLs().getRootFolder())
                 .setOrangeAccessToken(orangeAccessToken);
@@ -72,5 +80,12 @@ public class OrangeCloudFoldersAPIImpl implements OrangeCloudFoldersAPI {
     @Override
     public void deleteFolder(OrangeAccessToken orangeAccessToken, OrangeFolder orangeFolder) {
 
+    }
+
+    @Override
+    public void setGsonTypeAdapters(Map<Type, JsonDeserializer> gsonTypeAdapters) {
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        gsonTypeAdapters.forEach(gsonBuilder::registerTypeAdapter);
+        this.gson = gsonBuilder.create();
     }
 }

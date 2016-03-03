@@ -40,7 +40,7 @@ public class OrangeResponse implements Serializable {
         return body;
     }
 
-    public OrangeResponse setBody(String body) {
+    public OrangeResponse setBody(final String body) {
         this.body = body;
         return this;
     }

@@ -22,8 +22,17 @@
         <dependency>
             <groupId>com.mkbrv.orange</groupId>
             <artifactId>http-client</artifactId>
+            <scope>provided</scope>
         </dependency>
 
+
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+        </dependency>
+
+
+        <!-- test deps  -->
 
         <dependency>
             <groupId>junit</groupId>
@@ -37,7 +46,7 @@
             <artifactId>mockito-core</artifactId>
             <scope>test</scope>
         </dependency>
-        
+
 
     </dependencies>
 

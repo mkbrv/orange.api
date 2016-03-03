@@ -58,7 +58,7 @@ public class ITOrangeCloudFoldersAPI extends ITOrangeIdentityAPI {
         OrangeAccessToken orangeAccessToken = orangeIdentityAPI.generateAccessTokenFromRefreshToken(orangeRefreshToken);
 
         assertNotNull(orangeAccessToken);
-        OrangeFolder orangeFolder = orangeCloudFoldersAPI.getRootFolder(orangeAccessToken);
+        OrangeFolder orangeFolder = orangeCloudFoldersAPI.getRootFolder(orangeAccessToken, null);
 
         assertNotNull(orangeFolder);
     }
