@@ -1,4 +1,4 @@
-package com.mkbrv.orange;
+package com.mkbrv.orange.integration;
 
 import com.mkbrv.orange.configuration.OrangeClientConfiguration;
 import org.junit.Before;

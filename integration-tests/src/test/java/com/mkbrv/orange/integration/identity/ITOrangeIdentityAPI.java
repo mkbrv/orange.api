@@ -1,11 +1,8 @@
-package com.mkbrv.orange.identity.integration;
+package com.mkbrv.orange.integration.identity;
 
 import com.mkbrv.orange.client.exception.OrangeException;
 import com.mkbrv.orange.client.security.OrangeAccessToken;
 import com.mkbrv.orange.client.security.OrangeRefreshToken;
-import com.mkbrv.orange.identity.model.OrangeIdentityContext;
-import com.mkbrv.orange.identity.model.OrangePrompt;
-import com.mkbrv.orange.identity.model.OrangeScope;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -16,9 +13,7 @@ import org.junit.Test;
 import java.io.IOException;
 import java.util.Date;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 
 /**

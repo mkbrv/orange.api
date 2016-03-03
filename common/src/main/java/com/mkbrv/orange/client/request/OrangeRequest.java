@@ -93,4 +93,9 @@ public class OrangeRequest implements Serializable {
         this.orangeAccessToken = orangeAccessToken;
         return this;
     }
+
+    @Override
+    public String toString() {
+        return this.getUrl();
+    }
 }

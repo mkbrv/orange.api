@@ -9,44 +9,45 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>http-client</artifactId>
+    <artifactId>integration-tests</artifactId>
 
 
     <dependencies>
+        <!-- own dependencies -->
         <dependency>
             <groupId>com.mkbrv.orange</groupId>
             <artifactId>common</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpclient</artifactId>
+            <groupId>com.mkbrv.orange</groupId>
+            <artifactId>http-client</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
+            <groupId>com.mkbrv.orange</groupId>
+            <artifactId>identity</artifactId>
         </dependency>
-
 
         <dependency>
-            <groupId>com.google.code.gson</groupId>
-            <artifactId>gson</artifactId>
+            <groupId>com.mkbrv.orange</groupId>
+            <artifactId>cloud</artifactId>
         </dependency>
 
 
+        <!-- test deps -->
 
-        <!-- Test -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-core</artifactId>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
         </dependency>
 
     </dependencies>
+
 
 </project>

@@ -1,7 +1,7 @@
-package com.mkbrv.orange.identity.integration;
+package com.mkbrv.orange.integration.identity;
 
 
-import com.mkbrv.orange.AbstractIntegrationTest;
+import com.mkbrv.orange.integration.AbstractIntegrationTest;
 import com.mkbrv.orange.configuration.OrangeURLs;
 import com.mkbrv.orange.identity.OrangeIdentityAPI;
 import com.mkbrv.orange.identity.impl.OrangeIdentityAPIImpl;
@@ -11,7 +11,6 @@ import com.mkbrv.orange.identity.model.OrangeScope;
 import org.junit.Before;
 
 import java.io.IOException;
-import java.net.URL;
 
 /**
  * Created by mikibrv on 18/02/16.

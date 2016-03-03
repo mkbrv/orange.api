@@ -6,6 +6,8 @@ import com.mkbrv.orange.client.exception.OrangeException;
 import com.mkbrv.orange.client.exception.OrangeExceptionDeserializer;
 import com.mkbrv.orange.client.request.OrangeRequest;
 import com.mkbrv.orange.client.response.OrangeResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Decorator for the http client. aware of orange errors
@@ -14,6 +16,7 @@ import com.mkbrv.orange.client.response.OrangeResponse;
  */
 public class ExceptionAwareHttpClient implements OrangeHttpClient {
 
+    private final Logger LOG = LoggerFactory.getLogger(ExceptionAwareHttpClient.class);
 
     private final OrangeHttpClient actualClient;
 
@@ -62,6 +65,7 @@ public class ExceptionAwareHttpClient implements OrangeHttpClient {
         try {
             orangeException = gson.fromJson(orangeResponse.getBody().toString(), OrangeException.class)
                     .setCode(orangeResponse.getStatus());
+            LOG.error(orangeResponse.getOrangeRequest() + orangeResponse.getBody().toString());
         } catch (Exception e) {
             orangeException = new OrangeException(e)
                     .setCode(orangeResponse.getStatus())

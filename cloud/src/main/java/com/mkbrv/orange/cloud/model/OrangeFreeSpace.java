@@ -7,7 +7,6 @@ public class OrangeFreeSpace {
 
     private final Long availableSpace;
 
-
     public OrangeFreeSpace(Long availableSpace) {
         this.availableSpace = availableSpace;
     }

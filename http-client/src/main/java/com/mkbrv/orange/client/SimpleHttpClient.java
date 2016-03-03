@@ -44,7 +44,7 @@ public class SimpleHttpClient implements OrangeHttpClient {
         HttpGet httpGet = new HttpGet(request.getUrl());
         this.addAuthParameterToHeaderIfRequired(request);
         request.getHeaders().forEach(httpGet::addHeader);
-        return executeRequestAndReadResponse(httpGet);
+        return executeRequestAndReadResponse(httpGet).setOrangeRequest(request);
     }
 
     /**
@@ -62,7 +62,7 @@ public class SimpleHttpClient implements OrangeHttpClient {
         } catch (UnsupportedEncodingException e) {
             LOG.warn(e.getMessage());
         }
-        return executeRequestAndReadResponse(httpPost);
+        return executeRequestAndReadResponse(httpPost).setOrangeRequest(request);
     }
 
     /**
@@ -72,7 +72,7 @@ public class SimpleHttpClient implements OrangeHttpClient {
         HttpDelete httpDelete = new HttpDelete(request.getUrl());
         this.addAuthParameterToHeaderIfRequired(request);
         request.getHeaders().forEach(httpDelete::addHeader);
-        return executeRequestAndReadResponse(httpDelete);
+        return executeRequestAndReadResponse(httpDelete).setOrangeRequest(request);
     }
 
     final String AUTHORIZATION = "Authorization";
@@ -102,6 +102,7 @@ public class SimpleHttpClient implements OrangeHttpClient {
         HttpResponse response = this.executeRequest(httpRequest);
         orangeResponse.setStatus(response.getStatusLine().getStatusCode());
         orangeResponse.setBody(this.readResponseBody(response));
+        LOG.info("Called URL : {} with response : {}", httpRequest.getURI(), orangeResponse.getBody());
         return orangeResponse;
     }
 
