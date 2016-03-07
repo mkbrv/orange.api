@@ -2,7 +2,7 @@ package com.mkbrv.orange.configuration;
 
 /**
  * As in what concerns credentials for orange apps;
- * Created by mikibrv on 16/02/16.
+ * Created by mkbrv on 16/02/16.
  */
 public class OrangeClientConfiguration {
 

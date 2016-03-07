@@ -3,6 +3,7 @@ package com.mkbrv.orange.client;
 import com.mkbrv.orange.client.exception.OrangeException;
 import com.mkbrv.orange.client.request.OrangeRequest;
 import com.mkbrv.orange.client.response.OrangeResponse;
+import com.mkbrv.orange.client.security.OrangeAccessTokenHeader;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
@@ -11,6 +12,7 @@ import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
 import org.slf4j.Logger;
@@ -19,12 +21,14 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * Created by mikibrv on 16/02/16.
+ * Created by mkbrv on 16/02/16.
  */
 public class SimpleHttpClient implements OrangeHttpClient {
 
@@ -41,10 +45,28 @@ public class SimpleHttpClient implements OrangeHttpClient {
      * @param request
      */
     public OrangeResponse doGet(final OrangeRequest request) {
-        HttpGet httpGet = new HttpGet(request.getUrl());
+        HttpGet httpGet = new HttpGet(this.buildUrlWithParameters(request.getUrl(), request.getParameters()));
         this.addAuthParameterToHeaderIfRequired(request);
         request.getHeaders().forEach(httpGet::addHeader);
         return executeRequestAndReadResponse(httpGet).setOrangeRequest(request);
+    }
+
+    /**
+     * Builds the URL with parameters (for get)
+     *
+     * @param url        base URL
+     * @param parameters parameters to be appended
+     * @return url with parameters
+     */
+    private String buildUrlWithParameters(final String url, final Map<String, String> parameters) {
+        try {
+            URIBuilder uriBuilder = new URIBuilder(url);
+            parameters.forEach(uriBuilder::addParameter);
+            return uriBuilder.build().toString();
+        } catch (URISyntaxException e) {
+            LOG.warn(e.getMessage(), e);
+            return url;
+        }
     }
 
     /**
@@ -54,7 +76,6 @@ public class SimpleHttpClient implements OrangeHttpClient {
         HttpPost httpPost = new HttpPost(request.getUrl());
         request.getHeaders().forEach(httpPost::addHeader);
         this.addAuthParameterToHeaderIfRequired(request);
-
         try {
             List<NameValuePair> requestParameters = new ArrayList<>();
             request.getParameters().forEach((key, value) -> requestParameters.add(new BasicNameValuePair(key, value)));
@@ -75,18 +96,16 @@ public class SimpleHttpClient implements OrangeHttpClient {
         return executeRequestAndReadResponse(httpDelete).setOrangeRequest(request);
     }
 
-    final String AUTHORIZATION = "Authorization";
-    final String BEARER = "Bearer";
-
     /**
      * @param orangeRequest
      */
     protected void addAuthParameterToHeaderIfRequired(final OrangeRequest orangeRequest) {
-        if (orangeRequest.getHeaders().containsKey(AUTHORIZATION)) {
+        if (orangeRequest.getHeaders().containsKey(OrangeAccessTokenHeader.HEADER_AUTHORIZATION)) {
             return;
         } else if (orangeRequest.getOrangeAccessToken() != null &&
                 orangeRequest.getOrangeAccessToken().getToken() != null) {
-            orangeRequest.addHeader(AUTHORIZATION, BEARER + " " + orangeRequest.getOrangeAccessToken().getToken());
+            orangeRequest.addHeader(OrangeAccessTokenHeader.HEADER_AUTHORIZATION,
+                    OrangeAccessTokenHeader.BEARER + " " + orangeRequest.getOrangeAccessToken().getToken());
         }
     }
 
@@ -112,7 +131,7 @@ public class SimpleHttpClient implements OrangeHttpClient {
      * @param response
      * @return
      */
-    private String readResponseBody(final HttpResponse response) {
+    protected String readResponseBody(final HttpResponse response) {
         try (BufferedReader buffer = new BufferedReader(
                 new InputStreamReader(response.getEntity().getContent()))) {
             return buffer.lines().collect(Collectors.joining());

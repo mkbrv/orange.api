@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.util.Properties;
 
 /**
- * Created by mikibrv on 17/02/16.
+ * Created by mkbrv on 17/02/16.
  */
 public abstract class AbstractIntegrationTest {
 

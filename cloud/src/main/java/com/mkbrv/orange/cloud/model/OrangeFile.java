@@ -3,13 +3,17 @@ package com.mkbrv.orange.cloud.model;
 import java.util.Date;
 
 /**
- * Created by mikibrv on 26/02/16.
+ * Created by mkbrv on 26/02/16.
  */
 public class OrangeFile {
 
     private String id;
 
     private String name;
+
+    private String thumbUrl;
+
+    private String previewUrl;
 
     private OrangeFileType type;
 
@@ -82,6 +86,24 @@ public class OrangeFile {
 
     public OrangeFile setMetadata(OrangeFileMetadata metadata) {
         this.metadata = metadata;
+        return this;
+    }
+
+    public String getThumbUrl() {
+        return thumbUrl;
+    }
+
+    public OrangeFile setThumbUrl(String thumbUrl) {
+        this.thumbUrl = thumbUrl;
+        return this;
+    }
+
+    public String getPreviewUrl() {
+        return previewUrl;
+    }
+
+    public OrangeFile setPreviewUrl(String previewUrl) {
+        this.previewUrl = previewUrl;
         return this;
     }
 }

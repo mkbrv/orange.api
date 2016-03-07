@@ -9,6 +9,8 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.junit.Before;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.Date;
@@ -18,9 +20,12 @@ import static org.junit.Assert.*;
 
 /**
  * Integration tests should not be run in the default maven goal
- * Created by mikibrv on 17/02/16.
+ * Created by mkbrv on 17/02/16.
  */
 public class ITOrangeIdentityAPI extends AbstractIdentityIntegrationTest {
+
+    private static final Logger LOG = LoggerFactory.getLogger(ITOrangeIdentityAPI.class);
+
 
     @Test
     public void testFoundConfigurationFileWithSecretKey() {
@@ -43,7 +48,7 @@ public class ITOrangeIdentityAPI extends AbstractIdentityIntegrationTest {
         assertTrue(response.getStatusLine().getStatusCode() < 400);
         assertTrue(response.getStatusLine().getStatusCode() >= 200);
 
-        System.out.println("AuthorizationURL : " + authorizeUrl);
+        LOG.warn("AuthorizationURL obtained for generating a real token : {}", authorizeUrl);
     }
 
 
@@ -65,7 +70,7 @@ public class ITOrangeIdentityAPI extends AbstractIdentityIntegrationTest {
             OrangeAccessToken orangeAccessToken = orangeIdentityAPI.generateAccessAndRefreshTokenFromInitial(initialToken);
             assertNotNull(orangeAccessToken);
 
-            System.out.println("Access Token: " + orangeAccessToken.toString());
+            LOG.warn("Access Token obtained from the initial token: {} ", orangeAccessToken.toString());
         } catch (OrangeException e) {
             //Initial token has expired, we cannot generate a new one
             assertEquals(new Integer(400), e.getCode());
@@ -88,7 +93,7 @@ public class ITOrangeIdentityAPI extends AbstractIdentityIntegrationTest {
         assertNotNull(orangeAccessToken.getRefreshToken());
         assertTrue(StringUtils.isNotEmpty(orangeAccessToken.getToken()));
         assertTrue(orangeAccessToken.getExpirationTime().after(new Date()));
-        System.out.println("Generated token using refresh: " + orangeAccessToken);
+        LOG.info("Generated token using refresh: {}", orangeAccessToken);
     }
 
 }

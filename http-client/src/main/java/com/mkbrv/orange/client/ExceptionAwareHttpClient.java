@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Decorator for the http client. aware of orange errors
  * Throws exceptions based on orange errors
- * Created by mikibrv on 19/02/16.
+ * Created by mkbrv on 19/02/16.
  */
 public class ExceptionAwareHttpClient implements OrangeHttpClient {
 

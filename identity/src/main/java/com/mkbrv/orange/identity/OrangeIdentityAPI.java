@@ -6,7 +6,8 @@ import com.mkbrv.orange.identity.impl.OrangeIdentityAPIImpl;
 import com.mkbrv.orange.identity.model.OrangeIdentityContext;
 
 /**
- * Created by mikibrv on 18/02/16.
+ * As described in: https://developer.orange.com/apis/identity-france/api-reference
+ * Created by mkbrv on 18/02/16.
  */
 public interface OrangeIdentityAPI {
 
@@ -62,10 +63,5 @@ public interface OrangeIdentityAPI {
         public static final String PARAM_CODE = "code";
         public static final String PARAM_AUTH_CODE = "authorization_code";
         public static final String PARAM_REFRESH_TOKEN = "refresh_token";
-
-
-        public static final String HEADER_AUTHORIZATION = "Authorization";
-        public static final String HEADER_AUTHORIZATION_BASIC = "Basic";
-
     }
 }

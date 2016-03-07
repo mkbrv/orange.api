@@ -10,7 +10,7 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 
 /**
- * Created by mikibrv on 19/02/16.
+ * Created by mkbrv on 19/02/16.
  */
 public class ExceptionAwareHttpClientTest {
 

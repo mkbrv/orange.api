@@ -3,6 +3,7 @@ package com.mkbrv.orange.client.request;
 
 import com.mkbrv.orange.client.OrangeContext;
 import com.mkbrv.orange.client.security.OrangeAccessToken;
+import com.mkbrv.orange.client.security.OrangeAccessTokenHeader;
 
 import java.io.Serializable;
 import java.util.Collections;
@@ -10,7 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by mikibrv on 16/02/16.
+ * Created by mkbrv on 16/02/16.
  */
 public class OrangeRequest implements Serializable {
 
@@ -53,8 +54,18 @@ public class OrangeRequest implements Serializable {
         return this;
     }
 
+
     public OrangeRequest addParameter(final String key, final String value) {
         this.parameters.put(key, value);
+        return this;
+    }
+
+    public OrangeRequest addParameter(final String key, final Object value) {
+        if (value == null) {
+            this.parameters.put(key, null);
+        } else {
+            this.parameters.put(key, String.valueOf(value));
+        }
         return this;
     }
 
@@ -98,4 +109,6 @@ public class OrangeRequest implements Serializable {
     public String toString() {
         return this.getUrl();
     }
+
+
 }

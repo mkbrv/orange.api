@@ -6,7 +6,7 @@ import com.mkbrv.orange.client.response.OrangeResponse;
 /**
  * Implementation required in order to send an HTTP request to Orange API.
  * Default implementation can be found in the http-client module which uses Apache HTTP Client;
- * Created by mikibrv on 16/02/16.
+ * Created by mkbrv on 16/02/16.
  */
 public interface OrangeHttpClient {
 
