@@ -1,7 +1,7 @@
 package com.mkbrv.orange.cloud.model;
 
 /**
- * Created by mikibrv on 20/02/16.
+ * Created by mkbrv on 20/02/16.
  */
 public class OrangeFreeSpace {
 

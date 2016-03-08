@@ -6,7 +6,7 @@ Provides a java client for the Orange Cloud API as defined in: https://developer
 
 
 ## Project structure
-**Maven**modules:
+**Maven** modules:
  - common
     > Contains common classes and interfaces used in the project.
 
@@ -37,8 +37,10 @@ Provides a java client for the Orange Cloud API as defined in: https://developer
 - [x] Identity API
 - [ ] Orange Cloud API
     - [x] Freespace
-    - [ ] **Orange Folders**
-    - [ ] Orange Files
+    - [ ] Orange Folders
+        - [x] Orange Root folder
+        - [x] Orange Folder CRUD
+    - [ ] **Orange Files**
     - [ ] Upload
 - [ ] Integration testing
 

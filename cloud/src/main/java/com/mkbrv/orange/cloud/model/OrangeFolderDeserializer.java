@@ -5,7 +5,7 @@ import com.google.gson.*;
 import java.lang.reflect.Type;
 
 /**
- * Created by mikibrv on 26/02/16.
+ * Created by mkbrv on 26/02/16.
  */
 public class OrangeFolderDeserializer implements JsonDeserializer<OrangeFolder> {
 
@@ -22,11 +22,10 @@ public class OrangeFolderDeserializer implements JsonDeserializer<OrangeFolder> 
     public OrangeFolder deserialize(final JsonElement jsonElement,
                                     final Type type, final JsonDeserializationContext jsonDeserializationContext)
             throws JsonParseException {
-        OrangeFolder orangeFolder = new OrangeFolder();
         JsonObject jsonObject = jsonElement.getAsJsonObject();
+        OrangeFolder orangeFolder = new OrangeFolder(jsonObject.get(Params.ID).getAsString());
 
         orangeFolder.setName(jsonObject.get(Params.NAME).getAsString());
-        orangeFolder.setId(jsonObject.get(Params.ID).getAsString());
         orangeFolder.setParentFolderId(jsonObject.get(Params.PARENTID).getAsString());
 
         JsonArray subFoldersArray = jsonObject.getAsJsonArray(Params.SUBFOLDERS);
@@ -58,9 +57,8 @@ public class OrangeFolderDeserializer implements JsonDeserializer<OrangeFolder> 
     private void addSubFolders(final OrangeFolder orangeFolder, final JsonArray subFoldersArray) {
         for (int index = 0; index < subFoldersArray.size(); index++) {
             JsonObject subFolderJson = subFoldersArray.get(index).getAsJsonObject();
-            OrangeFolder subFolder = new OrangeFolder()
+            OrangeFolder subFolder = new OrangeFolder(subFolderJson.get(Params.ID).getAsString())
                     .setName(subFolderJson.get(Params.NAME).getAsString())
-                    .setId(subFolderJson.get(Params.ID).getAsString())
                     .setParentFolderId(subFolderJson.get(Params.PARENTID).getAsString());
             orangeFolder.addSubFolder(subFolder);
         }

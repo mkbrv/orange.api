@@ -6,7 +6,7 @@ import com.mkbrv.orange.configuration.OrangeURLs;
 /**
  * Stores default configuration used in the other modules.
  * The configuration can be changed, even at runtime;
- * Created by mikibrv on 17/02/16.
+ * Created by mkbrv on 17/02/16.
  */
 public class OrangeContext {
 

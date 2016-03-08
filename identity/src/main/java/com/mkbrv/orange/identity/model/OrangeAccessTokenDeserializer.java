@@ -8,7 +8,7 @@ import java.lang.reflect.Type;
 import java.util.Date;
 
 /**
- * Created by mikibrv on 19/02/16.
+ * Created by mkbrv on 19/02/16.
  */
 public class OrangeAccessTokenDeserializer implements
         JsonDeserializer<OrangeAccessToken> {

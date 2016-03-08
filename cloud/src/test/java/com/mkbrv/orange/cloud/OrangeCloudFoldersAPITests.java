@@ -1,43 +1,77 @@
 package com.mkbrv.orange.cloud;
 
-import com.mkbrv.orange.client.OrangeContext;
-import com.mkbrv.orange.client.OrangeHttpClient;
+
 import com.mkbrv.orange.client.response.OrangeResponse;
 import com.mkbrv.orange.client.security.OrangeAccessToken;
-import com.mkbrv.orange.cloud.impl.OrangeCloudFoldersAPIImpl;
 import com.mkbrv.orange.cloud.model.OrangeFolder;
 import com.mkbrv.orange.cloud.model.OrangeFreeSpace;
-import com.mkbrv.orange.configuration.OrangeClientConfiguration;
-import org.junit.Before;
+import com.mkbrv.orange.cloud.response.OrangeDeleteFolderResponse;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static org.mockito.Matchers.any;
 
 /**
- * Created by mikibrv on 20/02/16.
+ * Created by mkbrv on 20/02/16.
  */
-public class OrangeCloudFoldersAPITests {
+public class OrangeCloudFoldersAPITests extends AbstractOrangeCloudAPITests {
 
-    private OrangeCloudFoldersAPI orangeCloudFoldersAPI;
-    private OrangeHttpClient orangeHttpClient;
+    @Test
+    public void removeFolderFailsDueToException() {
+        Mockito.when(orangeHttpClient.delete(any())).thenReturn(new OrangeResponse() {
+            {
+                setStatus(400);
+                setBody("{\n" +
+                        "  \"code\": 800,\n" +
+                        "  \"message\": \"PDK_CW_0002-INVALID_PARAMETER\",\n" +
+                        "  \"description\": \"Invalid some parameter\",\n" +
+                        "  \"infoURL\": \"http://orange.com\"\n" +
+                        "}");
+            }
+        });
 
-    protected final OrangeClientConfiguration orangeClientConfiguration
-            = new OrangeClientConfiguration("appId", "clientID", "clientSecret", "http://app.com");
+        OrangeAccessToken orangeAccessToken = new OrangeAccessToken("token");
+        OrangeDeleteFolderResponse response = orangeCloudFoldersAPI.deleteFolder(orangeAccessToken,
+                new OrangeFolder("random"));
+        assertNotNull(response);
+        assertFalse(response.wasRemoved());
+    }
 
-    @Before
-    public void init() throws IOException {
-        OrangeContext orangeContext = new OrangeContext().setOrangeClientConfiguration(this.orangeClientConfiguration);
-        orangeHttpClient = Mockito.mock(OrangeHttpClient.class);
-        orangeCloudFoldersAPI = new OrangeCloudFoldersAPIImpl(orangeContext, orangeHttpClient);
+    @Test
+    public void canRemoveOneFolder() {
+        Mockito.when(orangeHttpClient.delete(any())).thenReturn(new OrangeResponse() {
+            {
+                setStatus(204);
+                setBody("");
+            }
+        });
+
+        OrangeAccessToken orangeAccessToken = new OrangeAccessToken("token");
+        OrangeDeleteFolderResponse response = orangeCloudFoldersAPI.deleteFolder(orangeAccessToken,
+                new OrangeFolder("random"));
+        assertNotNull(response);
+        assertTrue(response.wasRemoved());
+    }
+
+
+    @Test
+    public void canGetOneFolder() {
+        Mockito.when(orangeHttpClient.doGet(any())).thenReturn(new OrangeResponse() {
+            {
+                setStatus(200);
+                setBody(readValidResponseBody("folder.json"));
+            }
+        });
+
+        OrangeAccessToken orangeAccessToken = new OrangeAccessToken("token");
+        OrangeFolder orangeFolder = orangeCloudFoldersAPI.getFolder(orangeAccessToken,
+                new OrangeFolder("random"), null);
+        assertNotNull(orangeFolder);
+        assertNotNull(orangeFolder.getParentFolderId());
+        assertTrue(orangeFolder.getSubFolders().size() > 0);
+        assertTrue(orangeFolder.getFiles().size() > 0);
+        assertNotNull(orangeFolder.getFiles().get(0).getCreationDate());
     }
 
 
@@ -65,12 +99,12 @@ public class OrangeCloudFoldersAPITests {
         Mockito.when(orangeHttpClient.doGet(any())).thenReturn(new OrangeResponse() {
             {
                 setStatus(200);
-                setBody(readFile("rootfolder.json"));
+                setBody(readValidResponseBody("rootfolder.json"));
             }
         });
 
         OrangeAccessToken orangeAccessToken = new OrangeAccessToken("token");
-        OrangeFolder rootFolder = orangeCloudFoldersAPI.getRootFolder(orangeAccessToken,null);
+        OrangeFolder rootFolder = orangeCloudFoldersAPI.getRootFolder(orangeAccessToken, null);
         assertNotNull(rootFolder);
         assertEquals("Lw", rootFolder.getParentFolderId());
         assertTrue(rootFolder.getSubFolders().size() > 0);
@@ -78,23 +112,5 @@ public class OrangeCloudFoldersAPITests {
         assertNotNull(rootFolder.getFiles().get(0).getCreationDate());
     }
 
-    private String readFile(final String fileName) {
-        String result = "";
-        try {
-            ClassLoader classLoader = getClass().getClassLoader();
-            File file = new File(classLoader.getResource(fileName).getFile());
-            BufferedReader br = new BufferedReader(new FileReader(file));
-            StringBuilder sb = new StringBuilder();
-            String line = br.readLine();
-            while (line != null) {
-                sb.append(line);
-                line = br.readLine();
-            }
-            result = sb.toString();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return result;
-    }
 
 }

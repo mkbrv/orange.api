@@ -6,7 +6,7 @@ import com.mkbrv.orange.client.request.OrangeRequest;
 import java.io.Serializable;
 
 /**
- * Created by mikibrv on 16/02/16.
+ * Created by mkbrv on 16/02/16.
  */
 public class OrangeResponse implements Serializable {
 

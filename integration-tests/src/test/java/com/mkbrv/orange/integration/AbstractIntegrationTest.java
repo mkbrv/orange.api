@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.util.Properties;
 
 /**
- * Created by mikibrv on 17/02/16.
+ * Created by mkbrv on 17/02/16.
  */
 public abstract class AbstractIntegrationTest {
 
@@ -22,11 +22,13 @@ public abstract class AbstractIntegrationTest {
 
     protected String orangeAccountRefreshToken;
 
+    protected Properties properties = new Properties();
+
     @Before
     public void loadProperties() throws IOException {
 
         try {
-            Properties properties = new Properties();
+            properties = new Properties();
             properties.load(new FileInputStream("../orange.keys.properties"));
             orangeClientConfiguration = new OrangeClientConfiguration(
                     properties.getProperty("orange.app.id"),

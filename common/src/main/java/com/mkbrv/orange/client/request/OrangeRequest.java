@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by mikibrv on 16/02/16.
+ * Created by mkbrv on 16/02/16.
  */
 public class OrangeRequest implements Serializable {
 
@@ -22,7 +22,10 @@ public class OrangeRequest implements Serializable {
 
     private final Map<String, String> parameters = new HashMap<>();
 
-    private String jsonContent;
+    /**
+     * Json content for the request;
+     */
+    private String body;
 
     private OrangeContext orangeContext;
 
@@ -53,8 +56,18 @@ public class OrangeRequest implements Serializable {
         return this;
     }
 
+
     public OrangeRequest addParameter(final String key, final String value) {
         this.parameters.put(key, value);
+        return this;
+    }
+
+    public OrangeRequest addParameter(final String key, final Object value) {
+        if (value == null) {
+            this.parameters.put(key, null);
+        } else {
+            this.parameters.put(key, String.valueOf(value));
+        }
         return this;
     }
 
@@ -67,12 +80,12 @@ public class OrangeRequest implements Serializable {
     }
 
 
-    public String getJsonContent() {
-        return jsonContent;
+    public String getBody() {
+        return body;
     }
 
-    public OrangeRequest setJsonContent(String jsonContent) {
-        this.jsonContent = jsonContent;
+    public OrangeRequest setBody(String body) {
+        this.body = body;
         return this;
     }
 
@@ -94,8 +107,14 @@ public class OrangeRequest implements Serializable {
         return this;
     }
 
+    public Boolean hasContent() {
+        return this.body != null && !this.body.isEmpty();
+    }
+
     @Override
     public String toString() {
         return this.getUrl();
     }
+
+
 }

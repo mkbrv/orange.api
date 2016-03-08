@@ -5,14 +5,15 @@ import com.google.gson.*;
 import java.lang.reflect.Type;
 
 /**
- * Created by mikibrv on 20/02/16.
+ * Created by mkbrv on 20/02/16.
  */
 public class OrangeExceptionDeserializer implements JsonDeserializer<OrangeException> {
 
 
     public static class Params {
-        public static final String ERROR = "error";
-        public static final String ERROR_DESCRIPTION = "error_description";
+        public static final String CODE = "code";
+        public static final String MESSAGE = "message";
+        public static final String DESCRIPTION = "description";
     }
 
 
@@ -24,10 +25,24 @@ public class OrangeExceptionDeserializer implements JsonDeserializer<OrangeExcep
         JsonObject jsonObject = jsonElement.getAsJsonObject();
 
         OrangeException orangeException = new OrangeException();
-        orangeException.setName(jsonObject.get(Params.ERROR).getAsString());
-        orangeException.setDescription(jsonObject.get(Params.ERROR_DESCRIPTION).getAsString());
-
-
+        orangeException.setCode(notNull(Params.CODE, jsonObject));
+        orangeException.setName(notNull(Params.MESSAGE, jsonObject));
+        orangeException.setDescription(notNull(Params.DESCRIPTION, jsonObject));
         return orangeException;
     }
+
+    /**
+     * Prevents NPE from the json deserializer
+     *
+     * @param key
+     * @param jsonObject
+     * @return
+     */
+    private String notNull(final String key, final JsonObject jsonObject) {
+        if (jsonObject.has(key)) {
+            return jsonObject.get(key).getAsString();
+        }
+        return null;
+    }
+
 }

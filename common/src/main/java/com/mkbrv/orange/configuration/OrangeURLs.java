@@ -1,7 +1,7 @@
 package com.mkbrv.orange.configuration;
 
 /**
- * Created by mikibrv on 17/02/16.
+ * Created by mkbrv on 17/02/16.
  */
 public class OrangeURLs {
 
@@ -18,7 +18,7 @@ public class OrangeURLs {
 
     protected String freeSpace;
 
-    protected String rootFolder;
+    protected String folders;
 
     public String getDomain() {
         return domain;
@@ -61,12 +61,12 @@ public class OrangeURLs {
     }
 
 
-    public String getRootFolder() {
-        return this.domain + rootFolder;
+    public String getFolders() {
+        return this.domain + folders;
     }
 
-    public void setRootFolder(final String rootFolder) {
-        this.rootFolder = rootFolder;
+    public void setFolders(final String folders) {
+        this.folders = folders;
     }
 
     public void setFreeSpace(String freeSpace) {
@@ -90,7 +90,7 @@ public class OrangeURLs {
             this.oauthAuthorize = DEFAULT_OAUTHORIZE;
             this.oauthToken = DEFAULT_OAUTH_TOKEN;
             this.freeSpace = DEFAULT_FREESPACE;
-            this.rootFolder = DEFAULT_ROOT_FOLDER;
+            this.folders = DEFAULT_ROOT_FOLDER;
         }
     };
 

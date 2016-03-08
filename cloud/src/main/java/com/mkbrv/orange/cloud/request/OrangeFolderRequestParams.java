@@ -1,25 +1,41 @@
 package com.mkbrv.orange.cloud.request;
 
-import com.mkbrv.orange.cloud.model.OrangeFileType;
-
 /**
- * Optional parameters for the folder request;
- * Created by mikibrv on 26/02/16.
+ * Contains parameters used to update / create a folder
+ * Created by mkbrv on 08/03/16.
  */
 public class OrangeFolderRequestParams {
 
-    private String restrictedMode;
+    private Boolean clone;
 
-    private String showThumbnails;
+    private String name;
 
-    private OrangeFileType filter;
+    private String parentFolderId;
 
-    private Boolean flat;
+    public Boolean getClone() {
+        return clone;
+    }
 
-    private Boolean tree;
+    public OrangeFolderRequestParams setClone(Boolean clone) {
+        this.clone = clone;
+        return this;
+    }
 
-    private Integer limit;
+    public String getName() {
+        return name;
+    }
 
-    private Integer offset;
+    public OrangeFolderRequestParams setName(String name) {
+        this.name = name;
+        return this;
+    }
 
+    public String getParentFolderId() {
+        return parentFolderId;
+    }
+
+    public OrangeFolderRequestParams setParentFolderId(String parentFolderId) {
+        this.parentFolderId = parentFolderId;
+        return this;
+    }
 }

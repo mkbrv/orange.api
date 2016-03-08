@@ -8,6 +8,7 @@ import com.mkbrv.orange.client.SimpleHttpClient;
 import com.mkbrv.orange.client.request.OrangeRequest;
 import com.mkbrv.orange.client.response.OrangeResponse;
 import com.mkbrv.orange.client.security.OrangeAccessToken;
+import com.mkbrv.orange.client.security.OrangeAccessTokenHeader;
 import com.mkbrv.orange.client.security.OrangeRefreshToken;
 import com.mkbrv.orange.identity.OrangeIdentityAPI;
 import com.mkbrv.orange.identity.exception.OrangeIdentityException;
@@ -15,12 +16,13 @@ import com.mkbrv.orange.identity.model.OrangeAccessTokenDeserializer;
 import com.mkbrv.orange.identity.model.OrangeIdentityContext;
 import com.mkbrv.orange.identity.model.OrangePrompt;
 import com.mkbrv.orange.identity.model.OrangeScope;
-import org.apache.commons.codec.binary.Base64;
 
 import java.util.Iterator;
 
 /**
- * Created by mikibrv on 17/02/16.
+ * {@inheritDoc}
+ * Implementation of the OrangeIdentityAPI using GSON
+ * Created by mkbrv on 17/02/16.
  */
 public class OrangeIdentityAPIImpl implements OrangeIdentityAPI {
 
@@ -147,10 +149,8 @@ public class OrangeIdentityAPIImpl implements OrangeIdentityAPI {
                 .setUrl(orangeContext.getOrangeURLs().getOauthToken())
                 .setOrangeAccessToken(initialToken)
                 .setOrangeContext(orangeContext)
-                .addHeader(Constants.HEADER_AUTHORIZATION,
-                        Constants.HEADER_AUTHORIZATION_BASIC + " "
-                                + new String(Base64.encodeBase64((orangeContext.getOrangeClientConfiguration().getClientId()
-                                + ":" + orangeContext.getOrangeClientConfiguration().getClientSecret()).getBytes())))
+                .addHeader(OrangeAccessTokenHeader.HEADER_AUTHORIZATION,
+                        new OrangeAccessTokenHeader(orangeContext).getHeaderValue())
                 .addParameter(Constants.PARAM_GRANT_TYPE, Constants.PARAM_AUTH_CODE)
                 .addParameter(Constants.PARAM_CODE, initialToken.getToken())
                 .addParameter(Constants.PARAM_REDIRECT_URI, orangeContext.getOrangeClientConfiguration().getAppRedirectURL());
@@ -170,11 +170,8 @@ public class OrangeIdentityAPIImpl implements OrangeIdentityAPI {
                 .addParameter(Constants.PARAM_REFRESH_TOKEN, orangeRefreshToken.getToken())
                 //.addParameter(Constants.PARAM_SCOPE, this.buildScope(orangeContext)) fails - has to be checked
                 .addParameter(Constants.PARAM_REDIRECT_URI, orangeContext.getOrangeClientConfiguration().getAppRedirectURL())
-                .addHeader(Constants.HEADER_AUTHORIZATION,
-                        Constants.HEADER_AUTHORIZATION_BASIC + " " + new String(Base64.encodeBase64(
-                                (orangeContext.getOrangeClientConfiguration().getClientId() + ":"
-                                        + orangeContext.getOrangeClientConfiguration().getClientSecret()).getBytes())));
-
+                .addHeader(OrangeAccessTokenHeader.HEADER_AUTHORIZATION,
+                        new OrangeAccessTokenHeader(orangeContext).getHeaderValue());
 
         OrangeResponse orangeResponse = orangeHttpClient.doPost(orangeRequest);
         OrangeAccessToken orangeAccessToken = gson.fromJson(orangeResponse.getBody().toString(), OrangeAccessToken.class);

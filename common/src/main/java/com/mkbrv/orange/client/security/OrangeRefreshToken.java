@@ -3,7 +3,7 @@ package com.mkbrv.orange.client.security;
 import java.util.Date;
 
 /**
- * Created by mikibrv on 18/02/16.
+ * Created by mkbrv on 18/02/16.
  */
 public class OrangeRefreshToken {
 

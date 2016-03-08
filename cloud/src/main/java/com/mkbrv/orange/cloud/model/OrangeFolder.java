@@ -4,10 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by mikibrv on 21/02/16.
+ * Created by mkbrv on 21/02/16.
  */
 public class OrangeFolder {
 
+    /**
+     * Unique identifier. Cannot be changed
+     */
     private String id;
 
     private String parentFolderId;
@@ -22,9 +25,12 @@ public class OrangeFolder {
         return id;
     }
 
-    public OrangeFolder setId(String id) {
+    public OrangeFolder() {
+
+    }
+
+    public OrangeFolder(final String id) {
         this.id = id;
-        return this;
     }
 
     public String getParentFolderId() {
@@ -71,5 +77,21 @@ public class OrangeFolder {
     public OrangeFolder addSubFolder(OrangeFolder subFolder) {
         this.subFolders.add(subFolder);
         return this;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        OrangeFolder that = (OrangeFolder) o;
+
+        return id != null ? id.equals(that.id) : that.id == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
     }
 }

@@ -1,0 +1,5 @@
+{
+  "code": 800,
+  "message": "PDK_CW_0003-FORBIDDEN_ACCESS",
+  "description": "Forbidden access for the requested resource"
+}
