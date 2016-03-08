@@ -3,7 +3,6 @@ package com.mkbrv.orange.client.request;
 
 import com.mkbrv.orange.client.OrangeContext;
 import com.mkbrv.orange.client.security.OrangeAccessToken;
-import com.mkbrv.orange.client.security.OrangeAccessTokenHeader;
 
 import java.io.Serializable;
 import java.util.Collections;
@@ -23,7 +22,10 @@ public class OrangeRequest implements Serializable {
 
     private final Map<String, String> parameters = new HashMap<>();
 
-    private String jsonContent;
+    /**
+     * Json content for the request;
+     */
+    private String body;
 
     private OrangeContext orangeContext;
 
@@ -78,12 +80,12 @@ public class OrangeRequest implements Serializable {
     }
 
 
-    public String getJsonContent() {
-        return jsonContent;
+    public String getBody() {
+        return body;
     }
 
-    public OrangeRequest setJsonContent(String jsonContent) {
-        this.jsonContent = jsonContent;
+    public OrangeRequest setBody(String body) {
+        this.body = body;
         return this;
     }
 
@@ -103,6 +105,10 @@ public class OrangeRequest implements Serializable {
     public OrangeRequest setOrangeAccessToken(OrangeAccessToken orangeAccessToken) {
         this.orangeAccessToken = orangeAccessToken;
         return this;
+    }
+
+    public Boolean hasContent() {
+        return this.body != null && !this.body.isEmpty();
     }
 
     @Override

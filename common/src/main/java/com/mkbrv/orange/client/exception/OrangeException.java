@@ -1,15 +1,19 @@
 package com.mkbrv.orange.client.exception;
 
+import com.mkbrv.orange.client.response.OrangeResponse;
+
 /**
  * Created by mkbrv on 16/02/16.
  */
 public class OrangeException extends RuntimeException {
 
-    private Integer code;
+    private String code;
 
     private String name;
 
     private String description;
+
+    private OrangeResponse orangeResponse;
 
     /**
      * If this is a client exception (and not from Orange)
@@ -24,12 +28,17 @@ public class OrangeException extends RuntimeException {
         this.clientException = clientException;
     }
 
-    public Integer getCode() {
+    public String getCode() {
         return code;
     }
 
-    public OrangeException setCode(Integer code) {
+    public OrangeException setCode(String code) {
         this.code = code;
+        return this;
+    }
+
+    public OrangeException setCode(Integer code) {
+        this.code = String.valueOf(code);
         return this;
     }
 
@@ -55,6 +64,15 @@ public class OrangeException extends RuntimeException {
     public OrangeException setDescription(String description) {
         this.description = description;
         return this;
+    }
+
+    public OrangeException setOrangeResponse(OrangeResponse orangeResponse) {
+        this.orangeResponse = orangeResponse;
+        return this;
+    }
+
+    public OrangeResponse getOrangeResponse() {
+        return orangeResponse;
     }
 
     @Override

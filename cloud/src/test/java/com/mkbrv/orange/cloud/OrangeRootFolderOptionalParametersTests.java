@@ -7,7 +7,7 @@ import com.mkbrv.orange.client.response.OrangeResponse;
 import com.mkbrv.orange.client.security.OrangeAccessToken;
 import com.mkbrv.orange.cloud.impl.OrangeCloudFoldersAPIImpl;
 import com.mkbrv.orange.cloud.model.OrangeFileType;
-import com.mkbrv.orange.cloud.request.OrangeFolderRequestParams;
+import com.mkbrv.orange.cloud.request.OrangeFolderFilterParams;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -37,7 +37,7 @@ public class OrangeRootFolderOptionalParametersTests extends AbstractOrangeCloud
 
     @Test
     public void testOptionalParameterIsPresent() {
-        OrangeFolderRequestParams requestParams = new OrangeFolderRequestParams()
+        OrangeFolderFilterParams requestParams = new OrangeFolderFilterParams()
                 .setFilter(OrangeFileType.AUDIO)
                 .setFlat(Boolean.TRUE)
                 .setLimit(100)

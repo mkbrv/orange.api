@@ -7,12 +7,17 @@ import com.mkbrv.orange.client.ExceptionAwareHttpClient;
 import com.mkbrv.orange.client.OrangeContext;
 import com.mkbrv.orange.client.OrangeHttpClient;
 import com.mkbrv.orange.client.SimpleHttpClient;
+import com.mkbrv.orange.client.exception.OrangeException;
 import com.mkbrv.orange.client.request.OrangeRequest;
 import com.mkbrv.orange.client.response.OrangeResponse;
 import com.mkbrv.orange.client.security.OrangeAccessToken;
 import com.mkbrv.orange.cloud.OrangeCloudFoldersAPI;
 import com.mkbrv.orange.cloud.model.*;
+import com.mkbrv.orange.cloud.request.OrangeFolderFilterParams;
 import com.mkbrv.orange.cloud.request.OrangeFolderRequestParams;
+import com.mkbrv.orange.cloud.response.OrangeDeleteFolderResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Type;
 import java.util.Map;
@@ -24,6 +29,8 @@ import java.util.Map;
  * Created by mkbrv on 20/02/16.
  */
 public class OrangeCloudFoldersAPIImpl implements OrangeCloudFoldersAPI {
+
+    private static final Logger LOG = LoggerFactory.getLogger(OrangeCloudFoldersAPIImpl.class);
 
     /**
      *
@@ -83,42 +90,42 @@ public class OrangeCloudFoldersAPIImpl implements OrangeCloudFoldersAPI {
      */
     @Override
     public OrangeFolder getRootFolder(final OrangeAccessToken orangeAccessToken,
-                                      final OrangeFolderRequestParams orangeFolderRequestParams) {
+                                      final OrangeFolderFilterParams orangeFolderFilterParams) {
         OrangeRequest orangeRequest = new OrangeRequest()
-                .setUrl(this.orangeContext.getOrangeURLs().getRootFolder())
+                .setUrl(this.orangeContext.getOrangeURLs().getFolders())
                 .setOrangeAccessToken(orangeAccessToken);
-        this.buildParametersListForRootFolder(orangeRequest, orangeFolderRequestParams);
+        this.buildParametersListForRootFolder(orangeRequest, orangeFolderFilterParams);
         OrangeResponse orangeResponse = this.orangeHttpClient.doGet(orangeRequest);
         return gson.fromJson(orangeResponse.getBody().toString(), OrangeFolder.class);
     }
 
     /**
-     * @param orangeRequest             orange request where parameters are added
-     * @param orangeFolderRequestParams orange optional parameters;
+     * @param orangeRequest            orange request where parameters are added
+     * @param orangeFolderFilterParams orange optional parameters;
      */
-    private void buildParametersListForRootFolder(final OrangeRequest orangeRequest, final OrangeFolderRequestParams
-            orangeFolderRequestParams) {
-        if (orangeFolderRequestParams == null) {
+    protected void buildParametersListForRootFolder(final OrangeRequest orangeRequest, final OrangeFolderFilterParams
+            orangeFolderFilterParams) {
+        if (orangeFolderFilterParams == null) {
             return;
         }
         this.addParameterIfNotNull(orangeRequest, Constants.RESTRICTED_MODE,
-                orangeFolderRequestParams.getRestrictedMode());
+                orangeFolderFilterParams.getRestrictedMode());
         this.addParameterIfNotNull(orangeRequest, Constants.SHOW_THUMBNAILS,
-                orangeFolderRequestParams.getShowThumbnails());
+                orangeFolderFilterParams.getShowThumbnails());
         this.addParameterIfNotNull(orangeRequest, Constants.FILTER,
-                orangeFolderRequestParams.getFilter());
+                orangeFolderFilterParams.getFilter());
         this.addParameterIfNotNull(orangeRequest, Constants.FLAT,
-                orangeFolderRequestParams.getFlat());
+                orangeFolderFilterParams.getFlat());
         this.addParameterIfNotNull(orangeRequest, Constants.TREE,
-                orangeFolderRequestParams.getTree());
+                orangeFolderFilterParams.getTree());
         this.addParameterIfNotNull(orangeRequest, Constants.LIMIT,
-                orangeFolderRequestParams.getLimit());
+                orangeFolderFilterParams.getLimit());
         this.addParameterIfNotNull(orangeRequest, Constants.OFFSET,
-                orangeFolderRequestParams.getOffset());
+                orangeFolderFilterParams.getOffset());
     }
 
-    private void addParameterIfNotNull(final OrangeRequest orangeRequest, final String parameterName,
-                                       final Object parameterValue) {
+    protected void addParameterIfNotNull(final OrangeRequest orangeRequest, final String parameterName,
+                                         final Object parameterValue) {
         if (parameterValue != null) {
             orangeRequest.addParameter(parameterName, parameterValue.toString().toLowerCase().trim());
         }
@@ -128,31 +135,70 @@ public class OrangeCloudFoldersAPIImpl implements OrangeCloudFoldersAPI {
      * {@inheritDoc}
      */
     @Override
-    public OrangeFolder getFolder(final OrangeAccessToken orangeAccessToken, final OrangeFolder orangeFolder) {
-        return null;
+    public OrangeFolder getFolder(final OrangeAccessToken orangeAccessToken, final OrangeFolder orangeFolder,
+                                  final OrangeFolderFilterParams orangeFolderFilterParams) {
+        OrangeRequest orangeRequest = new OrangeRequest()
+                .setUrl(this.orangeContext.getOrangeURLs().getFolders() + "/" + orangeFolder.getId())
+                .setOrangeAccessToken(orangeAccessToken);
+        try {
+            OrangeResponse orangeResponse = this.orangeHttpClient.doGet(orangeRequest);
+            this.buildParametersListForRootFolder(orangeRequest, orangeFolderFilterParams);
+            return gson.fromJson(orangeResponse.getBody().toString(), OrangeFolder.class);
+        } catch (OrangeException orangeException) {
+            LOG.warn(orangeException.toString(), orangeException);
+            return null;
+        }
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public OrangeFolder createFolder(final OrangeAccessToken orangeAccessToken, final OrangeFolder orangeFolder) {
-        return null;
+    public OrangeFolder createFolder(final OrangeAccessToken orangeAccessToken,
+                                     final OrangeFolderRequestParams orangeFolder) {
+        OrangeRequest orangeRequest = new OrangeRequest()
+                .setUrl(this.orangeContext.getOrangeURLs().getFolders())
+                .setOrangeAccessToken(orangeAccessToken);
+        assert (orangeFolder.getParentFolderId() != null);
+        assert (orangeFolder.getName() != null);
+        orangeRequest.setBody(this.buildJsonForUpdate(orangeFolder));
+        OrangeResponse orangeResponse = this.orangeHttpClient.doPost(orangeRequest);
+        return gson.fromJson(orangeResponse.getBody().toString(), OrangeFolder.class);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public OrangeFolder updateFolder(final OrangeAccessToken orangeAccessToken, final OrangeFolder orangeFolder) {
-        return null;
+    public OrangeFolder updateFolder(final OrangeAccessToken orangeAccessToken,
+                                     final OrangeFolder orangeFolder,
+                                     final OrangeFolderRequestParams orangeFolderRequestParams) {
+        OrangeRequest orangeRequest = new OrangeRequest()
+                .setUrl(this.orangeContext.getOrangeURLs().getFolders() + "/" + orangeFolder.getId())
+                .setOrangeAccessToken(orangeAccessToken);
+        orangeRequest.setBody(this.buildJsonForUpdate(orangeFolderRequestParams));
+        OrangeResponse orangeResponse = this.orangeHttpClient.doPost(orangeRequest);
+        return gson.fromJson(orangeResponse.getBody().toString(), OrangeFolder.class);
+    }
+
+    /**
+     * @param orangeFolderRequestParams
+     * @return body json
+     */
+    protected String buildJsonForUpdate(final OrangeFolderRequestParams orangeFolderRequestParams) {
+        return gson.toJson(orangeFolderRequestParams);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void deleteFolder(OrangeAccessToken orangeAccessToken, OrangeFolder orangeFolder) {
+    public OrangeDeleteFolderResponse deleteFolder(OrangeAccessToken orangeAccessToken, OrangeFolder orangeFolder) {
+        OrangeRequest orangeRequest = new OrangeRequest()
+                .setUrl(this.orangeContext.getOrangeURLs().getFolders() + "/" + orangeFolder.getId())
+                .setOrangeAccessToken(orangeAccessToken);
+        OrangeResponse orangeResponse = this.orangeHttpClient.delete(orangeRequest);
+        return new OrangeDeleteFolderResponse(orangeResponse);
     }
 
     /**

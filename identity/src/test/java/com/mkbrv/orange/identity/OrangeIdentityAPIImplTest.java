@@ -26,6 +26,7 @@ import static org.mockito.Mockito.when;
  */
 public class OrangeIdentityAPIImplTest {
 
+
     private OrangeIdentityAPI orangeIdentityAPI;
 
     private OrangeIdentityContext orangeContext;
@@ -43,7 +44,7 @@ public class OrangeIdentityAPIImplTest {
 
         orangeContext = new OrangeIdentityContext();
         orangeContext.addScope(OrangeScope.cloudfullread).addScope(OrangeScope.offline_access);
-        orangeContext.addPrompt(OrangePrompt.login);
+        orangeContext.addPrompt(OrangePrompt.login).addPrompt(OrangePrompt.consent);
         orangeContext.setOrangeURLs(OrangeURLs.DEFAULT)
                 .setOrangeClientConfiguration(orangeClientConfiguration);
         orangeIdentityAPI = new OrangeIdentityAPIImpl(orangeContext, orangeHttpClient);
@@ -123,7 +124,6 @@ public class OrangeIdentityAPIImplTest {
         assertEquals("Refresh token is not the same as used before",
                 refreshToken.getToken(), orangeAccessToken.getRefreshToken().getToken());
         assertTrue(orangeAccessToken.getExpirationTime().after(new Date()));
-
     }
 
 

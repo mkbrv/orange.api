@@ -4,7 +4,9 @@ import com.google.gson.JsonDeserializer;
 import com.mkbrv.orange.client.security.OrangeAccessToken;
 import com.mkbrv.orange.cloud.model.OrangeFolder;
 import com.mkbrv.orange.cloud.model.OrangeFreeSpace;
+import com.mkbrv.orange.cloud.request.OrangeFolderFilterParams;
 import com.mkbrv.orange.cloud.request.OrangeFolderRequestParams;
+import com.mkbrv.orange.cloud.response.OrangeDeleteFolderResponse;
 
 import java.lang.reflect.Type;
 import java.util.Map;
@@ -30,39 +32,47 @@ public interface OrangeCloudFoldersAPI {
      * Orange Cloud API: GET /folders
      *
      * @param orangeAccessToken         Users Access Token used to validate his session;
-     * @param orangeFolderRequestParams Parameters which specify how the data should be returned;
-     * @return OrangeFolder root folder of the user with specifications described in the orangeFolderRequestParams
+     * @param orangeFolderFilterParams Parameters which specify how the data should be returned;
+     * @return OrangeFolder root folder of the user with specifications described in the orangeFolderFilterParams
      */
     OrangeFolder getRootFolder(final OrangeAccessToken orangeAccessToken,
-                               final OrangeFolderRequestParams orangeFolderRequestParams);
+                               final OrangeFolderFilterParams orangeFolderFilterParams);
 
     /**
-     * @param orangeAccessToken Users Access Token used to validate his session;
-     * @param orangeFolder      Contains the id of the folder which is required
+     * @param orangeAccessToken         Users Access Token used to validate his session;
+     * @param orangeFolder              Contains the id of the folder which is required
+     * @param orangeFolderFilterParams Parameters which specify how the data should be returned;
      * @return OrangeFolder returned folder
+     * Will return null if not found;
      */
-    OrangeFolder getFolder(final OrangeAccessToken orangeAccessToken, final OrangeFolder orangeFolder);
+    OrangeFolder getFolder(final OrangeAccessToken orangeAccessToken,
+                           final OrangeFolder orangeFolder, final OrangeFolderFilterParams orangeFolderFilterParams);
 
     /**
      * @param orangeAccessToken Users Access Token used to validate his session;
      * @param orangeFolder      Contains the name of the created folder and his parent id
      * @return OrangeFolder created folder
      */
-    OrangeFolder createFolder(final OrangeAccessToken orangeAccessToken, final OrangeFolder orangeFolder);
+    OrangeFolder createFolder(final OrangeAccessToken orangeAccessToken, final OrangeFolderRequestParams orangeFolder);
 
     /**
+     * Rename, move or copy a folder. To rename a folder, use the 'name' attribute. To move a folder,
+     * use the 'parentFolderId'. To copy a folder, use both 'parentFolderId' and 'clone' (set to true).
+     *
      * @param orangeAccessToken Users Access Token used to validate his session;
      * @param orangeFolder      Folder to update
      * @return OrangeFolder Updated Folder
      */
-    OrangeFolder updateFolder(final OrangeAccessToken orangeAccessToken, final OrangeFolder orangeFolder);
+    OrangeFolder updateFolder(final OrangeAccessToken orangeAccessToken, final OrangeFolder orangeFolder,
+                              final OrangeFolderRequestParams orangeFolderRequestParams);
 
 
     /**
      * @param orangeAccessToken Users Access Token used to validate his session;
      * @param orangeFolder      Folder to be removed
+     * @return OrangeDeleteFolderResponse
      */
-    void deleteFolder(final OrangeAccessToken orangeAccessToken, final OrangeFolder orangeFolder);
+    OrangeDeleteFolderResponse deleteFolder(final OrangeAccessToken orangeAccessToken, final OrangeFolder orangeFolder);
 
 
     /**
@@ -84,8 +94,9 @@ public interface OrangeCloudFoldersAPI {
         public static final String OFFSET = "offset";
 
 
-        public static final String HEADER_AUTHORIZATION = "Authorization";
-        public static final String HEADER_AUTHORIZATION_BASIC = "Basic";
+        public static final String NAME = "name";
+        public static final String PARENT_FOLDER_ID =  "parentFolderId";
+        public static final String CLONE = "clone";
     }
 
 

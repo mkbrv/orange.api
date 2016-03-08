@@ -8,6 +8,7 @@ import java.lang.reflect.Type;
 import java.util.Date;
 
 /**
+ * Deserializer for an Orange File;
  * Created by mkbrv on 26/02/16.
  */
 public class OrangeFileDeserializer implements JsonDeserializer<OrangeFile> {
@@ -75,6 +76,8 @@ public class OrangeFileDeserializer implements JsonDeserializer<OrangeFile> {
     }
 
     /**
+     * Prevents NPE from the json deserializer
+     *
      * @param key
      * @param jsonObject
      * @return

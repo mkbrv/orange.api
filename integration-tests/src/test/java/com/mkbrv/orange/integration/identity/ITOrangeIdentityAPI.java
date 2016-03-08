@@ -73,7 +73,7 @@ public class ITOrangeIdentityAPI extends AbstractIdentityIntegrationTest {
             LOG.warn("Access Token obtained from the initial token: {} ", orangeAccessToken.toString());
         } catch (OrangeException e) {
             //Initial token has expired, we cannot generate a new one
-            assertEquals(new Integer(400), e.getCode());
+            assertEquals(400, e.getCode());
             assertTrue(e.getMessage().contains("invalid_grant"));
         }
     }

@@ -13,6 +13,8 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.client.utils.URIBuilder;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
 import org.slf4j.Logger;
@@ -76,14 +78,37 @@ public class SimpleHttpClient implements OrangeHttpClient {
         HttpPost httpPost = new HttpPost(request.getUrl());
         request.getHeaders().forEach(httpPost::addHeader);
         this.addAuthParameterToHeaderIfRequired(request);
-        try {
-            List<NameValuePair> requestParameters = new ArrayList<>();
-            request.getParameters().forEach((key, value) -> requestParameters.add(new BasicNameValuePair(key, value)));
-            httpPost.setEntity(new UrlEncodedFormEntity(requestParameters));
-        } catch (UnsupportedEncodingException e) {
-            LOG.warn(e.getMessage());
+        if (request.hasContent()) {
+            this.addContentJSONBody(request.getBody(), httpPost);
+        } else {
+            this.addHttpParamsToBody(request, httpPost);
         }
         return executeRequestAndReadResponse(httpPost).setOrangeRequest(request);
+    }
+
+    /**
+     * @param body
+     * @param httpPost
+     */
+    protected void addContentJSONBody(final String body, final HttpPost httpPost) {
+        StringEntity input = null;
+        try {
+            input = new StringEntity(body);
+            input.setContentType(ContentType.APPLICATION_JSON.toString());
+            httpPost.setEntity(input);
+        } catch (UnsupportedEncodingException e) {
+            LOG.warn(e.getMessage(), e);
+        }
+    }
+
+    protected void addHttpParamsToBody(final OrangeRequest orangeRequest, final HttpPost httpPost) {
+        try {
+            List<NameValuePair> requestParameters = new ArrayList<>();
+            orangeRequest.getParameters().forEach((key, value) -> requestParameters.add(new BasicNameValuePair(key, value)));
+            httpPost.setEntity(new UrlEncodedFormEntity(requestParameters));
+        } catch (UnsupportedEncodingException e) {
+            LOG.warn(e.getMessage(), e);
+        }
     }
 
     /**

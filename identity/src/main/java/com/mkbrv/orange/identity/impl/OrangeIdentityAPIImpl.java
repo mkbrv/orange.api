@@ -16,7 +16,6 @@ import com.mkbrv.orange.identity.model.OrangeAccessTokenDeserializer;
 import com.mkbrv.orange.identity.model.OrangeIdentityContext;
 import com.mkbrv.orange.identity.model.OrangePrompt;
 import com.mkbrv.orange.identity.model.OrangeScope;
-import org.apache.commons.codec.binary.Base64;
 
 import java.util.Iterator;
 
