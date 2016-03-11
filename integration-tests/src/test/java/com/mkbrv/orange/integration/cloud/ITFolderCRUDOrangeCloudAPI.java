@@ -7,9 +7,8 @@ import com.mkbrv.orange.cloud.impl.OrangeCloudFoldersAPIImpl;
 import com.mkbrv.orange.cloud.model.OrangeFolder;
 import com.mkbrv.orange.cloud.request.OrangeFolderFilterParams;
 import com.mkbrv.orange.cloud.request.OrangeFolderRequestParams;
-import com.mkbrv.orange.cloud.response.OrangeDeleteFolderResponse;
+import com.mkbrv.orange.cloud.response.OrangeGenericResponse;
 import com.mkbrv.orange.integration.identity.ITOrangeIdentityAPI;
-import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -78,7 +77,7 @@ public class ITFolderCRUDOrangeCloudAPI extends ITOrangeIdentityAPI {
                 new OrangeFolderFilterParams().setShowThumbnails(""));
         if (orangeFolder != null) {
             try {
-                OrangeDeleteFolderResponse deleteFolderResponse =
+                OrangeGenericResponse deleteFolderResponse =
                         orangeCloudFoldersAPI.deleteFolder(orangeAccessToken, orangeFolder);
                 assertNotNull(deleteFolderResponse);
                 assertTrue(deleteFolderResponse.wasRemoved());

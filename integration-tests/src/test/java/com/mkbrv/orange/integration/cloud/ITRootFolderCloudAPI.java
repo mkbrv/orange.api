@@ -34,8 +34,7 @@ public class ITRootFolderCloudAPI extends ITOrangeIdentityAPI {
     }
 
 
-    @Test
-    public OrangeFolder getRootFolder() {
+    protected OrangeFolder getRootFolder() {
         //we were unable to generate this dynamically based on user & pwd. so we can only use temporary ones
         if (this.orangeAccountRefreshToken == null || this.orangeAccountRefreshToken.length() == 0) {
             return null;
@@ -46,6 +45,16 @@ public class ITRootFolderCloudAPI extends ITOrangeIdentityAPI {
         OrangeFolder orangeFolder = orangeCloudFoldersAPI.getRootFolder(orangeAccessToken, null);
         assertNotNull(orangeFolder);
         return orangeFolder;
+    }
+
+    @Test
+    public void rootFolderCanBeFetched() {
+        //we were unable to generate this dynamically based on user & pwd. so we can only use temporary ones
+        if (this.orangeAccountRefreshToken == null || this.orangeAccountRefreshToken.length() == 0) {
+            return;
+        }
+        OrangeFolder orangeFolder = this.getRootFolder();
+        assertNotNull(orangeFolder);
     }
 
 

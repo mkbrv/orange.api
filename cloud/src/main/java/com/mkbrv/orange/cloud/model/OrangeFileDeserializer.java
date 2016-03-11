@@ -31,10 +31,9 @@ public class OrangeFileDeserializer implements JsonDeserializer<OrangeFile> {
     public OrangeFile deserialize(final JsonElement jsonElement,
                                   final Type type, JsonDeserializationContext jsonDeserializationContext)
             throws JsonParseException {
-        OrangeFile orangeFile = new OrangeFile();
         JsonObject jsonObject = jsonElement.getAsJsonObject();
 
-        orangeFile.setId(jsonObject.get(Params.ID).getAsString());
+        OrangeFile orangeFile = new OrangeFile(jsonObject.get(Params.ID).getAsString());
         orangeFile.setName(jsonObject.get(Params.NAME).getAsString());
         orangeFile.setSize(jsonObject.get(Params.SIZE).getAsLong());
 

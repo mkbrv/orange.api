@@ -14,6 +14,10 @@ public class OrangeExceptionDeserializer implements JsonDeserializer<OrangeExcep
         public static final String CODE = "code";
         public static final String MESSAGE = "message";
         public static final String DESCRIPTION = "description";
+
+
+        public static final String ERROR = "error";
+        public static final String ERROR_DESCRIPTION = "error_description";
     }
 
 
@@ -25,10 +29,38 @@ public class OrangeExceptionDeserializer implements JsonDeserializer<OrangeExcep
         JsonObject jsonObject = jsonElement.getAsJsonObject();
 
         OrangeException orangeException = new OrangeException();
+
+        if (jsonObject.has(Params.CODE)) {
+            this.addExceptionDetailsForCloud(orangeException, jsonObject);
+        } else {
+            this.addExceptionDetailsForIdentity(orangeException, jsonObject);
+        }
+
+        return orangeException;
+    }
+
+    /**
+     * Different json is used for Cloud
+     *
+     * @param orangeException
+     * @param jsonObject
+     */
+    private void addExceptionDetailsForCloud(final OrangeException orangeException, final JsonObject jsonObject) {
         orangeException.setCode(notNull(Params.CODE, jsonObject));
         orangeException.setName(notNull(Params.MESSAGE, jsonObject));
         orangeException.setDescription(notNull(Params.DESCRIPTION, jsonObject));
-        return orangeException;
+    }
+
+    /**
+     * Different json is used for identity
+     *
+     * @param orangeException
+     * @param jsonObject
+     */
+    private void addExceptionDetailsForIdentity(final OrangeException orangeException, final JsonObject jsonObject) {
+        orangeException.setCode(notNull(Params.ERROR, jsonObject));
+        orangeException.setName(notNull(Params.ERROR, jsonObject));
+        orangeException.setDescription(notNull(Params.ERROR_DESCRIPTION, jsonObject));
     }
 
     /**

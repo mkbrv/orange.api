@@ -5,7 +5,7 @@ import com.mkbrv.orange.client.response.OrangeResponse;
 import com.mkbrv.orange.client.security.OrangeAccessToken;
 import com.mkbrv.orange.cloud.model.OrangeFolder;
 import com.mkbrv.orange.cloud.model.OrangeFreeSpace;
-import com.mkbrv.orange.cloud.response.OrangeDeleteFolderResponse;
+import com.mkbrv.orange.cloud.response.OrangeGenericResponse;
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -32,7 +32,7 @@ public class OrangeCloudFoldersAPITests extends AbstractOrangeCloudAPITests {
         });
 
         OrangeAccessToken orangeAccessToken = new OrangeAccessToken("token");
-        OrangeDeleteFolderResponse response = orangeCloudFoldersAPI.deleteFolder(orangeAccessToken,
+        OrangeGenericResponse response = orangeCloudFoldersAPI.deleteFolder(orangeAccessToken,
                 new OrangeFolder("random"));
         assertNotNull(response);
         assertFalse(response.wasRemoved());
@@ -48,7 +48,7 @@ public class OrangeCloudFoldersAPITests extends AbstractOrangeCloudAPITests {
         });
 
         OrangeAccessToken orangeAccessToken = new OrangeAccessToken("token");
-        OrangeDeleteFolderResponse response = orangeCloudFoldersAPI.deleteFolder(orangeAccessToken,
+        OrangeGenericResponse response = orangeCloudFoldersAPI.deleteFolder(orangeAccessToken,
                 new OrangeFolder("random"));
         assertNotNull(response);
         assertTrue(response.wasRemoved());
