@@ -34,7 +34,7 @@ public class AbstractIdentityIntegrationTest extends AbstractIntegrationTest {
         this.loadProperties();
         orangeContext = new OrangeIdentityContext();
         orangeContext.addScope(OrangeScope.cloudfullread).addScope(OrangeScope.offline_access)
-                .addScope(OrangeScope.cloudfullwrite);
+                .addScope(OrangeScope.cloudfullwrite).addScope(OrangeScope.openid);
         orangeContext.addPrompt(OrangePrompt.login).addPrompt(OrangePrompt.consent);
         orangeContext.setOrangeURLs(OrangeURLs.DEFAULT)
                 .setOrangeClientConfiguration(orangeClientConfiguration);

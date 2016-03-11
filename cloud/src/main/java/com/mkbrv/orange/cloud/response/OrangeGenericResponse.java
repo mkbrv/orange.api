@@ -5,13 +5,13 @@ import com.mkbrv.orange.client.response.OrangeResponse;
 /**
  * Created by mkbrv on 08/03/16.
  */
-public class OrangeDeleteFolderResponse {
+public class OrangeGenericResponse {
 
     final Integer STATUS_REMOVED = 204;
 
     final OrangeResponse orangeResponse;
 
-    public OrangeDeleteFolderResponse(final OrangeResponse orangeResponse) {
+    public OrangeGenericResponse(final OrangeResponse orangeResponse) {
         this.orangeResponse = orangeResponse;
     }
 

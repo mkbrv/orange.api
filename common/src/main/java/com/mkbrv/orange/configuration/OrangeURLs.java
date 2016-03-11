@@ -20,40 +20,22 @@ public class OrangeURLs {
 
     protected String folders;
 
+    protected String files;
+
     public String getDomain() {
         return domain;
-    }
-
-    public OrangeURLs setDomain(final String domain) {
-        this.domain = domain;
-        return this;
     }
 
     public String getResStatus() {
         return resStatus;
     }
 
-    public OrangeURLs setResStatus(final String resStatus) {
-        this.resStatus = resStatus;
-        return this;
-    }
-
     public String getOauthAuthorize() {
         return oauthAuthorize;
     }
 
-    public OrangeURLs setOauthAuthorize(final String oauthAuthorize) {
-        this.oauthAuthorize = oauthAuthorize;
-        return this;
-    }
-
     public String getOauthToken() {
         return this.domain + oauthToken;
-    }
-
-    public OrangeURLs setOauthToken(final String oauthToken) {
-        this.oauthToken = oauthToken;
-        return this;
     }
 
     public String getFreeSpace() {
@@ -65,12 +47,8 @@ public class OrangeURLs {
         return this.domain + folders;
     }
 
-    public void setFolders(final String folders) {
-        this.folders = folders;
-    }
-
-    public void setFreeSpace(String freeSpace) {
-        this.freeSpace = freeSpace;
+    public String getFiles() {
+        return files;
     }
 
     public static final OrangeURLs DEFAULT = new OrangeURLs() {
@@ -83,6 +61,8 @@ public class OrangeURLs {
         public static final String DEFAULT_FREESPACE = "/cloud/v1/freespace";
         public static final String DEFAULT_ROOT_FOLDER = "/cloud/v1/folders";
 
+        public static final String DEFAULT_FILES = "/cloud/v1/files";
+
 
         {
             this.domain = DEFAULT_DOMAIN;
@@ -91,6 +71,7 @@ public class OrangeURLs {
             this.oauthToken = DEFAULT_OAUTH_TOKEN;
             this.freeSpace = DEFAULT_FREESPACE;
             this.folders = DEFAULT_ROOT_FOLDER;
+            this.files = DEFAULT_FILES;
         }
     };
 

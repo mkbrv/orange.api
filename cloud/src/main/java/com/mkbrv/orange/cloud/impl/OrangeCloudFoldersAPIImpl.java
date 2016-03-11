@@ -15,7 +15,7 @@ import com.mkbrv.orange.cloud.OrangeCloudFoldersAPI;
 import com.mkbrv.orange.cloud.model.*;
 import com.mkbrv.orange.cloud.request.OrangeFolderFilterParams;
 import com.mkbrv.orange.cloud.request.OrangeFolderRequestParams;
-import com.mkbrv.orange.cloud.response.OrangeDeleteFolderResponse;
+import com.mkbrv.orange.cloud.response.OrangeGenericResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -193,12 +193,12 @@ public class OrangeCloudFoldersAPIImpl implements OrangeCloudFoldersAPI {
      * {@inheritDoc}
      */
     @Override
-    public OrangeDeleteFolderResponse deleteFolder(OrangeAccessToken orangeAccessToken, OrangeFolder orangeFolder) {
+    public OrangeGenericResponse deleteFolder(OrangeAccessToken orangeAccessToken, OrangeFolder orangeFolder) {
         OrangeRequest orangeRequest = new OrangeRequest()
                 .setUrl(this.orangeContext.getOrangeURLs().getFolders() + "/" + orangeFolder.getId())
                 .setOrangeAccessToken(orangeAccessToken);
         OrangeResponse orangeResponse = this.orangeHttpClient.delete(orangeRequest);
-        return new OrangeDeleteFolderResponse(orangeResponse);
+        return new OrangeGenericResponse(orangeResponse);
     }
 
     /**

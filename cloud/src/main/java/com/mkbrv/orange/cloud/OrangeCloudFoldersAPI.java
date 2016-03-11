@@ -6,7 +6,7 @@ import com.mkbrv.orange.cloud.model.OrangeFolder;
 import com.mkbrv.orange.cloud.model.OrangeFreeSpace;
 import com.mkbrv.orange.cloud.request.OrangeFolderFilterParams;
 import com.mkbrv.orange.cloud.request.OrangeFolderRequestParams;
-import com.mkbrv.orange.cloud.response.OrangeDeleteFolderResponse;
+import com.mkbrv.orange.cloud.response.OrangeGenericResponse;
 
 import java.lang.reflect.Type;
 import java.util.Map;
@@ -70,9 +70,9 @@ public interface OrangeCloudFoldersAPI {
     /**
      * @param orangeAccessToken Users Access Token used to validate his session;
      * @param orangeFolder      Folder to be removed
-     * @return OrangeDeleteFolderResponse
+     * @return OrangeGenericResponse
      */
-    OrangeDeleteFolderResponse deleteFolder(final OrangeAccessToken orangeAccessToken, final OrangeFolder orangeFolder);
+    OrangeGenericResponse deleteFolder(final OrangeAccessToken orangeAccessToken, final OrangeFolder orangeFolder);
 
 
     /**
@@ -93,10 +93,6 @@ public interface OrangeCloudFoldersAPI {
         public static final String LIMIT = "limit";
         public static final String OFFSET = "offset";
 
-
-        public static final String NAME = "name";
-        public static final String PARENT_FOLDER_ID =  "parentFolderId";
-        public static final String CLONE = "clone";
     }
 
 

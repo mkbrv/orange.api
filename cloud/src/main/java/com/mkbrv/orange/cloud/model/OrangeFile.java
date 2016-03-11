@@ -25,14 +25,18 @@ public class OrangeFile {
 
     private Date lastUpdateDate;
 
+    public OrangeFile() {
+    }
+
+    public OrangeFile(final String id) {
+        this.id = id;
+    }
+
+
     public String getId() {
         return id;
     }
 
-    public OrangeFile setId(String id) {
-        this.id = id;
-        return this;
-    }
 
     public String getName() {
         return name;
