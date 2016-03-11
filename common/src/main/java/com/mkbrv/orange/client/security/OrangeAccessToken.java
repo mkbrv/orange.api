@@ -9,6 +9,11 @@ public class OrangeAccessToken {
 
     private final String token;
 
+    /**
+     * User associated to this account;
+     */
+    private OrangeUser orangeUser;
+
     private String tokenType;
 
     private OrangeRefreshToken refreshToken;
@@ -45,6 +50,15 @@ public class OrangeAccessToken {
     public OrangeAccessToken setTokenType(String tokenType) {
         this.tokenType = tokenType;
         return this;
+    }
+
+    public OrangeAccessToken setOrangeUser(OrangeUser orangeUser) {
+        this.orangeUser = orangeUser;
+        return this;
+    }
+
+    public OrangeUser getOrangeUser() {
+        return orangeUser;
     }
 
     public String getTokenType() {
