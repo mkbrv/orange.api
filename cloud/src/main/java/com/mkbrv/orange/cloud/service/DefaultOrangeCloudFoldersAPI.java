@@ -33,9 +33,9 @@ import java.util.Map;
  * Implementation of the OrangeCloudFoldersAPI using GSON
  * Created by mkbrv on 20/02/16.
  */
-public class OrangeCloudFoldersAPIImpl implements OrangeCloudFoldersAPI {
+public class DefaultOrangeCloudFoldersAPI implements OrangeCloudFoldersAPI {
 
-    private static final Logger LOG = LoggerFactory.getLogger(OrangeCloudFoldersAPIImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(DefaultOrangeCloudFoldersAPI.class);
 
     /**
      *
@@ -50,7 +50,7 @@ public class OrangeCloudFoldersAPIImpl implements OrangeCloudFoldersAPI {
     /**
      * Default deserializers for Orange JSON to java classes
      */
-    private Gson gson = new GsonBuilder()
+    protected Gson gson = new GsonBuilder()
             .registerTypeAdapter(OrangeFreeSpace.class, new OrangeFreeSpaceDeserializer())
             .registerTypeAdapter(OrangeFolder.class, new OrangeFolderDeserializer())
             .registerTypeAdapter(OrangeFile.class, new OrangeFileDeserializer())
@@ -62,7 +62,7 @@ public class OrangeCloudFoldersAPIImpl implements OrangeCloudFoldersAPI {
      *
      * @param orangeContext contains api keys;
      */
-    public OrangeCloudFoldersAPIImpl(final OrangeContext orangeContext) {
+    public DefaultOrangeCloudFoldersAPI(final OrangeContext orangeContext) {
         this.orangeContext = orangeContext;
         this.orangeHttpClient = new ExceptionAwareHttpClient(new SimpleHttpClient());
     }
@@ -73,7 +73,7 @@ public class OrangeCloudFoldersAPIImpl implements OrangeCloudFoldersAPI {
      * @param orangeContext    contains api keys;
      * @param orangeHttpClient custom http client
      */
-    public OrangeCloudFoldersAPIImpl(final OrangeContext orangeContext, final OrangeHttpClient orangeHttpClient) {
+    public DefaultOrangeCloudFoldersAPI(final OrangeContext orangeContext, final OrangeHttpClient orangeHttpClient) {
         this.orangeContext = orangeContext;
         this.orangeHttpClient = orangeHttpClient;
     }
@@ -95,7 +95,7 @@ public class OrangeCloudFoldersAPIImpl implements OrangeCloudFoldersAPI {
      */
     @Override
     public OrangeFolder getRootFolder(final OrangeAccessToken orangeAccessToken,
-                                             final OrangeFolderFilterParams orangeFolderFilterParams) {
+                                      final OrangeFolderFilterParams orangeFolderFilterParams) {
         OrangeRequest orangeRequest = new OrangeRequest()
                 .setUrl(this.orangeContext.getOrangeURLs().getFolders())
                 .setOrangeAccessToken(orangeAccessToken);
@@ -141,7 +141,7 @@ public class OrangeCloudFoldersAPIImpl implements OrangeCloudFoldersAPI {
      */
     @Override
     public OrangeFolder getFolder(final OrangeAccessToken orangeAccessToken, final OrangeFolder orangeFolder,
-                                         final OrangeFolderFilterParams orangeFolderFilterParams) {
+                                  final OrangeFolderFilterParams orangeFolderFilterParams) {
         OrangeRequest orangeRequest = new OrangeRequest()
                 .setUrl(this.orangeContext.getOrangeURLs().getFolders() + "/" + orangeFolder.getId())
                 .setOrangeAccessToken(orangeAccessToken);
@@ -160,7 +160,7 @@ public class OrangeCloudFoldersAPIImpl implements OrangeCloudFoldersAPI {
      */
     @Override
     public OrangeFolder createFolder(final OrangeAccessToken orangeAccessToken,
-                                            final OrangeFolderRequestParams orangeFolder) {
+                                     final OrangeFolderRequestParams orangeFolder) {
         OrangeRequest orangeRequest = new OrangeRequest()
                 .setUrl(this.orangeContext.getOrangeURLs().getFolders())
                 .setOrangeAccessToken(orangeAccessToken);
@@ -176,8 +176,8 @@ public class OrangeCloudFoldersAPIImpl implements OrangeCloudFoldersAPI {
      */
     @Override
     public OrangeFolder updateFolder(final OrangeAccessToken orangeAccessToken,
-                                            final OrangeFolder orangeFolder,
-                                            final OrangeFolderRequestParams orangeFolderRequestParams) {
+                                     final OrangeFolder orangeFolder,
+                                     final OrangeFolderRequestParams orangeFolderRequestParams) {
         OrangeRequest orangeRequest = new OrangeRequest()
                 .setUrl(this.orangeContext.getOrangeURLs().getFolders() + "/" + orangeFolder.getId())
                 .setOrangeAccessToken(orangeAccessToken);
@@ -203,7 +203,8 @@ public class OrangeCloudFoldersAPIImpl implements OrangeCloudFoldersAPI {
                 .setUrl(this.orangeContext.getOrangeURLs().getFolders() + "/" + orangeFolder.getId())
                 .setOrangeAccessToken(orangeAccessToken);
         OrangeResponse orangeResponse = this.orangeHttpClient.delete(orangeRequest);
-        return new OrangeGenericResponse(orangeResponse);
+        return new OrangeGenericResponse(orangeResponse,
+                Constants.ORANGE_DELETE_OK_STATUS.equals(orangeResponse.getStatus()));
     }
 
     /**

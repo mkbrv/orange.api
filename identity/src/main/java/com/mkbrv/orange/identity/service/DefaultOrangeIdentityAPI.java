@@ -24,7 +24,7 @@ import java.util.Iterator;
  * Implementation of the OrangeIdentityAPI using GSON
  * Created by mkbrv on 17/02/16.
  */
-public class OrangeIdentityAPIImpl implements OrangeIdentityAPI {
+public class DefaultOrangeIdentityAPI implements OrangeIdentityAPI {
 
     private final OrangeIdentityContext orangeContext;
 
@@ -36,7 +36,7 @@ public class OrangeIdentityAPIImpl implements OrangeIdentityAPI {
     /**
      * @param orangeContext
      */
-    public OrangeIdentityAPIImpl(final OrangeIdentityContext orangeContext) {
+    public DefaultOrangeIdentityAPI(final OrangeIdentityContext orangeContext) {
         this.orangeContext = orangeContext;
         this.orangeHttpClient = new ExceptionAwareHttpClient(new SimpleHttpClient());
     }
@@ -45,7 +45,7 @@ public class OrangeIdentityAPIImpl implements OrangeIdentityAPI {
      * @param orangeContext
      * @param orangeHttpClient
      */
-    public OrangeIdentityAPIImpl(final OrangeIdentityContext orangeContext, final OrangeHttpClient orangeHttpClient) {
+    public DefaultOrangeIdentityAPI(final OrangeIdentityContext orangeContext, final OrangeHttpClient orangeHttpClient) {
         this.orangeContext = orangeContext;
         this.orangeHttpClient = orangeHttpClient;
     }

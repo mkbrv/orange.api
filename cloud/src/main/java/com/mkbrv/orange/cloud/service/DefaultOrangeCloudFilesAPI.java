@@ -22,10 +22,10 @@ import java.io.File;
 /**
  * Created by mkbrv on 09/03/16.
  */
-public class OrangeCloudFilesAPIImpl implements OrangeCloudFilesAPI {
+public class DefaultOrangeCloudFilesAPI implements OrangeCloudFilesAPI {
 
 
-    private static final Logger LOG = LoggerFactory.getLogger(OrangeCloudFilesAPIImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(DefaultOrangeCloudFilesAPI.class);
 
     /**
      *
@@ -51,7 +51,7 @@ public class OrangeCloudFilesAPIImpl implements OrangeCloudFilesAPI {
      *
      * @param orangeContext contains api keys;
      */
-    public OrangeCloudFilesAPIImpl(final OrangeContext orangeContext) {
+    public DefaultOrangeCloudFilesAPI(final OrangeContext orangeContext) {
         this.orangeContext = orangeContext;
         this.orangeHttpClient = new ExceptionAwareHttpClient(new SimpleHttpClient());
     }
@@ -62,7 +62,7 @@ public class OrangeCloudFilesAPIImpl implements OrangeCloudFilesAPI {
      * @param orangeContext    contains api keys;
      * @param orangeHttpClient custom http client
      */
-    public OrangeCloudFilesAPIImpl(final OrangeContext orangeContext, final OrangeHttpClient orangeHttpClient) {
+    public DefaultOrangeCloudFilesAPI(final OrangeContext orangeContext, final OrangeHttpClient orangeHttpClient) {
         this.orangeContext = orangeContext;
         this.orangeHttpClient = orangeHttpClient;
     }

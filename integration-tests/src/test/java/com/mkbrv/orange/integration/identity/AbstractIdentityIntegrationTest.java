@@ -8,7 +8,7 @@ import com.mkbrv.orange.identity.OrangeIdentityAPI;
 import com.mkbrv.orange.identity.model.OrangeIdentityContext;
 import com.mkbrv.orange.identity.model.OrangePrompt;
 import com.mkbrv.orange.identity.model.OrangeScope;
-import com.mkbrv.orange.identity.service.OrangeIdentityAPIImpl;
+import com.mkbrv.orange.identity.service.DefaultOrangeIdentityAPI;
 import com.mkbrv.orange.integration.AbstractIntegrationTest;
 import org.junit.Before;
 
@@ -44,7 +44,7 @@ public class AbstractIdentityIntegrationTest extends AbstractIntegrationTest {
         orangeContext.addPrompt(OrangePrompt.login).addPrompt(OrangePrompt.consent);
         orangeContext.setOrangeURLs(OrangeURLs.DEFAULT)
                 .setOrangeClientConfiguration(orangeClientConfiguration);
-        this.orangeIdentityAPI = new OrangeIdentityAPIImpl(this.orangeContext);
+        this.orangeIdentityAPI = new DefaultOrangeIdentityAPI(this.orangeContext);
     }
 
 

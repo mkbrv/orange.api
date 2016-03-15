@@ -1,13 +1,13 @@
-package com.mkbrv.orange.cloud;
+package com.mkbrv.orange.cloud.service;
 
 import com.mkbrv.orange.client.OrangeContext;
 import com.mkbrv.orange.client.SimpleHttpClient;
 import com.mkbrv.orange.client.request.OrangeRequest;
 import com.mkbrv.orange.client.response.OrangeResponse;
 import com.mkbrv.orange.client.security.OrangeAccessToken;
+import com.mkbrv.orange.cloud.AbstractOrangeCloudAPITests;
 import com.mkbrv.orange.cloud.model.file.OrangeFileType;
 import com.mkbrv.orange.cloud.request.OrangeFolderFilterParams;
-import com.mkbrv.orange.cloud.service.OrangeCloudFoldersAPIImpl;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -32,7 +32,7 @@ public class OrangeRootFolderOptionalParametersTests extends AbstractOrangeCloud
     public void init() throws IOException {
         OrangeContext orangeContext = new OrangeContext().setOrangeClientConfiguration(this.orangeClientConfiguration);
         orangeHttpClient = Mockito.spy(new SimpleHttpClient());
-        orangeCloudFoldersAPI = new OrangeCloudFoldersAPIImpl(orangeContext, orangeHttpClient);
+        orangeCloudFoldersAPI = new DefaultOrangeCloudFoldersAPI(orangeContext, orangeHttpClient);
     }
 
     @Test

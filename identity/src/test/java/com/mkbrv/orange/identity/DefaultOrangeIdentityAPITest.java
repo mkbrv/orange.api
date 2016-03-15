@@ -9,7 +9,7 @@ import com.mkbrv.orange.configuration.OrangeURLs;
 import com.mkbrv.orange.identity.model.OrangeIdentityContext;
 import com.mkbrv.orange.identity.model.OrangePrompt;
 import com.mkbrv.orange.identity.model.OrangeScope;
-import com.mkbrv.orange.identity.service.OrangeIdentityAPIImpl;
+import com.mkbrv.orange.identity.service.DefaultOrangeIdentityAPI;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -26,7 +26,7 @@ import static org.mockito.Mockito.when;
 /**
  * Created by mkbrv on 17/02/16.
  */
-public class OrangeIdentityAPIImplTest {
+public class DefaultOrangeIdentityAPITest {
 
 
     private OrangeIdentityAPI orangeIdentityAPI;
@@ -49,7 +49,7 @@ public class OrangeIdentityAPIImplTest {
         orangeContext.addPrompt(OrangePrompt.login).addPrompt(OrangePrompt.consent);
         orangeContext.setOrangeURLs(OrangeURLs.DEFAULT)
                 .setOrangeClientConfiguration(orangeClientConfiguration);
-        orangeIdentityAPI = new OrangeIdentityAPIImpl(orangeContext, orangeHttpClient);
+        orangeIdentityAPI = new DefaultOrangeIdentityAPI(orangeContext, orangeHttpClient);
     }
 
     /**
@@ -72,11 +72,11 @@ public class OrangeIdentityAPIImplTest {
 
 
         //check all required params are there
-        assertTrue(authorizeUrl.contains(OrangeIdentityAPIImpl.Constants.PARAM_RESPONSE_TYPE));
-        assertTrue(authorizeUrl.contains(OrangeIdentityAPIImpl.Constants.PARAM_CLIENT_ID));
-        assertTrue(authorizeUrl.contains(OrangeIdentityAPIImpl.Constants.PARAM_REDIRECT_URI));
-        assertTrue(authorizeUrl.contains(OrangeIdentityAPIImpl.Constants.PARAM_SCOPE));
-        assertTrue(authorizeUrl.contains(OrangeIdentityAPIImpl.Constants.PARAM_STATE));
+        assertTrue(authorizeUrl.contains(DefaultOrangeIdentityAPI.Constants.PARAM_RESPONSE_TYPE));
+        assertTrue(authorizeUrl.contains(DefaultOrangeIdentityAPI.Constants.PARAM_CLIENT_ID));
+        assertTrue(authorizeUrl.contains(DefaultOrangeIdentityAPI.Constants.PARAM_REDIRECT_URI));
+        assertTrue(authorizeUrl.contains(DefaultOrangeIdentityAPI.Constants.PARAM_SCOPE));
+        assertTrue(authorizeUrl.contains(DefaultOrangeIdentityAPI.Constants.PARAM_STATE));
     }
 
 

@@ -6,7 +6,7 @@ import com.mkbrv.orange.cloud.model.OrangeFolder;
 import com.mkbrv.orange.cloud.model.file.OrangeFileMetadata;
 import com.mkbrv.orange.cloud.model.file.OrangeFileType;
 import com.mkbrv.orange.cloud.request.OrangeFolderFilterParams;
-import com.mkbrv.orange.cloud.service.OrangeCloudFoldersAPIImpl;
+import com.mkbrv.orange.cloud.service.DefaultOrangeCloudFoldersAPI;
 import com.mkbrv.orange.integration.identity.AbstractIdentityIntegrationTest;
 import org.junit.Before;
 import org.junit.Test;
@@ -33,7 +33,7 @@ public class ITRootFolderCloudAPI extends AbstractIdentityIntegrationTest {
     @Before
     public void init() throws IOException {
         super.init();
-        orangeCloudFoldersAPI = new OrangeCloudFoldersAPIImpl(this.orangeContext);
+        orangeCloudFoldersAPI = new DefaultOrangeCloudFoldersAPI(this.orangeContext);
     }
 
 

@@ -8,7 +8,7 @@ import com.mkbrv.orange.cloud.model.folder.DefaultOrangeFolder;
 import com.mkbrv.orange.cloud.request.OrangeFolderFilterParams;
 import com.mkbrv.orange.cloud.request.OrangeFolderRequestParams;
 import com.mkbrv.orange.cloud.response.OrangeGenericResponse;
-import com.mkbrv.orange.cloud.service.OrangeCloudFoldersAPIImpl;
+import com.mkbrv.orange.cloud.service.DefaultOrangeCloudFoldersAPI;
 import com.mkbrv.orange.integration.identity.AbstractIdentityIntegrationTest;
 import org.junit.Before;
 import org.junit.Test;
@@ -31,7 +31,7 @@ public class ITFolderCRUDOrangeCloudAPI extends AbstractIdentityIntegrationTest 
     @Before
     public void init() throws IOException {
         super.init();
-        orangeCloudFoldersAPI = new OrangeCloudFoldersAPIImpl(this.orangeContext);
+        orangeCloudFoldersAPI = new DefaultOrangeCloudFoldersAPI(this.orangeContext);
     }
 
 
@@ -81,7 +81,7 @@ public class ITFolderCRUDOrangeCloudAPI extends AbstractIdentityIntegrationTest 
                 OrangeGenericResponse deleteFolderResponse =
                         orangeCloudFoldersAPI.deleteFolder(orangeAccessToken, orangeFolder);
                 assertNotNull(deleteFolderResponse);
-                assertTrue(deleteFolderResponse.wasRemoved());
+                assertTrue(deleteFolderResponse.isOperationSuccessful());
             } catch (OrangeException orangeException) {
                 //you can only get cloudfullwrite if you contact orange
                 assertEquals("800", orangeException.getCode());
@@ -116,7 +116,7 @@ public class ITFolderCRUDOrangeCloudAPI extends AbstractIdentityIntegrationTest 
                     new OrangeFolderFilterParams().setRestrictedMode(""));
 
             assertEquals(newName, orangeRootFolder.getSubFolders().get(0).getName());
-        } catch (OrangeException orangeException) {
+        } catch (final OrangeException orangeException) {
             //you can only get cloudfullwrite if you contact orange
             assertEquals(new Integer(401), orangeException.getOrangeResponse().getStatus());
         }
