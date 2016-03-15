@@ -1,4 +1,4 @@
-package com.mkbrv.orange.cloud.impl;
+package com.mkbrv.orange.cloud.service;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -10,7 +10,9 @@ import com.mkbrv.orange.client.request.OrangeRequest;
 import com.mkbrv.orange.client.response.OrangeResponse;
 import com.mkbrv.orange.client.security.OrangeAccessToken;
 import com.mkbrv.orange.cloud.OrangeCloudFilesAPI;
-import com.mkbrv.orange.cloud.model.*;
+import com.mkbrv.orange.cloud.model.OrangeFile;
+import com.mkbrv.orange.cloud.model.file.OrangeFileDeserializer;
+import com.mkbrv.orange.cloud.model.folder.DefaultOrangeFolder;
 import com.mkbrv.orange.cloud.response.OrangeGenericResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -70,7 +72,7 @@ public class OrangeCloudFilesAPIImpl implements OrangeCloudFilesAPI {
      * {@inheritDoc}
      */
     @Override
-    public OrangeGenericResponse uploadFile(OrangeAccessToken orangeAccessToken, OrangeFolder orangeFolder, File file) {
+    public OrangeGenericResponse uploadFile(OrangeAccessToken orangeAccessToken, DefaultOrangeFolder orangeFolder, File file) {
         return null;
     }
 
@@ -88,7 +90,7 @@ public class OrangeCloudFilesAPIImpl implements OrangeCloudFilesAPI {
     @Override
     public OrangeFile getFile(OrangeAccessToken orangeAccessToken, OrangeFile orangeFile) {
         OrangeRequest orangeRequest = new OrangeRequest()
-                .setUrl(this.orangeContext.getOrangeURLs().getFiles() + "/" + orangeFile)
+                .setUrl(this.orangeContext.getOrangeURLs().getFiles() + "/" + orangeFile.getId())
                 .setOrangeAccessToken(orangeAccessToken);
         OrangeResponse orangeResponse = this.orangeHttpClient.doGet(orangeRequest);
         return gson.fromJson(orangeResponse.getBody().toString(), OrangeFile.class);

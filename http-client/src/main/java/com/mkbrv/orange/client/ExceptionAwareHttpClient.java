@@ -10,7 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Decorator for the http client. aware of orange errors
+ * Decorator for the http client. aware of orange errors (can parse them)
  * Throws exceptions based on orange errors
  * Created by mkbrv on 19/02/16.
  */
@@ -23,27 +23,43 @@ public class ExceptionAwareHttpClient implements OrangeHttpClient {
     private final Gson gson = new GsonBuilder().registerTypeAdapter(OrangeException.class,
             new OrangeExceptionDeserializer()).create();
 
-
+    /**
+     * @param orangeHttpClient decorated client
+     */
     public ExceptionAwareHttpClient(final OrangeHttpClient orangeHttpClient) {
         this.actualClient = orangeHttpClient;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public OrangeResponse doGet(final OrangeRequest request) {
         return this.verifyResponse(this.actualClient.doGet(request));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public OrangeResponse doPost(final OrangeRequest request) {
         return this.verifyResponse(this.actualClient.doPost(request));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public OrangeResponse delete(final OrangeRequest request) {
         return this.verifyResponse(this.actualClient.delete(request));
     }
 
-
+    /**
+     * The orangeResponse is verified for eventual errors which can be parsed;
+     *
+     * @param orangeResponse orangeResponse
+     * @return orangeResponse unaltered
+     */
     private OrangeResponse verifyResponse(final OrangeResponse orangeResponse) {
         switch (this.computeStatusBasedOnValue(orangeResponse.getStatus())) {
             case OK:
@@ -57,16 +73,17 @@ public class ExceptionAwareHttpClient implements OrangeHttpClient {
     /**
      * Will attempt to parse the exception message from orange. if is unable to do it, will throw a generic exception
      *
-     * @param orangeResponse
-     * @return
+     * @param orangeResponse contains the body json
+     * @return OrangeException from the json
      */
-    private OrangeException attemptToParseException(final OrangeResponse orangeResponse) {
+    protected OrangeException attemptToParseException(final OrangeResponse orangeResponse) {
         OrangeException orangeException;
         try {
             orangeException = gson.fromJson(orangeResponse.getBody().toString(), OrangeException.class)
                     .setOrangeResponse(orangeResponse);
             LOG.error(orangeResponse.getOrangeRequest() + orangeResponse.getBody().toString());
         } catch (Exception e) {
+            LOG.warn(e.getMessage(), e);
             orangeException = new OrangeException(e)
                     .setCode(orangeResponse.getStatus())
                     .setDescription(orangeResponse.getBody().toString())
@@ -75,12 +92,22 @@ public class ExceptionAwareHttpClient implements OrangeHttpClient {
         return orangeException;
     }
 
-    private enum Status {
+    /**
+     * used for the switch regarding if the response of the api call was OK or not
+     */
+    protected enum Status {
         OK,
         NOT_OK
     }
 
-    private Status computeStatusBasedOnValue(Integer httpStatus) {
+    /**
+     * Returns if the status is ok.
+     *
+     * @param httpStatus value of the http response status
+     * @return OK for a status of type 2xx
+     * NOT_OK for other statuses;
+     */
+    protected Status computeStatusBasedOnValue(Integer httpStatus) {
         if (httpStatus != null && httpStatus < 300 && httpStatus >= 200) {
             return Status.OK;
         }

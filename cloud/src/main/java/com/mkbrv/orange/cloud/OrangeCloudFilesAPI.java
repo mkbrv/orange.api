@@ -2,7 +2,7 @@ package com.mkbrv.orange.cloud;
 
 import com.mkbrv.orange.client.security.OrangeAccessToken;
 import com.mkbrv.orange.cloud.model.OrangeFile;
-import com.mkbrv.orange.cloud.model.OrangeFolder;
+import com.mkbrv.orange.cloud.model.folder.DefaultOrangeFolder;
 import com.mkbrv.orange.cloud.response.OrangeGenericResponse;
 
 import java.io.File;
@@ -20,7 +20,7 @@ public interface OrangeCloudFilesAPI {
      * @return
      */
     OrangeGenericResponse uploadFile(final OrangeAccessToken orangeAccessToken,
-                                     final OrangeFolder orangeFolder, final File file);
+                                     final DefaultOrangeFolder orangeFolder, final File file);
 
     /**
      * Update a file.

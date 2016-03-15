@@ -2,8 +2,8 @@ package com.mkbrv.orange.identity;
 
 import com.mkbrv.orange.client.security.OrangeAccessToken;
 import com.mkbrv.orange.client.security.OrangeRefreshToken;
-import com.mkbrv.orange.identity.impl.OrangeIdentityAPIImpl;
 import com.mkbrv.orange.identity.model.OrangeIdentityContext;
+import com.mkbrv.orange.identity.service.OrangeIdentityAPIImpl;
 
 /**
  * As described in: https://developer.orange.com/apis/identity-france/api-reference

@@ -1,13 +1,19 @@
-package com.mkbrv.orange.cloud.model;
+package com.mkbrv.orange.cloud.model.folder;
 
-import com.google.gson.*;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
+import com.mkbrv.orange.cloud.model.OrangeFile;
 
 import java.lang.reflect.Type;
 
 /**
  * Created by mkbrv on 26/02/16.
  */
-public class OrangeFolderDeserializer implements JsonDeserializer<OrangeFolder> {
+public class OrangeFolderDeserializer implements JsonDeserializer<DefaultOrangeFolder> {
 
     public static class Params {
         public static final String NAME = "name";
@@ -19,11 +25,11 @@ public class OrangeFolderDeserializer implements JsonDeserializer<OrangeFolder> 
 
 
     @Override
-    public OrangeFolder deserialize(final JsonElement jsonElement,
-                                    final Type type, final JsonDeserializationContext jsonDeserializationContext)
+    public DefaultOrangeFolder deserialize(final JsonElement jsonElement,
+                                           final Type type, final JsonDeserializationContext jsonDeserializationContext)
             throws JsonParseException {
         JsonObject jsonObject = jsonElement.getAsJsonObject();
-        OrangeFolder orangeFolder = new OrangeFolder(jsonObject.get(Params.ID).getAsString());
+        DefaultOrangeFolder orangeFolder = new DefaultOrangeFolder(jsonObject.get(Params.ID).getAsString());
 
         orangeFolder.setName(jsonObject.get(Params.NAME).getAsString());
         orangeFolder.setParentFolderId(jsonObject.get(Params.PARENTID).getAsString());
@@ -41,7 +47,7 @@ public class OrangeFolderDeserializer implements JsonDeserializer<OrangeFolder> 
      * @param filesArray
      * @param jsonDeserializationContext
      */
-    private void addFiles(final OrangeFolder orangeFolder, final JsonArray filesArray,
+    private void addFiles(final DefaultOrangeFolder orangeFolder, final JsonArray filesArray,
                           final JsonDeserializationContext jsonDeserializationContext) {
         for (int index = 0; index < filesArray.size(); index++) {
             JsonElement fileJson = filesArray.get(index);
@@ -54,10 +60,10 @@ public class OrangeFolderDeserializer implements JsonDeserializer<OrangeFolder> 
      * @param orangeFolder
      * @param subFoldersArray
      */
-    private void addSubFolders(final OrangeFolder orangeFolder, final JsonArray subFoldersArray) {
+    private void addSubFolders(final DefaultOrangeFolder orangeFolder, final JsonArray subFoldersArray) {
         for (int index = 0; index < subFoldersArray.size(); index++) {
             JsonObject subFolderJson = subFoldersArray.get(index).getAsJsonObject();
-            OrangeFolder subFolder = new OrangeFolder(subFolderJson.get(Params.ID).getAsString())
+            DefaultOrangeFolder subFolder = new DefaultOrangeFolder(subFolderJson.get(Params.ID).getAsString())
                     .setName(subFolderJson.get(Params.NAME).getAsString())
                     .setParentFolderId(subFolderJson.get(Params.PARENTID).getAsString());
             orangeFolder.addSubFolder(subFolder);

@@ -1,6 +1,11 @@
-package com.mkbrv.orange.cloud.model;
+package com.mkbrv.orange.cloud.model.file;
 
-import com.google.gson.*;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
+import com.mkbrv.orange.cloud.model.OrangeFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,6 +30,7 @@ public class OrangeFileDeserializer implements JsonDeserializer<OrangeFile> {
         public static final String SIZE = "size";
         public static final String THUMB_URL = "thumbUrl";
         public static final String PREVIEW_URL = "previewUrl";
+        public static final String DOWNLOAD_URL = "downloadUrl";
     }
 
     @Override
@@ -33,7 +39,7 @@ public class OrangeFileDeserializer implements JsonDeserializer<OrangeFile> {
             throws JsonParseException {
         JsonObject jsonObject = jsonElement.getAsJsonObject();
 
-        OrangeFile orangeFile = new OrangeFile(jsonObject.get(Params.ID).getAsString());
+        DefaultOrangeFile orangeFile = new DefaultOrangeFile(jsonObject.get(Params.ID).getAsString());
         orangeFile.setName(jsonObject.get(Params.NAME).getAsString());
         orangeFile.setSize(jsonObject.get(Params.SIZE).getAsLong());
 
@@ -43,6 +49,7 @@ public class OrangeFileDeserializer implements JsonDeserializer<OrangeFile> {
                 jsonDeserializationContext));
         orangeFile.setType(this.getOrangeFileType(jsonObject.get(Params.TYPE).getAsString()));
         orangeFile.setMetadata(this.getMetaData(jsonObject));
+        orangeFile.setDownloadUrl(this.notNull(Params.DOWNLOAD_URL, jsonObject));
 
         this.addThumbnailAndPreviewIfAvailable(orangeFile, jsonObject);
         return orangeFile;
@@ -52,7 +59,7 @@ public class OrangeFileDeserializer implements JsonDeserializer<OrangeFile> {
      * @param orangeFile
      * @param jsonObject
      */
-    private void addThumbnailAndPreviewIfAvailable(final OrangeFile orangeFile, final JsonObject jsonObject) {
+    private void addThumbnailAndPreviewIfAvailable(final DefaultOrangeFile orangeFile, final JsonObject jsonObject) {
         orangeFile.setThumbUrl(
                 notNull(Params.THUMB_URL, jsonObject));
         orangeFile.setPreviewUrl(

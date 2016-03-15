@@ -3,7 +3,7 @@ package com.mkbrv.orange.cloud;
 import com.google.gson.JsonDeserializer;
 import com.mkbrv.orange.client.security.OrangeAccessToken;
 import com.mkbrv.orange.cloud.model.OrangeFolder;
-import com.mkbrv.orange.cloud.model.OrangeFreeSpace;
+import com.mkbrv.orange.cloud.model.freespace.OrangeFreeSpace;
 import com.mkbrv.orange.cloud.request.OrangeFolderFilterParams;
 import com.mkbrv.orange.cloud.request.OrangeFolderRequestParams;
 import com.mkbrv.orange.cloud.response.OrangeGenericResponse;
@@ -36,7 +36,7 @@ public interface OrangeCloudFoldersAPI {
      * @return OrangeFolder root folder of the user with specifications described in the orangeFolderFilterParams
      */
     OrangeFolder getRootFolder(final OrangeAccessToken orangeAccessToken,
-                               final OrangeFolderFilterParams orangeFolderFilterParams);
+                                      final OrangeFolderFilterParams orangeFolderFilterParams);
 
     /**
      * @param orangeAccessToken         Users Access Token used to validate his session;
@@ -46,7 +46,7 @@ public interface OrangeCloudFoldersAPI {
      * Will return null if not found;
      */
     OrangeFolder getFolder(final OrangeAccessToken orangeAccessToken,
-                           final OrangeFolder orangeFolder, final OrangeFolderFilterParams orangeFolderFilterParams);
+                                  final OrangeFolder orangeFolder, final OrangeFolderFilterParams orangeFolderFilterParams);
 
     /**
      * @param orangeAccessToken Users Access Token used to validate his session;
@@ -64,7 +64,7 @@ public interface OrangeCloudFoldersAPI {
      * @return OrangeFolder Updated Folder
      */
     OrangeFolder updateFolder(final OrangeAccessToken orangeAccessToken, final OrangeFolder orangeFolder,
-                              final OrangeFolderRequestParams orangeFolderRequestParams);
+                                     final OrangeFolderRequestParams orangeFolderRequestParams);
 
 
     /**

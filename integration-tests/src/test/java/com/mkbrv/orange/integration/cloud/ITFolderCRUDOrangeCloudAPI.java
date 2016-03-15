@@ -3,12 +3,13 @@ package com.mkbrv.orange.integration.cloud;
 import com.mkbrv.orange.client.exception.OrangeException;
 import com.mkbrv.orange.client.security.OrangeAccessToken;
 import com.mkbrv.orange.cloud.OrangeCloudFoldersAPI;
-import com.mkbrv.orange.cloud.impl.OrangeCloudFoldersAPIImpl;
 import com.mkbrv.orange.cloud.model.OrangeFolder;
+import com.mkbrv.orange.cloud.model.folder.DefaultOrangeFolder;
 import com.mkbrv.orange.cloud.request.OrangeFolderFilterParams;
 import com.mkbrv.orange.cloud.request.OrangeFolderRequestParams;
 import com.mkbrv.orange.cloud.response.OrangeGenericResponse;
-import com.mkbrv.orange.integration.identity.ITOrangeIdentityAPI;
+import com.mkbrv.orange.cloud.service.OrangeCloudFoldersAPIImpl;
+import com.mkbrv.orange.integration.identity.AbstractIdentityIntegrationTest;
 import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -23,7 +24,7 @@ import static junit.framework.TestCase.assertNotNull;
 /**
  * Created by mkbrv on 08/03/16.
  */
-public class ITFolderCRUDOrangeCloudAPI extends ITOrangeIdentityAPI {
+public class ITFolderCRUDOrangeCloudAPI extends AbstractIdentityIntegrationTest {
     private static final Logger LOG = LoggerFactory.getLogger(ITRootFolderCloudAPI.class);
     OrangeCloudFoldersAPI orangeCloudFoldersAPI;
 
@@ -73,7 +74,7 @@ public class ITFolderCRUDOrangeCloudAPI extends ITOrangeIdentityAPI {
         }
         OrangeAccessToken orangeAccessToken = this.getOrangeAccessToken();
         OrangeFolder orangeFolder = orangeCloudFoldersAPI.getFolder(orangeAccessToken,
-                new OrangeFolder(orangeFolderToRemove),
+                new DefaultOrangeFolder(orangeFolderToRemove),
                 new OrangeFolderFilterParams().setShowThumbnails(""));
         if (orangeFolder != null) {
             try {

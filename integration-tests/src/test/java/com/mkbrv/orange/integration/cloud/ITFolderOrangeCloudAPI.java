@@ -1,10 +1,11 @@
 package com.mkbrv.orange.integration.cloud;
 
 import com.mkbrv.orange.client.security.OrangeAccessToken;
-import com.mkbrv.orange.cloud.model.OrangeFileMetadata;
-import com.mkbrv.orange.cloud.model.OrangeFileType;
 import com.mkbrv.orange.cloud.model.OrangeFolder;
-import com.mkbrv.orange.cloud.model.OrangeFreeSpace;
+import com.mkbrv.orange.cloud.model.file.OrangeFileMetadata;
+import com.mkbrv.orange.cloud.model.file.OrangeFileType;
+import com.mkbrv.orange.cloud.model.folder.DefaultOrangeFolder;
+import com.mkbrv.orange.cloud.model.freespace.OrangeFreeSpace;
 import com.mkbrv.orange.cloud.request.OrangeFolderFilterParams;
 import org.junit.Assert;
 import org.junit.Before;
@@ -15,7 +16,11 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Integration Tests for Orange Cloud API
@@ -58,7 +63,7 @@ public class ITFolderOrangeCloudAPI extends ITRootFolderCloudAPI {
 
         OrangeAccessToken orangeAccessToken = this.getOrangeAccessToken();
         //get the first folder from the root
-        OrangeFolder orangeFolder = new OrangeFolder("randomId");
+        OrangeFolder orangeFolder = new DefaultOrangeFolder("randomId");
         orangeFolder = orangeCloudFoldersAPI.getFolder(orangeAccessToken, orangeFolder, new OrangeFolderFilterParams());
         assertNull(orangeFolder);
     }

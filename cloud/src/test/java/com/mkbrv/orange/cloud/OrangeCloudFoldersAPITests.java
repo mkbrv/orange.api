@@ -4,12 +4,16 @@ package com.mkbrv.orange.cloud;
 import com.mkbrv.orange.client.response.OrangeResponse;
 import com.mkbrv.orange.client.security.OrangeAccessToken;
 import com.mkbrv.orange.cloud.model.OrangeFolder;
-import com.mkbrv.orange.cloud.model.OrangeFreeSpace;
+import com.mkbrv.orange.cloud.model.folder.DefaultOrangeFolder;
+import com.mkbrv.orange.cloud.model.freespace.OrangeFreeSpace;
 import com.mkbrv.orange.cloud.response.OrangeGenericResponse;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 
 /**
@@ -33,7 +37,7 @@ public class OrangeCloudFoldersAPITests extends AbstractOrangeCloudAPITests {
 
         OrangeAccessToken orangeAccessToken = new OrangeAccessToken("token");
         OrangeGenericResponse response = orangeCloudFoldersAPI.deleteFolder(orangeAccessToken,
-                new OrangeFolder("random"));
+                new DefaultOrangeFolder("random"));
         assertNotNull(response);
         assertFalse(response.wasRemoved());
     }
@@ -49,7 +53,7 @@ public class OrangeCloudFoldersAPITests extends AbstractOrangeCloudAPITests {
 
         OrangeAccessToken orangeAccessToken = new OrangeAccessToken("token");
         OrangeGenericResponse response = orangeCloudFoldersAPI.deleteFolder(orangeAccessToken,
-                new OrangeFolder("random"));
+                new DefaultOrangeFolder("random"));
         assertNotNull(response);
         assertTrue(response.wasRemoved());
     }
@@ -66,7 +70,7 @@ public class OrangeCloudFoldersAPITests extends AbstractOrangeCloudAPITests {
 
         OrangeAccessToken orangeAccessToken = new OrangeAccessToken("token");
         OrangeFolder orangeFolder = orangeCloudFoldersAPI.getFolder(orangeAccessToken,
-                new OrangeFolder("random"), null);
+                new DefaultOrangeFolder("random"), null);
         assertNotNull(orangeFolder);
         assertNotNull(orangeFolder.getParentFolderId());
         assertTrue(orangeFolder.getSubFolders().size() > 0);

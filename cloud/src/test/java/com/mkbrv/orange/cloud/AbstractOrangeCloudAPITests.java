@@ -2,7 +2,7 @@ package com.mkbrv.orange.cloud;
 
 import com.mkbrv.orange.client.OrangeContext;
 import com.mkbrv.orange.client.OrangeHttpClient;
-import com.mkbrv.orange.cloud.impl.OrangeCloudFoldersAPIImpl;
+import com.mkbrv.orange.cloud.service.OrangeCloudFoldersAPIImpl;
 import com.mkbrv.orange.configuration.OrangeClientConfiguration;
 import org.junit.Before;
 import org.mockito.Mockito;
@@ -30,6 +30,12 @@ public class AbstractOrangeCloudAPITests {
         orangeCloudFoldersAPI = new OrangeCloudFoldersAPIImpl(orangeContext, orangeHttpClient);
     }
 
+    /**
+     * Reads a json from the resources folder containing a mocked response from one of orange api calls;
+     *
+     * @param fileName
+     * @return
+     */
     protected String readValidResponseBody(final String fileName) {
         String result = "";
         try {

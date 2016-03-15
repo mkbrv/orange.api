@@ -1,4 +1,4 @@
-package com.mkbrv.orange.cloud.model;
+package com.mkbrv.orange.cloud.model.file;
 
 import java.util.ArrayList;
 import java.util.Arrays;

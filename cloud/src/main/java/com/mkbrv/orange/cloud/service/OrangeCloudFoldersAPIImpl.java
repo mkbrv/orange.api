@@ -1,4 +1,4 @@
-package com.mkbrv.orange.cloud.impl;
+package com.mkbrv.orange.cloud.service;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -12,7 +12,12 @@ import com.mkbrv.orange.client.request.OrangeRequest;
 import com.mkbrv.orange.client.response.OrangeResponse;
 import com.mkbrv.orange.client.security.OrangeAccessToken;
 import com.mkbrv.orange.cloud.OrangeCloudFoldersAPI;
-import com.mkbrv.orange.cloud.model.*;
+import com.mkbrv.orange.cloud.model.OrangeFile;
+import com.mkbrv.orange.cloud.model.OrangeFolder;
+import com.mkbrv.orange.cloud.model.file.OrangeFileDeserializer;
+import com.mkbrv.orange.cloud.model.folder.OrangeFolderDeserializer;
+import com.mkbrv.orange.cloud.model.freespace.OrangeFreeSpace;
+import com.mkbrv.orange.cloud.model.freespace.OrangeFreeSpaceDeserializer;
 import com.mkbrv.orange.cloud.request.OrangeFolderFilterParams;
 import com.mkbrv.orange.cloud.request.OrangeFolderRequestParams;
 import com.mkbrv.orange.cloud.response.OrangeGenericResponse;
@@ -90,7 +95,7 @@ public class OrangeCloudFoldersAPIImpl implements OrangeCloudFoldersAPI {
      */
     @Override
     public OrangeFolder getRootFolder(final OrangeAccessToken orangeAccessToken,
-                                      final OrangeFolderFilterParams orangeFolderFilterParams) {
+                                             final OrangeFolderFilterParams orangeFolderFilterParams) {
         OrangeRequest orangeRequest = new OrangeRequest()
                 .setUrl(this.orangeContext.getOrangeURLs().getFolders())
                 .setOrangeAccessToken(orangeAccessToken);
@@ -136,7 +141,7 @@ public class OrangeCloudFoldersAPIImpl implements OrangeCloudFoldersAPI {
      */
     @Override
     public OrangeFolder getFolder(final OrangeAccessToken orangeAccessToken, final OrangeFolder orangeFolder,
-                                  final OrangeFolderFilterParams orangeFolderFilterParams) {
+                                         final OrangeFolderFilterParams orangeFolderFilterParams) {
         OrangeRequest orangeRequest = new OrangeRequest()
                 .setUrl(this.orangeContext.getOrangeURLs().getFolders() + "/" + orangeFolder.getId())
                 .setOrangeAccessToken(orangeAccessToken);
@@ -155,7 +160,7 @@ public class OrangeCloudFoldersAPIImpl implements OrangeCloudFoldersAPI {
      */
     @Override
     public OrangeFolder createFolder(final OrangeAccessToken orangeAccessToken,
-                                     final OrangeFolderRequestParams orangeFolder) {
+                                            final OrangeFolderRequestParams orangeFolder) {
         OrangeRequest orangeRequest = new OrangeRequest()
                 .setUrl(this.orangeContext.getOrangeURLs().getFolders())
                 .setOrangeAccessToken(orangeAccessToken);
@@ -171,8 +176,8 @@ public class OrangeCloudFoldersAPIImpl implements OrangeCloudFoldersAPI {
      */
     @Override
     public OrangeFolder updateFolder(final OrangeAccessToken orangeAccessToken,
-                                     final OrangeFolder orangeFolder,
-                                     final OrangeFolderRequestParams orangeFolderRequestParams) {
+                                            final OrangeFolder orangeFolder,
+                                            final OrangeFolderRequestParams orangeFolderRequestParams) {
         OrangeRequest orangeRequest = new OrangeRequest()
                 .setUrl(this.orangeContext.getOrangeURLs().getFolders() + "/" + orangeFolder.getId())
                 .setOrangeAccessToken(orangeAccessToken);

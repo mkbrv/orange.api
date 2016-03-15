@@ -48,7 +48,7 @@ public class OrangeURLs {
     }
 
     public String getFiles() {
-        return files;
+        return this.domain + files;
     }
 
     public static final OrangeURLs DEFAULT = new OrangeURLs() {

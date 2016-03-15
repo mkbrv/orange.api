@@ -6,10 +6,10 @@ import com.mkbrv.orange.client.security.OrangeAccessToken;
 import com.mkbrv.orange.client.security.OrangeRefreshToken;
 import com.mkbrv.orange.configuration.OrangeClientConfiguration;
 import com.mkbrv.orange.configuration.OrangeURLs;
-import com.mkbrv.orange.identity.impl.OrangeIdentityAPIImpl;
 import com.mkbrv.orange.identity.model.OrangeIdentityContext;
 import com.mkbrv.orange.identity.model.OrangePrompt;
 import com.mkbrv.orange.identity.model.OrangeScope;
+import com.mkbrv.orange.identity.service.OrangeIdentityAPIImpl;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,7 +17,9 @@ import org.mockito.Mockito;
 
 import java.util.Date;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.when;
 
@@ -42,7 +44,7 @@ public class OrangeIdentityAPIImplTest {
         orangeClientConfiguration = new OrangeClientConfiguration("appId", "clientId",
                 "clientSecret", "http://AppRedirect.com");
 
-        orangeContext = new OrangeIdentityContext();
+        orangeContext = new OrangeIdentityContext(null);
         orangeContext.addScope(OrangeScope.cloudfullread).addScope(OrangeScope.offline_access);
         orangeContext.addPrompt(OrangePrompt.login).addPrompt(OrangePrompt.consent);
         orangeContext.setOrangeURLs(OrangeURLs.DEFAULT)

@@ -5,7 +5,7 @@ import java.util.Date;
 /**
  * Created by mkbrv on 18/02/16.
  */
-public class OrangeAccessToken {
+public final class OrangeAccessToken {
 
     private final String token;
 

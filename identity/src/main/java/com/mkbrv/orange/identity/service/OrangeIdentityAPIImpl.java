@@ -1,4 +1,4 @@
-package com.mkbrv.orange.identity.impl;
+package com.mkbrv.orange.identity.service;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
