@@ -5,7 +5,7 @@ import java.util.Date;
 /**
  * Created by mkbrv on 18/02/16.
  */
-public class OrangeRefreshToken {
+public final class OrangeRefreshToken {
 
     private final String token;
     private Date createdDate;

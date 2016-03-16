@@ -3,7 +3,8 @@ package com.mkbrv.orange.client;
 import com.mkbrv.orange.client.exception.OrangeException;
 import com.mkbrv.orange.client.request.OrangeRequest;
 import com.mkbrv.orange.client.response.OrangeResponse;
-import org.junit.Test;
+import org.junit.gen5.api.Assertions;
+import org.junit.gen5.api.Test;
 import org.mockito.Mockito;
 
 import static org.mockito.Matchers.any;
@@ -15,7 +16,7 @@ import static org.mockito.Mockito.when;
 public class ExceptionAwareHttpClientTest {
 
 
-    @Test(expected = OrangeException.class)
+    @Test()
     public void httpErrorStatusThrowsException() {
 
         OrangeHttpClient orangeHttpClient = Mockito.mock(OrangeHttpClient.class);
@@ -27,7 +28,7 @@ public class ExceptionAwareHttpClientTest {
         });
 
         OrangeHttpClient errorAwareClient = new ExceptionAwareHttpClient(orangeHttpClient);
-        errorAwareClient.doGet(new OrangeRequest());
+        Assertions.expectThrows(OrangeException.class, () -> errorAwareClient.doGet(new OrangeRequest()));
     }
 
 

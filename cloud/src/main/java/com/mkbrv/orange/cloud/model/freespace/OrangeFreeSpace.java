@@ -1,4 +1,4 @@
-package com.mkbrv.orange.cloud.model;
+package com.mkbrv.orange.cloud.model.freespace;
 
 /**
  * Created by mkbrv on 20/02/16.

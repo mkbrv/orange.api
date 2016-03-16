@@ -1,6 +1,6 @@
 package com.mkbrv.orange.cloud.request;
 
-import com.mkbrv.orange.cloud.model.OrangeFileType;
+import com.mkbrv.orange.cloud.model.file.OrangeFileType;
 
 /**
  * Optional parameters for the folder request;

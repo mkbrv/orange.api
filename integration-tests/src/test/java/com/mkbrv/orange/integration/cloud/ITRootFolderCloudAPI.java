@@ -2,35 +2,39 @@ package com.mkbrv.orange.integration.cloud;
 
 import com.mkbrv.orange.client.security.OrangeAccessToken;
 import com.mkbrv.orange.cloud.OrangeCloudFoldersAPI;
-import com.mkbrv.orange.cloud.impl.OrangeCloudFoldersAPIImpl;
-import com.mkbrv.orange.cloud.model.OrangeFileMetadata;
-import com.mkbrv.orange.cloud.model.OrangeFileType;
 import com.mkbrv.orange.cloud.model.OrangeFolder;
+import com.mkbrv.orange.cloud.model.file.OrangeFileMetadata;
+import com.mkbrv.orange.cloud.model.file.OrangeFileType;
 import com.mkbrv.orange.cloud.request.OrangeFolderFilterParams;
-import com.mkbrv.orange.integration.identity.ITOrangeIdentityAPI;
-import org.junit.Before;
-import org.junit.Test;
+import com.mkbrv.orange.cloud.service.DefaultOrangeCloudFoldersAPI;
+import com.mkbrv.orange.integration.identity.AbstractIdentityIntegrationTest;
+import org.junit.gen5.api.BeforeAll;
+import org.junit.gen5.api.BeforeEach;
+import org.junit.gen5.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static org.junit.Assert.*;
+import static org.junit.gen5.api.Assertions.assertEquals;
+import static org.junit.gen5.api.Assertions.assertNotEquals;
+import static org.junit.gen5.api.Assertions.assertNotNull;
+import static org.junit.gen5.api.Assertions.assertTrue;
 
 
 /**
  * Created by mkbrv on 20/02/16.
  */
-public class ITRootFolderCloudAPI extends ITOrangeIdentityAPI {
+public class ITRootFolderCloudAPI extends AbstractIdentityIntegrationTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(ITRootFolderCloudAPI.class);
     OrangeCloudFoldersAPI orangeCloudFoldersAPI;
 
-    @Before
+    @BeforeAll
     public void init() throws IOException {
         super.init();
-        orangeCloudFoldersAPI = new OrangeCloudFoldersAPIImpl(this.orangeContext);
+        orangeCloudFoldersAPI = new DefaultOrangeCloudFoldersAPI(this.orangeContext);
     }
 
 

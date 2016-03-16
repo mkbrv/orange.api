@@ -11,12 +11,13 @@
     <url>github.com/mkbrv/orange-api</url>
 
     <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <apache.httpclient.version>4.5.1</apache.httpclient.version>
         <google.gson.version>2.6.1</google.gson.version>
         <apache.commons.lang.version>3.4</apache.commons.lang.version>
 
         <!-- test deps properties -->
-        <junit.version>4.12</junit.version>
+        <junit.version>5.0.0-SNAPSHOT</junit.version>
         <mockito.version>2.0.42-beta</mockito.version>
         <logback.version>1.1.5</logback.version>
     </properties>
@@ -87,8 +88,8 @@
 
             <!-- Test -->
             <dependency>
-                <groupId>junit</groupId>
-                <artifactId>junit</artifactId>
+                <groupId>org.junit</groupId>
+                <artifactId>junit5-api</artifactId>
                 <version>${junit.version}</version>
                 <scope>test</scope>
             </dependency>
@@ -101,7 +102,7 @@
             <dependency>
                 <groupId>ch.qos.logback</groupId>
                 <artifactId>logback-classic</artifactId>
-                <version>1.1.5</version>
+                <version>${logback.version}</version>
                 <scope>test</scope>
             </dependency>
         </dependencies>
@@ -168,18 +169,16 @@
                 </configuration>
             </plugin>
 
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <configuration>
-                    <!-- Excludes integration tests when unit tests are run -->
-                    <excludes>
-                        <exclude>**/IT*.java</exclude>
-                    </excludes>
-
-                    <skipTests>${skip.unit.tests}</skipTests>
-                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.junit</groupId>
+                        <artifactId>surefire-junit5</artifactId>
+                        <version>${junit.version}</version>
+                    </dependency>
+                </dependencies>
             </plugin>
 
             <plugin>
@@ -206,8 +205,41 @@
                     </execution>
                 </executions>
             </plugin>
+
+
         </plugins>
     </build>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>snapshots-repo</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <!-- Do NOT cache JUnit 5 snapshot JARs. -->
+                <updatePolicy>always</updatePolicy>
+                <enabled>true</enabled>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
+
+    <repositories>
+        <repository>
+            <id>snapshots-repo</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <!-- Do NOT cache JUnit 5 snapshot JARs. -->
+                <updatePolicy>always</updatePolicy>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+
 
 
     <contributors>

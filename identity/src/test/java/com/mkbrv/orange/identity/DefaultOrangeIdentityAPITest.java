@@ -6,25 +6,27 @@ import com.mkbrv.orange.client.security.OrangeAccessToken;
 import com.mkbrv.orange.client.security.OrangeRefreshToken;
 import com.mkbrv.orange.configuration.OrangeClientConfiguration;
 import com.mkbrv.orange.configuration.OrangeURLs;
-import com.mkbrv.orange.identity.impl.OrangeIdentityAPIImpl;
 import com.mkbrv.orange.identity.model.OrangeIdentityContext;
 import com.mkbrv.orange.identity.model.OrangePrompt;
 import com.mkbrv.orange.identity.model.OrangeScope;
+import com.mkbrv.orange.identity.service.DefaultOrangeIdentityAPI;
 import org.apache.commons.lang3.StringUtils;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.gen5.api.BeforeEach;
+import org.junit.gen5.api.Test;
 import org.mockito.Mockito;
 
 import java.util.Date;
 
-import static org.junit.Assert.*;
+import static org.junit.gen5.api.Assertions.assertEquals;
+import static org.junit.gen5.api.Assertions.assertNotNull;
+import static org.junit.gen5.api.Assertions.assertTrue;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.when;
 
 /**
  * Created by mkbrv on 17/02/16.
  */
-public class OrangeIdentityAPIImplTest {
+public class DefaultOrangeIdentityAPITest {
 
 
     private OrangeIdentityAPI orangeIdentityAPI;
@@ -35,19 +37,19 @@ public class OrangeIdentityAPIImplTest {
 
     private OrangeHttpClient orangeHttpClient;
 
-    @Before
+    @BeforeEach
     public void init() {
         orangeHttpClient = Mockito.mock(OrangeHttpClient.class);
 
         orangeClientConfiguration = new OrangeClientConfiguration("appId", "clientId",
                 "clientSecret", "http://AppRedirect.com");
 
-        orangeContext = new OrangeIdentityContext();
+        orangeContext = new OrangeIdentityContext(null);
         orangeContext.addScope(OrangeScope.cloudfullread).addScope(OrangeScope.offline_access);
         orangeContext.addPrompt(OrangePrompt.login).addPrompt(OrangePrompt.consent);
         orangeContext.setOrangeURLs(OrangeURLs.DEFAULT)
                 .setOrangeClientConfiguration(orangeClientConfiguration);
-        orangeIdentityAPI = new OrangeIdentityAPIImpl(orangeContext, orangeHttpClient);
+        orangeIdentityAPI = new DefaultOrangeIdentityAPI(orangeContext, orangeHttpClient);
     }
 
     /**
@@ -70,11 +72,11 @@ public class OrangeIdentityAPIImplTest {
 
 
         //check all required params are there
-        assertTrue(authorizeUrl.contains(OrangeIdentityAPIImpl.Constants.PARAM_RESPONSE_TYPE));
-        assertTrue(authorizeUrl.contains(OrangeIdentityAPIImpl.Constants.PARAM_CLIENT_ID));
-        assertTrue(authorizeUrl.contains(OrangeIdentityAPIImpl.Constants.PARAM_REDIRECT_URI));
-        assertTrue(authorizeUrl.contains(OrangeIdentityAPIImpl.Constants.PARAM_SCOPE));
-        assertTrue(authorizeUrl.contains(OrangeIdentityAPIImpl.Constants.PARAM_STATE));
+        assertTrue(authorizeUrl.contains(DefaultOrangeIdentityAPI.Constants.PARAM_RESPONSE_TYPE));
+        assertTrue(authorizeUrl.contains(DefaultOrangeIdentityAPI.Constants.PARAM_CLIENT_ID));
+        assertTrue(authorizeUrl.contains(DefaultOrangeIdentityAPI.Constants.PARAM_REDIRECT_URI));
+        assertTrue(authorizeUrl.contains(DefaultOrangeIdentityAPI.Constants.PARAM_SCOPE));
+        assertTrue(authorizeUrl.contains(DefaultOrangeIdentityAPI.Constants.PARAM_STATE));
     }
 
 
@@ -97,8 +99,9 @@ public class OrangeIdentityAPIImplTest {
                 .generateAccessAndRefreshTokenFromInitial(initialToken);
 
         assertNotNull(orangeAccessToken);
-        assertTrue("Missing access token", StringUtils.isNotEmpty(orangeAccessToken.getToken()));
-        assertTrue("Refresh token was not recovered", StringUtils.isNotEmpty(orangeAccessToken.getRefreshToken().getToken()));
+        assertTrue(StringUtils.isNotEmpty(orangeAccessToken.getToken()), "Missing access token");
+        assertTrue(StringUtils.isNotEmpty(orangeAccessToken.getRefreshToken().getToken()),
+                "Refresh token was not recovered");
         assertTrue(orangeAccessToken.getExpirationTime().after(new Date()));
     }
 
@@ -120,9 +123,9 @@ public class OrangeIdentityAPIImplTest {
                 .generateAccessTokenFromRefreshToken(refreshToken);
 
         assertNotNull(orangeAccessToken);
-        assertTrue("Missing access token", StringUtils.isNotEmpty(orangeAccessToken.getToken()));
-        assertEquals("Refresh token is not the same as used before",
-                refreshToken.getToken(), orangeAccessToken.getRefreshToken().getToken());
+        assertTrue(StringUtils.isNotEmpty(orangeAccessToken.getToken()), "Missing access token");
+        assertEquals(refreshToken.getToken(), orangeAccessToken.getRefreshToken().getToken(),
+                "Refresh token is not the same as used BeforeEach");
         assertTrue(orangeAccessToken.getExpirationTime().after(new Date()));
     }
 

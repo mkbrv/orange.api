@@ -2,9 +2,9 @@ package com.mkbrv.orange.cloud;
 
 import com.mkbrv.orange.client.OrangeContext;
 import com.mkbrv.orange.client.OrangeHttpClient;
-import com.mkbrv.orange.cloud.impl.OrangeCloudFoldersAPIImpl;
+import com.mkbrv.orange.cloud.service.DefaultOrangeCloudFoldersAPI;
 import com.mkbrv.orange.configuration.OrangeClientConfiguration;
-import org.junit.Before;
+import org.junit.gen5.api.BeforeEach;
 import org.mockito.Mockito;
 
 import java.io.BufferedReader;
@@ -19,17 +19,24 @@ public class AbstractOrangeCloudAPITests {
 
     protected OrangeCloudFoldersAPI orangeCloudFoldersAPI;
     protected OrangeHttpClient orangeHttpClient;
+    protected OrangeContext orangeContext;
 
     protected final OrangeClientConfiguration orangeClientConfiguration
             = new OrangeClientConfiguration("appId", "clientID", "clientSecret", "http://app.com");
 
-    @Before
+    @BeforeEach
     public void init() throws IOException {
-        OrangeContext orangeContext = new OrangeContext().setOrangeClientConfiguration(this.orangeClientConfiguration);
+        orangeContext = new OrangeContext().setOrangeClientConfiguration(this.orangeClientConfiguration);
         orangeHttpClient = Mockito.mock(OrangeHttpClient.class);
-        orangeCloudFoldersAPI = new OrangeCloudFoldersAPIImpl(orangeContext, orangeHttpClient);
+        orangeCloudFoldersAPI = new DefaultOrangeCloudFoldersAPI(orangeContext, orangeHttpClient);
     }
 
+    /**
+     * Reads a json from the resources folder containing a mocked response from one of orange api calls;
+     *
+     * @param fileName
+     * @return
+     */
     protected String readValidResponseBody(final String fileName) {
         String result = "";
         try {

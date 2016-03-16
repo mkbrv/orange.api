@@ -5,9 +5,14 @@ import java.util.Date;
 /**
  * Created by mkbrv on 18/02/16.
  */
-public class OrangeAccessToken {
+public final class OrangeAccessToken {
 
     private final String token;
+
+    /**
+     * User associated to this account;
+     */
+    private OrangeUser orangeUser;
 
     private String tokenType;
 
@@ -45,6 +50,15 @@ public class OrangeAccessToken {
     public OrangeAccessToken setTokenType(String tokenType) {
         this.tokenType = tokenType;
         return this;
+    }
+
+    public OrangeAccessToken setOrangeUser(OrangeUser orangeUser) {
+        this.orangeUser = orangeUser;
+        return this;
+    }
+
+    public OrangeUser getOrangeUser() {
+        return orangeUser;
     }
 
     public String getTokenType() {

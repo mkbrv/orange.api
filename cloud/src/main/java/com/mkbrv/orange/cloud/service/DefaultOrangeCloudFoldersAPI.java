@@ -1,4 +1,4 @@
-package com.mkbrv.orange.cloud.impl;
+package com.mkbrv.orange.cloud.service;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -12,7 +12,12 @@ import com.mkbrv.orange.client.request.OrangeRequest;
 import com.mkbrv.orange.client.response.OrangeResponse;
 import com.mkbrv.orange.client.security.OrangeAccessToken;
 import com.mkbrv.orange.cloud.OrangeCloudFoldersAPI;
-import com.mkbrv.orange.cloud.model.*;
+import com.mkbrv.orange.cloud.model.OrangeFile;
+import com.mkbrv.orange.cloud.model.OrangeFolder;
+import com.mkbrv.orange.cloud.model.file.OrangeFileDeserializer;
+import com.mkbrv.orange.cloud.model.folder.OrangeFolderDeserializer;
+import com.mkbrv.orange.cloud.model.freespace.OrangeFreeSpace;
+import com.mkbrv.orange.cloud.model.freespace.OrangeFreeSpaceDeserializer;
 import com.mkbrv.orange.cloud.request.OrangeFolderFilterParams;
 import com.mkbrv.orange.cloud.request.OrangeFolderRequestParams;
 import com.mkbrv.orange.cloud.response.OrangeGenericResponse;
@@ -28,24 +33,24 @@ import java.util.Map;
  * Implementation of the OrangeCloudFoldersAPI using GSON
  * Created by mkbrv on 20/02/16.
  */
-public class OrangeCloudFoldersAPIImpl implements OrangeCloudFoldersAPI {
+public class DefaultOrangeCloudFoldersAPI implements OrangeCloudFoldersAPI {
 
-    private static final Logger LOG = LoggerFactory.getLogger(OrangeCloudFoldersAPIImpl.class);
-
-    /**
-     *
-     */
-    private final OrangeContext orangeContext;
+    private static final Logger LOG = LoggerFactory.getLogger(DefaultOrangeCloudFoldersAPI.class);
 
     /**
      *
      */
-    private final OrangeHttpClient orangeHttpClient;
+    protected final OrangeContext orangeContext;
+
+    /**
+     *
+     */
+    protected final OrangeHttpClient orangeHttpClient;
 
     /**
      * Default deserializers for Orange JSON to java classes
      */
-    private Gson gson = new GsonBuilder()
+    protected Gson gson = new GsonBuilder()
             .registerTypeAdapter(OrangeFreeSpace.class, new OrangeFreeSpaceDeserializer())
             .registerTypeAdapter(OrangeFolder.class, new OrangeFolderDeserializer())
             .registerTypeAdapter(OrangeFile.class, new OrangeFileDeserializer())
@@ -57,7 +62,7 @@ public class OrangeCloudFoldersAPIImpl implements OrangeCloudFoldersAPI {
      *
      * @param orangeContext contains api keys;
      */
-    public OrangeCloudFoldersAPIImpl(final OrangeContext orangeContext) {
+    public DefaultOrangeCloudFoldersAPI(final OrangeContext orangeContext) {
         this.orangeContext = orangeContext;
         this.orangeHttpClient = new ExceptionAwareHttpClient(new SimpleHttpClient());
     }
@@ -68,7 +73,7 @@ public class OrangeCloudFoldersAPIImpl implements OrangeCloudFoldersAPI {
      * @param orangeContext    contains api keys;
      * @param orangeHttpClient custom http client
      */
-    public OrangeCloudFoldersAPIImpl(final OrangeContext orangeContext, final OrangeHttpClient orangeHttpClient) {
+    public DefaultOrangeCloudFoldersAPI(final OrangeContext orangeContext, final OrangeHttpClient orangeHttpClient) {
         this.orangeContext = orangeContext;
         this.orangeHttpClient = orangeHttpClient;
     }
@@ -198,7 +203,8 @@ public class OrangeCloudFoldersAPIImpl implements OrangeCloudFoldersAPI {
                 .setUrl(this.orangeContext.getOrangeURLs().getFolders() + "/" + orangeFolder.getId())
                 .setOrangeAccessToken(orangeAccessToken);
         OrangeResponse orangeResponse = this.orangeHttpClient.delete(orangeRequest);
-        return new OrangeGenericResponse(orangeResponse);
+        return new OrangeGenericResponse(orangeResponse,
+                Constants.ORANGE_DELETE_OK_STATUS.equals(orangeResponse.getStatus()));
     }
 
     /**

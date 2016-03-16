@@ -3,7 +3,7 @@ package com.mkbrv.orange.cloud;
 import com.google.gson.JsonDeserializer;
 import com.mkbrv.orange.client.security.OrangeAccessToken;
 import com.mkbrv.orange.cloud.model.OrangeFolder;
-import com.mkbrv.orange.cloud.model.OrangeFreeSpace;
+import com.mkbrv.orange.cloud.model.freespace.OrangeFreeSpace;
 import com.mkbrv.orange.cloud.request.OrangeFolderFilterParams;
 import com.mkbrv.orange.cloud.request.OrangeFolderRequestParams;
 import com.mkbrv.orange.cloud.response.OrangeGenericResponse;
@@ -13,7 +13,6 @@ import java.util.Map;
 
 /**
  * As described in: https://developer.orange.com/apis/cloud-france/api-reference
- * <p>
  * Created by mkbrv on 20/02/16.
  */
 public interface OrangeCloudFoldersAPI {
@@ -31,7 +30,7 @@ public interface OrangeCloudFoldersAPI {
     /**
      * Orange Cloud API: GET /folders
      *
-     * @param orangeAccessToken         Users Access Token used to validate his session;
+     * @param orangeAccessToken        Users Access Token used to validate his session;
      * @param orangeFolderFilterParams Parameters which specify how the data should be returned;
      * @return OrangeFolder root folder of the user with specifications described in the orangeFolderFilterParams
      */
@@ -39,8 +38,8 @@ public interface OrangeCloudFoldersAPI {
                                final OrangeFolderFilterParams orangeFolderFilterParams);
 
     /**
-     * @param orangeAccessToken         Users Access Token used to validate his session;
-     * @param orangeFolder              Contains the id of the folder which is required
+     * @param orangeAccessToken        Users Access Token used to validate his session;
+     * @param orangeFolder             Contains the id of the folder which is required
      * @param orangeFolderFilterParams Parameters which specify how the data should be returned;
      * @return OrangeFolder returned folder
      * Will return null if not found;
@@ -92,6 +91,8 @@ public interface OrangeCloudFoldersAPI {
         public static final String TREE = "tree";
         public static final String LIMIT = "limit";
         public static final String OFFSET = "offset";
+
+        public static final Integer ORANGE_DELETE_OK_STATUS = 204;
 
     }
 

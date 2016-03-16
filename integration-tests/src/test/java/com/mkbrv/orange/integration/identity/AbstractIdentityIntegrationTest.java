@@ -5,12 +5,13 @@ import com.mkbrv.orange.client.security.OrangeAccessToken;
 import com.mkbrv.orange.client.security.OrangeRefreshToken;
 import com.mkbrv.orange.configuration.OrangeURLs;
 import com.mkbrv.orange.identity.OrangeIdentityAPI;
-import com.mkbrv.orange.identity.impl.OrangeIdentityAPIImpl;
 import com.mkbrv.orange.identity.model.OrangeIdentityContext;
 import com.mkbrv.orange.identity.model.OrangePrompt;
 import com.mkbrv.orange.identity.model.OrangeScope;
+import com.mkbrv.orange.identity.service.DefaultOrangeIdentityAPI;
 import com.mkbrv.orange.integration.AbstractIntegrationTest;
-import org.junit.Before;
+import org.junit.gen5.api.BeforeAll;
+import org.junit.gen5.api.BeforeEach;
 
 import java.io.IOException;
 
@@ -19,8 +20,14 @@ import java.io.IOException;
  */
 public class AbstractIdentityIntegrationTest extends AbstractIntegrationTest {
 
+    /**
+     *
+     */
     protected OrangeIdentityAPI orangeIdentityAPI;
 
+    /**
+     *
+     */
     protected OrangeIdentityContext orangeContext;
 
     /**
@@ -29,7 +36,7 @@ public class AbstractIdentityIntegrationTest extends AbstractIntegrationTest {
     static OrangeAccessToken orangeAccessToken;
 
 
-    @Before
+    @BeforeAll
     public void init() throws IOException {
         this.loadProperties();
         orangeContext = new OrangeIdentityContext();
@@ -38,7 +45,7 @@ public class AbstractIdentityIntegrationTest extends AbstractIntegrationTest {
         orangeContext.addPrompt(OrangePrompt.login).addPrompt(OrangePrompt.consent);
         orangeContext.setOrangeURLs(OrangeURLs.DEFAULT)
                 .setOrangeClientConfiguration(orangeClientConfiguration);
-        this.orangeIdentityAPI = new OrangeIdentityAPIImpl(this.orangeContext);
+        this.orangeIdentityAPI = new DefaultOrangeIdentityAPI(this.orangeContext);
     }
 
 

@@ -3,34 +3,35 @@ package com.mkbrv.orange.integration.cloud;
 import com.mkbrv.orange.client.exception.OrangeException;
 import com.mkbrv.orange.client.security.OrangeAccessToken;
 import com.mkbrv.orange.cloud.OrangeCloudFoldersAPI;
-import com.mkbrv.orange.cloud.impl.OrangeCloudFoldersAPIImpl;
 import com.mkbrv.orange.cloud.model.OrangeFolder;
+import com.mkbrv.orange.cloud.model.folder.DefaultOrangeFolder;
 import com.mkbrv.orange.cloud.request.OrangeFolderFilterParams;
 import com.mkbrv.orange.cloud.request.OrangeFolderRequestParams;
 import com.mkbrv.orange.cloud.response.OrangeGenericResponse;
-import com.mkbrv.orange.integration.identity.ITOrangeIdentityAPI;
-import org.junit.Before;
-import org.junit.Test;
+import com.mkbrv.orange.cloud.service.DefaultOrangeCloudFoldersAPI;
+import com.mkbrv.orange.integration.identity.AbstractIdentityIntegrationTest;
+import org.junit.gen5.api.BeforeAll;
+import org.junit.gen5.api.BeforeEach;
+import org.junit.gen5.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertTrue;
-import static junit.framework.TestCase.assertNotNull;
+import static org.junit.gen5.api.Assertions.*;
+
 
 /**
  * Created by mkbrv on 08/03/16.
  */
-public class ITFolderCRUDOrangeCloudAPI extends ITOrangeIdentityAPI {
+public class ITFolderCRUDOrangeCloudAPI extends AbstractIdentityIntegrationTest {
     private static final Logger LOG = LoggerFactory.getLogger(ITRootFolderCloudAPI.class);
     OrangeCloudFoldersAPI orangeCloudFoldersAPI;
 
-    @Before
+    @BeforeAll
     public void init() throws IOException {
         super.init();
-        orangeCloudFoldersAPI = new OrangeCloudFoldersAPIImpl(this.orangeContext);
+        orangeCloudFoldersAPI = new DefaultOrangeCloudFoldersAPI(this.orangeContext);
     }
 
 
@@ -73,14 +74,14 @@ public class ITFolderCRUDOrangeCloudAPI extends ITOrangeIdentityAPI {
         }
         OrangeAccessToken orangeAccessToken = this.getOrangeAccessToken();
         OrangeFolder orangeFolder = orangeCloudFoldersAPI.getFolder(orangeAccessToken,
-                new OrangeFolder(orangeFolderToRemove),
+                new DefaultOrangeFolder(orangeFolderToRemove),
                 new OrangeFolderFilterParams().setShowThumbnails(""));
         if (orangeFolder != null) {
             try {
                 OrangeGenericResponse deleteFolderResponse =
                         orangeCloudFoldersAPI.deleteFolder(orangeAccessToken, orangeFolder);
                 assertNotNull(deleteFolderResponse);
-                assertTrue(deleteFolderResponse.wasRemoved());
+                assertTrue(deleteFolderResponse.isOperationSuccessful());
             } catch (OrangeException orangeException) {
                 //you can only get cloudfullwrite if you contact orange
                 assertEquals("800", orangeException.getCode());
@@ -115,7 +116,7 @@ public class ITFolderCRUDOrangeCloudAPI extends ITOrangeIdentityAPI {
                     new OrangeFolderFilterParams().setRestrictedMode(""));
 
             assertEquals(newName, orangeRootFolder.getSubFolders().get(0).getName());
-        } catch (OrangeException orangeException) {
+        } catch (final OrangeException orangeException) {
             //you can only get cloudfullwrite if you contact orange
             assertEquals(new Integer(401), orangeException.getOrangeResponse().getStatus());
         }

@@ -1,21 +1,26 @@
 package com.mkbrv.orange.integration.cloud;
 
 import com.mkbrv.orange.client.security.OrangeAccessToken;
-import com.mkbrv.orange.cloud.model.OrangeFileMetadata;
-import com.mkbrv.orange.cloud.model.OrangeFileType;
 import com.mkbrv.orange.cloud.model.OrangeFolder;
-import com.mkbrv.orange.cloud.model.OrangeFreeSpace;
+import com.mkbrv.orange.cloud.model.file.OrangeFileMetadata;
+import com.mkbrv.orange.cloud.model.file.OrangeFileType;
+import com.mkbrv.orange.cloud.model.folder.DefaultOrangeFolder;
+import com.mkbrv.orange.cloud.model.freespace.OrangeFreeSpace;
 import com.mkbrv.orange.cloud.request.OrangeFolderFilterParams;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.gen5.api.Assertions;
+import org.junit.gen5.api.BeforeEach;
+import org.junit.gen5.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static org.junit.Assert.*;
+import static org.junit.gen5.api.Assertions.assertEquals;
+import static org.junit.gen5.api.Assertions.assertNotEquals;
+import static org.junit.gen5.api.Assertions.assertNotNull;
+import static org.junit.gen5.api.Assertions.assertNull;
+import static org.junit.gen5.api.Assertions.assertTrue;
 
 /**
  * Integration Tests for Orange Cloud API
@@ -25,7 +30,7 @@ public class ITFolderOrangeCloudAPI extends ITRootFolderCloudAPI {
 
     private static final Logger LOG = LoggerFactory.getLogger(ITFolderOrangeCloudAPI.class);
 
-    @Before
+    @BeforeEach
     public void init() throws IOException {
         super.init();
     }
@@ -58,7 +63,7 @@ public class ITFolderOrangeCloudAPI extends ITRootFolderCloudAPI {
 
         OrangeAccessToken orangeAccessToken = this.getOrangeAccessToken();
         //get the first folder from the root
-        OrangeFolder orangeFolder = new OrangeFolder("randomId");
+        OrangeFolder orangeFolder = new DefaultOrangeFolder("randomId");
         orangeFolder = orangeCloudFoldersAPI.getFolder(orangeAccessToken, orangeFolder, new OrangeFolderFilterParams());
         assertNull(orangeFolder);
     }
@@ -265,6 +270,6 @@ public class ITFolderOrangeCloudAPI extends ITRootFolderCloudAPI {
         OrangeFreeSpace orangeFreeSpace = orangeCloudFoldersAPI.getAvailableSpace(orangeAccessToken);
         LOG.info("Orange Free space found : {} ", orangeFreeSpace);
         assertNotNull(orangeFreeSpace);
-        Assert.assertTrue(orangeFreeSpace.getAvailableSpace() > 0L);
+        assertTrue(orangeFreeSpace.getAvailableSpace() > 0L);
     }
 }

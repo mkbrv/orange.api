@@ -14,10 +14,31 @@ public class OrangeIdentityContext extends OrangeContext implements Serializable
 
     private static final long serialVersionUID = 42L;
 
+    /**
+     * Orange scopes requested from the user
+     */
     private final List<OrangeScope> orangeScopeList = new ArrayList<>();
+    /**
+     * Orange prompts
+     */
     private final List<OrangePrompt> promptList = new ArrayList<>();
-    private String state;
+    /**
+     * State variable that can be sent to orange and will be received back
+     */
+    private final String state;
 
+    public OrangeIdentityContext() {
+        this.state = null;
+    }
+
+    /**
+     * State sent to orange, can be null;
+     *
+     * @param state
+     */
+    public OrangeIdentityContext(final String state) {
+        this.state = state;
+    }
 
     public List<OrangeScope> getOrangeScopeList() {
         return Collections.unmodifiableList(orangeScopeList);
@@ -30,11 +51,6 @@ public class OrangeIdentityContext extends OrangeContext implements Serializable
 
     public String getState() {
         return state;
-    }
-
-    public OrangeIdentityContext setState(final String state) {
-        this.state = state;
-        return this;
     }
 
     public List<OrangePrompt> getPromptList() {

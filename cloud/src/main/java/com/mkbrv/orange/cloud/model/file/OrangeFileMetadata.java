@@ -1,4 +1,4 @@
-package com.mkbrv.orange.cloud.model;
+package com.mkbrv.orange.cloud.model.file;
 
 
 import java.util.HashMap;
@@ -50,6 +50,10 @@ public class OrangeFileMetadata {
      */
     public OrangeFileMetadata(final Map<String, String> metadata) {
         this.metadata.putAll(metadata);
+    }
+
+    public OrangeFileMetadata(final OrangeFileMetadata orangeFileMetadata) {
+        this.metadata.putAll(orangeFileMetadata.metadata);
     }
 
     /**

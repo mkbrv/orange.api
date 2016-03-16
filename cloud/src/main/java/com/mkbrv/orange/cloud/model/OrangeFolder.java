@@ -1,97 +1,90 @@
 package com.mkbrv.orange.cloud.model;
 
-import java.util.ArrayList;
+
+import com.mkbrv.orange.cloud.model.folder.DefaultOrangeFolder;
+
 import java.util.List;
 
 /**
- * Created by mkbrv on 21/02/16.
+ * OrangeFolder as described in: https://developer.orange.com/apis/cloud-france/api-reference.
+ * Created by mkbrv on 15/03/16.
  */
-public class OrangeFolder {
+public interface OrangeFolder {
 
     /**
-     * Unique identifier. Cannot be changed
+     * @return id of the folder;
      */
-    private String id;
+    String getId();
 
-    private String parentFolderId;
+    /**
+     * @return parent of the current folder;
+     */
+    String getParentFolderId();
 
-    private String name;
+    /**
+     * @return name of the folder
+     */
+    String getName();
 
-    private List<OrangeFile> files = new ArrayList<>();
+    /**
+     * @return files in this folder
+     */
+    List<OrangeFile> getFiles();
 
-    private List<OrangeFolder> subFolders = new ArrayList<>();
+    /**
+     * @param orangeFile file to be added
+     * @return current folder
+     */
+    OrangeFolder addFile(final OrangeFile orangeFile);
 
-    public String getId() {
-        return id;
+    /**
+     * @param orangeFiles to be added
+     * @return current folder
+     */
+    OrangeFolder addFiles(final List<OrangeFile> orangeFiles);
+
+    /**
+     * @return subfolders
+     */
+    List<OrangeFolder> getSubFolders();
+
+    /**
+     * @param subFolders
+     * @return
+     */
+    OrangeFolder addSubFolders(List<OrangeFolder> subFolders);
+
+    /**
+     * @param subFolder
+     * @return
+     */
+    OrangeFolder addSubFolder(OrangeFolder subFolder);
+
+    /**
+     * default instance with an ID
+     *
+     * @param id
+     * @return
+     */
+    static OrangeFolder newInstance(final String id) {
+        return new DefaultOrangeFolder(id);
     }
 
-    public OrangeFolder() {
-
-    }
-
-    public OrangeFolder(final String id) {
-        this.id = id;
-    }
-
-    public String getParentFolderId() {
-        return parentFolderId;
-    }
-
-    public OrangeFolder setParentFolderId(String parentFolderId) {
-        this.parentFolderId = parentFolderId;
-        return this;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public OrangeFolder setName(String name) {
-        this.name = name;
-        return this;
-    }
-
-    public List<OrangeFile> getFiles() {
-        return files;
-    }
-
-    public OrangeFolder addFile(final OrangeFile orangeFile) {
-        this.files.add(orangeFile);
-        return this;
-    }
-
-    public OrangeFolder addFiles(final List<OrangeFile> orangeFiles) {
-        this.files.addAll(orangeFiles);
-        return this;
-    }
-
-    public List<OrangeFolder> getSubFolders() {
-        return subFolders;
-    }
-
-    public OrangeFolder addSubFolders(List<OrangeFolder> subFolders) {
-        this.subFolders.addAll(subFolders);
-        return this;
-    }
-
-    public OrangeFolder addSubFolder(OrangeFolder subFolder) {
-        this.subFolders.add(subFolder);
-        return this;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        OrangeFolder that = (OrangeFolder) o;
-
-        return id != null ? id.equals(that.id) : that.id == null;
-
-    }
-
-    @Override
-    public int hashCode() {
-        return id != null ? id.hashCode() : 0;
+    /**
+     * default instance
+     * Acts as a copy constructor;
+     *
+     * @param orangeFolder original;
+     * @return copy folder
+     */
+    static OrangeFolder newInstance(final OrangeFolder orangeFolder) {
+        DefaultOrangeFolder defaultOrangeFolder = new DefaultOrangeFolder(orangeFolder.getId())
+                .setName(orangeFolder.getName())
+                .setParentFolderId(orangeFolder.getParentFolderId());
+        orangeFolder.getSubFolders().forEach((subfolder) ->
+                defaultOrangeFolder.addSubFolder(OrangeFolder.newInstance(subfolder)));
+        orangeFolder.getFiles().forEach((file) -> defaultOrangeFolder.addFile(OrangeFile.newInstance(file)));
+        return defaultOrangeFolder;
     }
 }
+

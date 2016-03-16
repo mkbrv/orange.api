@@ -37,7 +37,7 @@ Provides a java client for the Orange Cloud API as defined in: https://developer
 - [x] Identity API
 - [ ] Orange Cloud API
     - [x] Freespace
-    - [ ] Orange Folders
+    - [x] Orange Folders
         - [x] Orange Root folder
         - [x] Orange Folder CRUD
     - [ ] **Orange Files**

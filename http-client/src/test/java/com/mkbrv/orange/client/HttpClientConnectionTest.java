@@ -3,9 +3,10 @@ package com.mkbrv.orange.client;
 import com.mkbrv.orange.client.exception.OrangeException;
 import com.mkbrv.orange.client.request.OrangeRequest;
 import com.mkbrv.orange.client.response.OrangeResponse;
-import org.junit.Test;
+import org.junit.gen5.api.Assertions;
+import org.junit.gen5.api.Test;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.gen5.api.Assertions.assertNotNull;
 
 /**
  * Tests regarding http connectivity to a remote endpoint;
@@ -41,9 +42,10 @@ public class HttpClientConnectionTest {
     }
 
 
-    @Test(expected = OrangeException.class)
+    @Test()
     public void invalidURLWillGenerateOrangeException() {
-        orangeHttpClient.doGet(new OrangeRequest().setUrl("BAD_URL"));
+        Assertions.expectThrows(OrangeException.class,
+                () -> orangeHttpClient.doGet(new OrangeRequest().setUrl("BAD_URL")));
     }
 
     @Test

@@ -35,8 +35,8 @@
         <!-- test deps  -->
 
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
+            <groupId>org.junit</groupId>
+            <artifactId>junit5-api</artifactId>
             <scope>test</scope>
         </dependency>
 
