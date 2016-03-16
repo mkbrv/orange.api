@@ -2,9 +2,11 @@ package com.mkbrv.orange.cloud.model.file;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
+ * Types of files used at orange. Some might have multiple acceptedNames (image = picture)
  * Created by mkbrv on 26/02/16.
  */
 public enum OrangeFileType {
@@ -15,7 +17,7 @@ public enum OrangeFileType {
     OTHER(new String[]{});
 
 
-    private List<String> acceptedNames = new ArrayList<>();
+    private final List<String> acceptedNames = new ArrayList<>();
 
     OrangeFileType(String[] typeNames) {
         this.acceptedNames.addAll(Arrays.asList(typeNames));
@@ -33,6 +35,13 @@ public enum OrangeFileType {
             }
         }
         return OTHER;
+    }
+
+    /**
+     * @return acceptedNames
+     */
+    public List<String> getAcceptedNames() {
+        return Collections.unmodifiableList(this.acceptedNames);
     }
 
     @Override

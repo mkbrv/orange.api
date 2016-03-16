@@ -7,17 +7,18 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.HttpClientBuilder;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.gen5.api.BeforeAll;
+import org.junit.gen5.api.BeforeEach;
+import org.junit.gen5.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.Date;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.gen5.api.Assertions.assertEquals;
+import static org.junit.gen5.api.Assertions.assertNotNull;
+import static org.junit.gen5.api.Assertions.assertTrue;
 
 
 /**
@@ -31,10 +32,10 @@ public class ITOrangeIdentityAPI extends AbstractIdentityIntegrationTest {
 
     @Test
     public void testFoundConfigurationFileWithSecretKey() {
-        assertNotNull("You need to define a configuration file", this.orangeClientConfiguration);
+        assertNotNull(this.orangeClientConfiguration, "You need to define a configuration file");
     }
 
-    @Before
+    @BeforeAll
     public void init() throws IOException {
         super.init();
     }

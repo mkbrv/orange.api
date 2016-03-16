@@ -11,15 +11,15 @@ import com.mkbrv.orange.identity.model.OrangePrompt;
 import com.mkbrv.orange.identity.model.OrangeScope;
 import com.mkbrv.orange.identity.service.DefaultOrangeIdentityAPI;
 import org.apache.commons.lang3.StringUtils;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.gen5.api.BeforeEach;
+import org.junit.gen5.api.Test;
 import org.mockito.Mockito;
 
 import java.util.Date;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.gen5.api.Assertions.assertEquals;
+import static org.junit.gen5.api.Assertions.assertNotNull;
+import static org.junit.gen5.api.Assertions.assertTrue;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.when;
 
@@ -37,7 +37,7 @@ public class DefaultOrangeIdentityAPITest {
 
     private OrangeHttpClient orangeHttpClient;
 
-    @Before
+    @BeforeEach
     public void init() {
         orangeHttpClient = Mockito.mock(OrangeHttpClient.class);
 
@@ -99,8 +99,9 @@ public class DefaultOrangeIdentityAPITest {
                 .generateAccessAndRefreshTokenFromInitial(initialToken);
 
         assertNotNull(orangeAccessToken);
-        assertTrue("Missing access token", StringUtils.isNotEmpty(orangeAccessToken.getToken()));
-        assertTrue("Refresh token was not recovered", StringUtils.isNotEmpty(orangeAccessToken.getRefreshToken().getToken()));
+        assertTrue(StringUtils.isNotEmpty(orangeAccessToken.getToken()), "Missing access token");
+        assertTrue(StringUtils.isNotEmpty(orangeAccessToken.getRefreshToken().getToken()),
+                "Refresh token was not recovered");
         assertTrue(orangeAccessToken.getExpirationTime().after(new Date()));
     }
 
@@ -122,9 +123,9 @@ public class DefaultOrangeIdentityAPITest {
                 .generateAccessTokenFromRefreshToken(refreshToken);
 
         assertNotNull(orangeAccessToken);
-        assertTrue("Missing access token", StringUtils.isNotEmpty(orangeAccessToken.getToken()));
-        assertEquals("Refresh token is not the same as used before",
-                refreshToken.getToken(), orangeAccessToken.getRefreshToken().getToken());
+        assertTrue(StringUtils.isNotEmpty(orangeAccessToken.getToken()), "Missing access token");
+        assertEquals(refreshToken.getToken(), orangeAccessToken.getRefreshToken().getToken(),
+                "Refresh token is not the same as used BeforeEach");
         assertTrue(orangeAccessToken.getExpirationTime().after(new Date()));
     }
 

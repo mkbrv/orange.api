@@ -4,7 +4,7 @@ import com.mkbrv.orange.client.OrangeContext;
 import com.mkbrv.orange.client.OrangeHttpClient;
 import com.mkbrv.orange.cloud.service.DefaultOrangeCloudFoldersAPI;
 import com.mkbrv.orange.configuration.OrangeClientConfiguration;
-import org.junit.Before;
+import org.junit.gen5.api.BeforeEach;
 import org.mockito.Mockito;
 
 import java.io.BufferedReader;
@@ -24,7 +24,7 @@ public class AbstractOrangeCloudAPITests {
     protected final OrangeClientConfiguration orangeClientConfiguration
             = new OrangeClientConfiguration("appId", "clientID", "clientSecret", "http://app.com");
 
-    @Before
+    @BeforeEach
     public void init() throws IOException {
         orangeContext = new OrangeContext().setOrangeClientConfiguration(this.orangeClientConfiguration);
         orangeHttpClient = Mockito.mock(OrangeHttpClient.class);

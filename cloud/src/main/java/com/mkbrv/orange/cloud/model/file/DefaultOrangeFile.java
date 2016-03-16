@@ -5,6 +5,7 @@ import com.mkbrv.orange.cloud.model.OrangeFile;
 import java.util.Date;
 
 /**
+ * Default implementation for the orange file
  * Created by mkbrv on 15/03/16.
  */
 public class DefaultOrangeFile implements OrangeFile {
@@ -30,7 +31,6 @@ public class DefaultOrangeFile implements OrangeFile {
     private String downloadUrl;
 
     public DefaultOrangeFile() {
-
     }
 
     public DefaultOrangeFile(String id) {

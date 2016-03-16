@@ -40,12 +40,12 @@ public class DefaultOrangeCloudFoldersAPI implements OrangeCloudFoldersAPI {
     /**
      *
      */
-    private final OrangeContext orangeContext;
+    protected final OrangeContext orangeContext;
 
     /**
      *
      */
-    private final OrangeHttpClient orangeHttpClient;
+    protected final OrangeHttpClient orangeHttpClient;
 
     /**
      * Default deserializers for Orange JSON to java classes

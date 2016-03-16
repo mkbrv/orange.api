@@ -52,6 +52,10 @@ public class OrangeFileMetadata {
         this.metadata.putAll(metadata);
     }
 
+    public OrangeFileMetadata(final OrangeFileMetadata orangeFileMetadata) {
+        this.metadata.putAll(orangeFileMetadata.metadata);
+    }
+
     /**
      *
      */

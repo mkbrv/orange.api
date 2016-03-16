@@ -8,18 +8,19 @@ import com.mkbrv.orange.cloud.model.file.OrangeFileType;
 import com.mkbrv.orange.cloud.request.OrangeFolderFilterParams;
 import com.mkbrv.orange.cloud.service.DefaultOrangeCloudFoldersAPI;
 import com.mkbrv.orange.integration.identity.AbstractIdentityIntegrationTest;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.gen5.api.BeforeAll;
+import org.junit.gen5.api.BeforeEach;
+import org.junit.gen5.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.gen5.api.Assertions.assertEquals;
+import static org.junit.gen5.api.Assertions.assertNotEquals;
+import static org.junit.gen5.api.Assertions.assertNotNull;
+import static org.junit.gen5.api.Assertions.assertTrue;
 
 
 /**
@@ -30,7 +31,7 @@ public class ITRootFolderCloudAPI extends AbstractIdentityIntegrationTest {
     private static final Logger LOG = LoggerFactory.getLogger(ITRootFolderCloudAPI.class);
     OrangeCloudFoldersAPI orangeCloudFoldersAPI;
 
-    @Before
+    @BeforeAll
     public void init() throws IOException {
         super.init();
         orangeCloudFoldersAPI = new DefaultOrangeCloudFoldersAPI(this.orangeContext);

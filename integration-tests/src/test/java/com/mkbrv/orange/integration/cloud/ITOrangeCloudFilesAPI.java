@@ -9,14 +9,16 @@ import com.mkbrv.orange.cloud.request.OrangeFolderFilterParams;
 import com.mkbrv.orange.cloud.service.DefaultOrangeCloudFilesAPI;
 import com.mkbrv.orange.cloud.service.DefaultOrangeCloudFoldersAPI;
 import com.mkbrv.orange.integration.identity.AbstractIdentityIntegrationTest;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.gen5.api.BeforeAll;
+import org.junit.gen5.api.BeforeEach;
+import org.junit.gen5.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
-import static junit.framework.TestCase.assertNotNull;
+import static org.junit.gen5.api.Assertions.assertNotNull;
+
 
 /**
  * Created by mkbrv on 11/03/16.
@@ -27,7 +29,7 @@ public class ITOrangeCloudFilesAPI extends AbstractIdentityIntegrationTest {
     OrangeCloudFilesAPI orangeCloudFilesAPI;
     OrangeCloudFoldersAPI orangeCloudFoldersAPI;
 
-    @Before
+    @BeforeAll
     public void init() throws IOException {
         super.init();
         orangeCloudFilesAPI = new DefaultOrangeCloudFilesAPI(this.orangeContext);

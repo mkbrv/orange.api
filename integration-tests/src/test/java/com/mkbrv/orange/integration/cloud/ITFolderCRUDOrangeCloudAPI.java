@@ -10,16 +10,16 @@ import com.mkbrv.orange.cloud.request.OrangeFolderRequestParams;
 import com.mkbrv.orange.cloud.response.OrangeGenericResponse;
 import com.mkbrv.orange.cloud.service.DefaultOrangeCloudFoldersAPI;
 import com.mkbrv.orange.integration.identity.AbstractIdentityIntegrationTest;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.gen5.api.BeforeAll;
+import org.junit.gen5.api.BeforeEach;
+import org.junit.gen5.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertTrue;
-import static junit.framework.TestCase.assertNotNull;
+import static org.junit.gen5.api.Assertions.*;
+
 
 /**
  * Created by mkbrv on 08/03/16.
@@ -28,7 +28,7 @@ public class ITFolderCRUDOrangeCloudAPI extends AbstractIdentityIntegrationTest 
     private static final Logger LOG = LoggerFactory.getLogger(ITRootFolderCloudAPI.class);
     OrangeCloudFoldersAPI orangeCloudFoldersAPI;
 
-    @Before
+    @BeforeAll
     public void init() throws IOException {
         super.init();
         orangeCloudFoldersAPI = new DefaultOrangeCloudFoldersAPI(this.orangeContext);

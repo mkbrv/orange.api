@@ -10,7 +10,7 @@ import com.mkbrv.orange.cloud.model.folder.DefaultOrangeFolder;
 import com.mkbrv.orange.cloud.model.freespace.OrangeFreeSpace;
 import com.mkbrv.orange.cloud.model.freespace.OrangeFreeSpaceDeserializer;
 import com.mkbrv.orange.cloud.response.OrangeGenericResponse;
-import org.junit.Test;
+import org.junit.gen5.api.Test;
 import org.mockito.Mockito;
 
 import java.io.IOException;
@@ -21,10 +21,10 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.gen5.api.Assertions.assertEquals;
+import static org.junit.gen5.api.Assertions.assertFalse;
+import static org.junit.gen5.api.Assertions.assertNotNull;
+import static org.junit.gen5.api.Assertions.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 
@@ -94,12 +94,28 @@ public class OrangeCloudFoldersAPITests extends AbstractOrangeCloudAPITests {
 
     @Test
     public void createFolderTest() {
-
+        this.createUpdateFolderTest();
     }
 
     @Test
     public void updateFolderTest() {
+        this.createUpdateFolderTest();
+    }
 
+    /**
+     * Create and update return the same thing, the folder
+     */
+    private void createUpdateFolderTest() {
+        when(orangeHttpClient.doPost(any())).thenReturn(new OrangeResponse() {
+            {
+                setStatus(200);
+                setBody(readValidResponseBody("folder.json"));
+            }
+        });
+        OrangeAccessToken orangeAccessToken = new OrangeAccessToken("token");
+        OrangeFolder orangeFolder = orangeCloudFoldersAPI.createFolder(orangeAccessToken, null);
+        assertNotNull(orangeFolder);
+        assertNotNull(orangeFolder.getParentFolderId());
     }
 
     @Test
