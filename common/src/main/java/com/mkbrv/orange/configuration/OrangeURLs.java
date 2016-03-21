@@ -1,6 +1,8 @@
 package com.mkbrv.orange.configuration;
 
 /**
+ * URL's used by Orange. it is configurable with a default.
+ * In case they maybe change their "v" in the URL;
  * Created by mkbrv on 17/02/16.
  */
 public class OrangeURLs {

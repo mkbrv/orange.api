@@ -1,16 +1,15 @@
 package com.mkbrv.orange.integration.cloud;
 
-import com.mkbrv.orange.client.security.OrangeAccessToken;
+import com.mkbrv.orange.httpclient.security.OrangeAccessToken;
 import com.mkbrv.orange.cloud.OrangeCloudFilesAPI;
 import com.mkbrv.orange.cloud.OrangeCloudFoldersAPI;
 import com.mkbrv.orange.cloud.model.OrangeFile;
 import com.mkbrv.orange.cloud.model.OrangeFolder;
-import com.mkbrv.orange.cloud.request.OrangeFolderFilterParams;
+import com.mkbrv.orange.cloud.request.OptionalFolderParams;
 import com.mkbrv.orange.cloud.service.DefaultOrangeCloudFilesAPI;
 import com.mkbrv.orange.cloud.service.DefaultOrangeCloudFoldersAPI;
 import com.mkbrv.orange.integration.identity.AbstractIdentityIntegrationTest;
 import org.junit.gen5.api.BeforeAll;
-import org.junit.gen5.api.BeforeEach;
 import org.junit.gen5.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,7 +35,7 @@ public class ITOrangeCloudFilesAPI extends AbstractIdentityIntegrationTest {
         orangeCloudFoldersAPI = new DefaultOrangeCloudFoldersAPI(this.orangeContext);
     }
 
-    @Test
+    @Test @org.junit.Test
     public void retrieveFileFromRootFolder() {
         //we were unable to generate this dynamically based on user & pwd. so we can only use temporary ones
         if (this.orangeAccountRefreshToken == null || this.orangeAccountRefreshToken.length() == 0) {
@@ -45,7 +44,7 @@ public class ITOrangeCloudFilesAPI extends AbstractIdentityIntegrationTest {
         OrangeAccessToken orangeAccessToken = this.getOrangeAccessToken();
 
         OrangeFolder rootFolder = orangeCloudFoldersAPI.getRootFolder(orangeAccessToken,
-                new OrangeFolderFilterParams());
+                new OptionalFolderParams());
 
         OrangeFile orangeFile = rootFolder.getFiles().get(0);
         orangeFile = orangeCloudFilesAPI.getFile(orangeAccessToken, orangeFile);

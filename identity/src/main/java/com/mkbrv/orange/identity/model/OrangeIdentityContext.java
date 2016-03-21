@@ -1,6 +1,6 @@
 package com.mkbrv.orange.identity.model;
 
-import com.mkbrv.orange.client.OrangeContext;
+import com.mkbrv.orange.httpclient.OrangeContext;
 
 import java.io.Serializable;
 import java.util.ArrayList;

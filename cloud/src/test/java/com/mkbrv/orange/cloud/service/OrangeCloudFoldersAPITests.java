@@ -2,14 +2,14 @@ package com.mkbrv.orange.cloud.service;
 
 
 import com.google.gson.JsonDeserializer;
-import com.mkbrv.orange.client.response.OrangeResponse;
-import com.mkbrv.orange.client.security.OrangeAccessToken;
+import com.mkbrv.orange.httpclient.response.OrangeResponse;
+import com.mkbrv.orange.httpclient.security.OrangeAccessToken;
 import com.mkbrv.orange.cloud.AbstractOrangeCloudAPITests;
 import com.mkbrv.orange.cloud.model.OrangeFolder;
 import com.mkbrv.orange.cloud.model.folder.DefaultOrangeFolder;
 import com.mkbrv.orange.cloud.model.freespace.OrangeFreeSpace;
-import com.mkbrv.orange.cloud.model.freespace.OrangeFreeSpaceDeserializer;
-import com.mkbrv.orange.cloud.response.OrangeGenericResponse;
+import com.mkbrv.orange.cloud.model.freespace.FreeSpaceDeserializer;
+import com.mkbrv.orange.cloud.response.GenericResponse;
 import org.junit.gen5.api.Test;
 import org.mockito.Mockito;
 
@@ -34,7 +34,7 @@ import static org.mockito.Mockito.when;
 public class OrangeCloudFoldersAPITests extends AbstractOrangeCloudAPITests {
 
 
-    @Test
+    @Test @org.junit.Test
     public void getAvailableSpaceTest() {
         final Long expectedSize = 200L;
         when(orangeHttpClient.doGet(any())).thenReturn(new OrangeResponse() {
@@ -53,12 +53,12 @@ public class OrangeCloudFoldersAPITests extends AbstractOrangeCloudAPITests {
     }
 
 
-    @Test
+    @Test @org.junit.Test
     public void getRootFolderTest() {
         when(orangeHttpClient.doGet(any())).thenReturn(new OrangeResponse() {
             {
                 setStatus(200);
-                setBody(readValidResponseBody("rootfolder.json"));
+                setBody(readResponseAsJson("rootfolder.json"));
             }
         });
 
@@ -72,12 +72,27 @@ public class OrangeCloudFoldersAPITests extends AbstractOrangeCloudAPITests {
     }
 
 
-    @Test
+    @Test @org.junit.Test
+    public void createFolderTest() {
+        when(orangeHttpClient.doPost(any())).thenReturn(new OrangeResponse() {
+            {
+                setStatus(200);
+                setBody(readResponseAsJson("folder.json"));
+            }
+        });
+        OrangeAccessToken orangeAccessToken = new OrangeAccessToken("token");
+        OrangeFolder orangeFolder = orangeCloudFoldersAPI.createFolder(orangeAccessToken, null);
+        assertNotNull(orangeFolder);
+        assertNotNull(orangeFolder.getParentFolderId());
+    }
+
+
+    @Test @org.junit.Test
     public void getFolderTest() {
         when(orangeHttpClient.doGet(any())).thenReturn(new OrangeResponse() {
             {
                 setStatus(200);
-                setBody(readValidResponseBody("folder.json"));
+                setBody(readResponseAsJson("folder.json"));
             }
         });
 
@@ -92,33 +107,7 @@ public class OrangeCloudFoldersAPITests extends AbstractOrangeCloudAPITests {
     }
 
 
-    @Test
-    public void createFolderTest() {
-        this.createUpdateFolderTest();
-    }
-
-    @Test
-    public void updateFolderTest() {
-        this.createUpdateFolderTest();
-    }
-
-    /**
-     * Create and update return the same thing, the folder
-     */
-    private void createUpdateFolderTest() {
-        when(orangeHttpClient.doPost(any())).thenReturn(new OrangeResponse() {
-            {
-                setStatus(200);
-                setBody(readValidResponseBody("folder.json"));
-            }
-        });
-        OrangeAccessToken orangeAccessToken = new OrangeAccessToken("token");
-        OrangeFolder orangeFolder = orangeCloudFoldersAPI.createFolder(orangeAccessToken, null);
-        assertNotNull(orangeFolder);
-        assertNotNull(orangeFolder.getParentFolderId());
-    }
-
-    @Test
+    @Test @org.junit.Test
     public void deleteFolderTest() {
         when(orangeHttpClient.delete(any())).thenReturn(new OrangeResponse() {
             {
@@ -128,13 +117,13 @@ public class OrangeCloudFoldersAPITests extends AbstractOrangeCloudAPITests {
         });
 
         OrangeAccessToken orangeAccessToken = new OrangeAccessToken("token");
-        OrangeGenericResponse response = orangeCloudFoldersAPI.deleteFolder(orangeAccessToken,
+        GenericResponse response = orangeCloudFoldersAPI.deleteFolder(orangeAccessToken,
                 new DefaultOrangeFolder("random"));
         assertNotNull(response);
         assertTrue(response.isOperationSuccessful());
     }
 
-    @Test
+    @Test @org.junit.Test
     public void deleteFolderFailureTest() {
         when(orangeHttpClient.delete(any())).thenReturn(new OrangeResponse() {
             {
@@ -149,27 +138,27 @@ public class OrangeCloudFoldersAPITests extends AbstractOrangeCloudAPITests {
         });
 
         OrangeAccessToken orangeAccessToken = new OrangeAccessToken("token");
-        OrangeGenericResponse response = orangeCloudFoldersAPI.deleteFolder(orangeAccessToken,
+        GenericResponse response = orangeCloudFoldersAPI.deleteFolder(orangeAccessToken,
                 new DefaultOrangeFolder("random"));
         assertNotNull(response);
         assertFalse(response.isOperationSuccessful());
     }
 
-    @Test
+    @Test @org.junit.Test
     public void setGsonTypeAdaptersTest() throws IOException {
         DefaultOrangeCloudFoldersAPI orangeCloudFoldersAPI =
                 new DefaultOrangeCloudFoldersAPI(this.orangeContext, this.orangeHttpClient);
 
-        OrangeFreeSpaceDeserializer orangeFreeSpaceDeserializer = Mockito.mock(OrangeFreeSpaceDeserializer.class);
+        FreeSpaceDeserializer freeSpaceDeserializer = Mockito.mock(FreeSpaceDeserializer.class);
         OrangeFreeSpace expectedFreeSpace = new OrangeFreeSpace(1234L);
 
         Map<Type, JsonDeserializer> gsonAdapters =
                 Collections.unmodifiableMap(Stream.of(
-                        new AbstractMap.SimpleEntry<>(OrangeFreeSpace.class, orangeFreeSpaceDeserializer))
+                        new AbstractMap.SimpleEntry<>(OrangeFreeSpace.class, freeSpaceDeserializer))
                         .collect(Collectors.toMap(AbstractMap.SimpleEntry::getKey, AbstractMap.SimpleEntry::getValue)));
 
         orangeCloudFoldersAPI.setGsonTypeAdapters(gsonAdapters);
-        when(orangeFreeSpaceDeserializer.deserialize(any(), any(), any())).thenReturn(expectedFreeSpace);
+        when(freeSpaceDeserializer.deserialize(any(), any(), any())).thenReturn(expectedFreeSpace);
 
         assertEquals(expectedFreeSpace, orangeCloudFoldersAPI.gson.getAdapter(OrangeFreeSpace.class).fromJson("{}"));
     }

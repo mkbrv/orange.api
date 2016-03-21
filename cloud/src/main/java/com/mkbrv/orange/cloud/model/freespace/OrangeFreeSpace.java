@@ -7,7 +7,7 @@ public class OrangeFreeSpace {
 
     private final Long availableSpace;
 
-    public OrangeFreeSpace(Long availableSpace) {
+    public OrangeFreeSpace(final Long availableSpace) {
         this.availableSpace = availableSpace;
     }
 
@@ -30,7 +30,6 @@ public class OrangeFreeSpace {
         OrangeFreeSpace that = (OrangeFreeSpace) o;
 
         return availableSpace.equals(that.availableSpace);
-
     }
 
     @Override

@@ -1,8 +1,8 @@
 package com.mkbrv.orange.integration.identity;
 
 
-import com.mkbrv.orange.client.security.OrangeAccessToken;
-import com.mkbrv.orange.client.security.OrangeRefreshToken;
+import com.mkbrv.orange.httpclient.security.OrangeAccessToken;
+import com.mkbrv.orange.httpclient.security.OrangeRefreshToken;
 import com.mkbrv.orange.configuration.OrangeURLs;
 import com.mkbrv.orange.identity.OrangeIdentityAPI;
 import com.mkbrv.orange.identity.model.OrangeIdentityContext;
@@ -11,7 +11,6 @@ import com.mkbrv.orange.identity.model.OrangeScope;
 import com.mkbrv.orange.identity.service.DefaultOrangeIdentityAPI;
 import com.mkbrv.orange.integration.AbstractIntegrationTest;
 import org.junit.gen5.api.BeforeAll;
-import org.junit.gen5.api.BeforeEach;
 
 import java.io.IOException;
 

@@ -1,9 +1,9 @@
 package com.mkbrv.orange.cloud;
 
-import com.mkbrv.orange.client.security.OrangeAccessToken;
+import com.mkbrv.orange.httpclient.security.OrangeAccessToken;
 import com.mkbrv.orange.cloud.model.OrangeFile;
 import com.mkbrv.orange.cloud.model.folder.DefaultOrangeFolder;
-import com.mkbrv.orange.cloud.response.OrangeGenericResponse;
+import com.mkbrv.orange.cloud.response.GenericResponse;
 
 import java.io.File;
 
@@ -19,7 +19,7 @@ public interface OrangeCloudFilesAPI {
      * @param file         file to be uploaded
      * @return
      */
-    OrangeGenericResponse uploadFile(final OrangeAccessToken orangeAccessToken,
+    OrangeFile uploadFile(final OrangeAccessToken orangeAccessToken,
                                      final DefaultOrangeFolder orangeFolder, final File file);
 
     /**
@@ -43,6 +43,6 @@ public interface OrangeCloudFilesAPI {
      * @param orangeFile
      * @return
      */
-    OrangeGenericResponse deleteFile(final OrangeAccessToken orangeAccessToken, final OrangeFile orangeFile);
+    GenericResponse deleteFile(final OrangeAccessToken orangeAccessToken, final OrangeFile orangeFile);
 
 }

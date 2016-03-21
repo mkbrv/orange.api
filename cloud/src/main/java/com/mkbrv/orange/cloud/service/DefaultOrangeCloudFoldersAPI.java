@@ -3,24 +3,24 @@ package com.mkbrv.orange.cloud.service;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializer;
-import com.mkbrv.orange.client.ExceptionAwareHttpClient;
-import com.mkbrv.orange.client.OrangeContext;
-import com.mkbrv.orange.client.OrangeHttpClient;
-import com.mkbrv.orange.client.SimpleHttpClient;
-import com.mkbrv.orange.client.exception.OrangeException;
-import com.mkbrv.orange.client.request.OrangeRequest;
-import com.mkbrv.orange.client.response.OrangeResponse;
-import com.mkbrv.orange.client.security.OrangeAccessToken;
+import com.mkbrv.orange.httpclient.ExceptionAwareHttpClient;
+import com.mkbrv.orange.httpclient.OrangeContext;
+import com.mkbrv.orange.httpclient.OrangeHttpClient;
+import com.mkbrv.orange.httpclient.SimpleHttpClient;
+import com.mkbrv.orange.httpclient.exception.OrangeException;
+import com.mkbrv.orange.httpclient.request.OrangeRequest;
+import com.mkbrv.orange.httpclient.response.OrangeResponse;
+import com.mkbrv.orange.httpclient.security.OrangeAccessToken;
 import com.mkbrv.orange.cloud.OrangeCloudFoldersAPI;
 import com.mkbrv.orange.cloud.model.OrangeFile;
 import com.mkbrv.orange.cloud.model.OrangeFolder;
-import com.mkbrv.orange.cloud.model.file.OrangeFileDeserializer;
-import com.mkbrv.orange.cloud.model.folder.OrangeFolderDeserializer;
+import com.mkbrv.orange.cloud.model.file.FileDeserializer;
+import com.mkbrv.orange.cloud.model.folder.FolderDeserializer;
+import com.mkbrv.orange.cloud.model.folder.FolderSerializer;
 import com.mkbrv.orange.cloud.model.freespace.OrangeFreeSpace;
-import com.mkbrv.orange.cloud.model.freespace.OrangeFreeSpaceDeserializer;
-import com.mkbrv.orange.cloud.request.OrangeFolderFilterParams;
-import com.mkbrv.orange.cloud.request.OrangeFolderRequestParams;
-import com.mkbrv.orange.cloud.response.OrangeGenericResponse;
+import com.mkbrv.orange.cloud.model.freespace.FreeSpaceDeserializer;
+import com.mkbrv.orange.cloud.request.OptionalFolderParams;
+import com.mkbrv.orange.cloud.response.GenericResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -51,14 +51,15 @@ public class DefaultOrangeCloudFoldersAPI implements OrangeCloudFoldersAPI {
      * Default deserializers for Orange JSON to java classes
      */
     protected Gson gson = new GsonBuilder()
-            .registerTypeAdapter(OrangeFreeSpace.class, new OrangeFreeSpaceDeserializer())
-            .registerTypeAdapter(OrangeFolder.class, new OrangeFolderDeserializer())
-            .registerTypeAdapter(OrangeFile.class, new OrangeFileDeserializer())
+            .registerTypeAdapter(OrangeFreeSpace.class, new FreeSpaceDeserializer())
+            .registerTypeAdapter(OrangeFolder.class, new FolderDeserializer())
+            .registerTypeAdapter(OrangeFile.class, new FileDeserializer())
+            .registerTypeAdapter(OrangeFolder.class, new FolderSerializer())
             .create();
 
     /**
      * Must have an orangeContext with api keys;
-     * Has a default http client;
+     * Has a default http httpclient;
      *
      * @param orangeContext contains api keys;
      */
@@ -68,10 +69,10 @@ public class DefaultOrangeCloudFoldersAPI implements OrangeCloudFoldersAPI {
     }
 
     /**
-     * A custom http client can be added
+     * A custom http httpclient can be added
      *
      * @param orangeContext    contains api keys;
-     * @param orangeHttpClient custom http client
+     * @param orangeHttpClient custom http httpclient
      */
     public DefaultOrangeCloudFoldersAPI(final OrangeContext orangeContext, final OrangeHttpClient orangeHttpClient) {
         this.orangeContext = orangeContext;
@@ -95,38 +96,38 @@ public class DefaultOrangeCloudFoldersAPI implements OrangeCloudFoldersAPI {
      */
     @Override
     public OrangeFolder getRootFolder(final OrangeAccessToken orangeAccessToken,
-                                      final OrangeFolderFilterParams orangeFolderFilterParams) {
+                                      final OptionalFolderParams optionalFolderParams) {
         OrangeRequest orangeRequest = new OrangeRequest()
                 .setUrl(this.orangeContext.getOrangeURLs().getFolders())
                 .setOrangeAccessToken(orangeAccessToken);
-        this.buildParametersListForRootFolder(orangeRequest, orangeFolderFilterParams);
+        this.buildParametersListForRootFolder(orangeRequest, optionalFolderParams);
         OrangeResponse orangeResponse = this.orangeHttpClient.doGet(orangeRequest);
         return gson.fromJson(orangeResponse.getBody().toString(), OrangeFolder.class);
     }
 
     /**
      * @param orangeRequest            orange request where parameters are added
-     * @param orangeFolderFilterParams orange optional parameters;
+     * @param optionalFolderParams orange optional parameters;
      */
-    protected void buildParametersListForRootFolder(final OrangeRequest orangeRequest, final OrangeFolderFilterParams
-            orangeFolderFilterParams) {
-        if (orangeFolderFilterParams == null) {
+    protected void buildParametersListForRootFolder(final OrangeRequest orangeRequest, final OptionalFolderParams
+            optionalFolderParams) {
+        if (optionalFolderParams == null) {
             return;
         }
         this.addParameterIfNotNull(orangeRequest, Constants.RESTRICTED_MODE,
-                orangeFolderFilterParams.getRestrictedMode());
+                optionalFolderParams.getRestrictedMode());
         this.addParameterIfNotNull(orangeRequest, Constants.SHOW_THUMBNAILS,
-                orangeFolderFilterParams.getShowThumbnails());
+                optionalFolderParams.getShowThumbnails());
         this.addParameterIfNotNull(orangeRequest, Constants.FILTER,
-                orangeFolderFilterParams.getFilter());
+                optionalFolderParams.getFilter());
         this.addParameterIfNotNull(orangeRequest, Constants.FLAT,
-                orangeFolderFilterParams.getFlat());
+                optionalFolderParams.getFlat());
         this.addParameterIfNotNull(orangeRequest, Constants.TREE,
-                orangeFolderFilterParams.getTree());
+                optionalFolderParams.getTree());
         this.addParameterIfNotNull(orangeRequest, Constants.LIMIT,
-                orangeFolderFilterParams.getLimit());
+                optionalFolderParams.getLimit());
         this.addParameterIfNotNull(orangeRequest, Constants.OFFSET,
-                orangeFolderFilterParams.getOffset());
+                optionalFolderParams.getOffset());
     }
 
     protected void addParameterIfNotNull(final OrangeRequest orangeRequest, final String parameterName,
@@ -140,14 +141,30 @@ public class DefaultOrangeCloudFoldersAPI implements OrangeCloudFoldersAPI {
      * {@inheritDoc}
      */
     @Override
+    public OrangeFolder createFolder(final OrangeAccessToken orangeAccessToken,
+                                     final OrangeFolder orangeFolder) {
+        OrangeRequest orangeRequest = new OrangeRequest()
+                .setUrl(this.orangeContext.getOrangeURLs().getFolders())
+                .setOrangeAccessToken(orangeAccessToken);
+        assert (orangeFolder.getParentFolderId() != null);
+        assert (orangeFolder.getName() != null);
+        orangeRequest.setBody(gson.toJson(orangeFolder));
+        OrangeResponse orangeResponse = this.orangeHttpClient.doPost(orangeRequest);
+        return gson.fromJson(orangeResponse.getBody().toString(), OrangeFolder.class);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public OrangeFolder getFolder(final OrangeAccessToken orangeAccessToken, final OrangeFolder orangeFolder,
-                                  final OrangeFolderFilterParams orangeFolderFilterParams) {
+                                  final OptionalFolderParams optionalFolderParams) {
         OrangeRequest orangeRequest = new OrangeRequest()
                 .setUrl(this.orangeContext.getOrangeURLs().getFolders() + "/" + orangeFolder.getId())
                 .setOrangeAccessToken(orangeAccessToken);
         try {
             OrangeResponse orangeResponse = this.orangeHttpClient.doGet(orangeRequest);
-            this.buildParametersListForRootFolder(orangeRequest, orangeFolderFilterParams);
+            this.buildParametersListForRootFolder(orangeRequest, optionalFolderParams);
             return gson.fromJson(orangeResponse.getBody().toString(), OrangeFolder.class);
         } catch (OrangeException orangeException) {
             LOG.warn(orangeException.toString(), orangeException);
@@ -155,55 +172,33 @@ public class DefaultOrangeCloudFoldersAPI implements OrangeCloudFoldersAPI {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
-    public OrangeFolder createFolder(final OrangeAccessToken orangeAccessToken,
-                                     final OrangeFolderRequestParams orangeFolder) {
-        OrangeRequest orangeRequest = new OrangeRequest()
-                .setUrl(this.orangeContext.getOrangeURLs().getFolders())
-                .setOrangeAccessToken(orangeAccessToken);
-        assert (orangeFolder.getParentFolderId() != null);
-        assert (orangeFolder.getName() != null);
-        orangeRequest.setBody(this.buildJsonForUpdate(orangeFolder));
-        OrangeResponse orangeResponse = this.orangeHttpClient.doPost(orangeRequest);
-        return gson.fromJson(orangeResponse.getBody().toString(), OrangeFolder.class);
+    public OrangeFolder renameFolder(OrangeAccessToken orangeAccessToken, OrangeFolder orangeFolder, String newName) {
+        return null;
+    }
+
+    @Override
+    public OrangeFolder copyFolder(OrangeAccessToken orangeAccessToken, OrangeFolder orangeFolder, OrangeFolder newParentFolder) {
+        return null;
+    }
+
+    @Override
+    public OrangeFolder moveFolder(OrangeAccessToken orangeAccessToken, OrangeFolder orangeFolder, OrangeFolder newParentFolder) {
+
+
+        return null;
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public OrangeFolder updateFolder(final OrangeAccessToken orangeAccessToken,
-                                     final OrangeFolder orangeFolder,
-                                     final OrangeFolderRequestParams orangeFolderRequestParams) {
-        OrangeRequest orangeRequest = new OrangeRequest()
-                .setUrl(this.orangeContext.getOrangeURLs().getFolders() + "/" + orangeFolder.getId())
-                .setOrangeAccessToken(orangeAccessToken);
-        orangeRequest.setBody(this.buildJsonForUpdate(orangeFolderRequestParams));
-        OrangeResponse orangeResponse = this.orangeHttpClient.doPost(orangeRequest);
-        return gson.fromJson(orangeResponse.getBody().toString(), OrangeFolder.class);
-    }
-
-    /**
-     * @param orangeFolderRequestParams
-     * @return body json
-     */
-    protected String buildJsonForUpdate(final OrangeFolderRequestParams orangeFolderRequestParams) {
-        return gson.toJson(orangeFolderRequestParams);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public OrangeGenericResponse deleteFolder(OrangeAccessToken orangeAccessToken, OrangeFolder orangeFolder) {
+    public GenericResponse deleteFolder(OrangeAccessToken orangeAccessToken, OrangeFolder orangeFolder) {
         OrangeRequest orangeRequest = new OrangeRequest()
                 .setUrl(this.orangeContext.getOrangeURLs().getFolders() + "/" + orangeFolder.getId())
                 .setOrangeAccessToken(orangeAccessToken);
         OrangeResponse orangeResponse = this.orangeHttpClient.delete(orangeRequest);
-        return new OrangeGenericResponse(orangeResponse,
+        return new GenericResponse(orangeResponse,
                 Constants.ORANGE_DELETE_OK_STATUS.equals(orangeResponse.getStatus()));
     }
 

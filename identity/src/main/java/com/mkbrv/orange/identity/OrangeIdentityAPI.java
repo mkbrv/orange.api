@@ -1,7 +1,7 @@
 package com.mkbrv.orange.identity;
 
-import com.mkbrv.orange.client.security.OrangeAccessToken;
-import com.mkbrv.orange.client.security.OrangeRefreshToken;
+import com.mkbrv.orange.httpclient.security.OrangeAccessToken;
+import com.mkbrv.orange.httpclient.security.OrangeRefreshToken;
 import com.mkbrv.orange.identity.model.OrangeIdentityContext;
 import com.mkbrv.orange.identity.service.DefaultOrangeIdentityAPI;
 
