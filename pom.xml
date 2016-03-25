@@ -17,7 +17,8 @@
         <apache.commons.lang.version>3.4</apache.commons.lang.version>
 
         <!-- test deps properties -->
-        <junit.version>5.0.0-SNAPSHOT</junit.version>
+        <junit.test.version>5.0.0-SNAPSHOT</junit.test.version>
+        <junit.version>4.12</junit.version>
         <mockito.version>2.0.42-beta</mockito.version>
         <logback.version>1.1.5</logback.version>
     </properties>
@@ -90,6 +91,12 @@
             <dependency>
                 <groupId>org.junit</groupId>
                 <artifactId>junit5-api</artifactId>
+                <version>${junit.test.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
                 <version>${junit.version}</version>
                 <scope>test</scope>
             </dependency>
@@ -176,7 +183,7 @@
                     <dependency>
                         <groupId>org.junit</groupId>
                         <artifactId>surefire-junit5</artifactId>
-                        <version>${junit.version}</version>
+                        <version>${junit.test.version}</version>
                     </dependency>
                 </dependencies>
             </plugin>
@@ -239,7 +246,6 @@
             </snapshots>
         </repository>
     </repositories>
-
 
 
     <contributors>

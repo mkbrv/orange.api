@@ -2,17 +2,17 @@ package com.mkbrv.orange.identity.service;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.mkbrv.orange.client.ExceptionAwareHttpClient;
-import com.mkbrv.orange.client.OrangeHttpClient;
-import com.mkbrv.orange.client.SimpleHttpClient;
-import com.mkbrv.orange.client.request.OrangeRequest;
-import com.mkbrv.orange.client.response.OrangeResponse;
-import com.mkbrv.orange.client.security.OrangeAccessToken;
-import com.mkbrv.orange.client.security.OrangeAccessTokenHeader;
-import com.mkbrv.orange.client.security.OrangeRefreshToken;
+import com.mkbrv.orange.httpclient.ExceptionAwareHttpClient;
+import com.mkbrv.orange.httpclient.OrangeHttpClient;
+import com.mkbrv.orange.httpclient.SimpleHttpClient;
+import com.mkbrv.orange.httpclient.request.OrangeRequest;
+import com.mkbrv.orange.httpclient.response.OrangeResponse;
+import com.mkbrv.orange.httpclient.security.OrangeAccessToken;
+import com.mkbrv.orange.httpclient.security.OrangeAccessTokenHeader;
+import com.mkbrv.orange.httpclient.security.OrangeRefreshToken;
 import com.mkbrv.orange.identity.OrangeIdentityAPI;
 import com.mkbrv.orange.identity.exception.OrangeIdentityException;
-import com.mkbrv.orange.identity.model.OrangeAccessTokenDeserializer;
+import com.mkbrv.orange.identity.model.AccessTokenDeserializer;
 import com.mkbrv.orange.identity.model.OrangeIdentityContext;
 import com.mkbrv.orange.identity.model.OrangePrompt;
 import com.mkbrv.orange.identity.model.OrangeScope;
@@ -31,7 +31,7 @@ public class DefaultOrangeIdentityAPI implements OrangeIdentityAPI {
     private final OrangeHttpClient orangeHttpClient;
 
     private final Gson gson = new GsonBuilder().registerTypeAdapter(OrangeAccessToken.class,
-            new OrangeAccessTokenDeserializer()).create();
+            new AccessTokenDeserializer()).create();
 
     /**
      * @param orangeContext

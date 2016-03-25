@@ -1,6 +1,6 @@
 package com.mkbrv.orange.identity.exception;
 
-import com.mkbrv.orange.client.exception.OrangeException;
+import com.mkbrv.orange.httpclient.exception.OrangeException;
 
 /**
  * Created by mkbrv on 17/02/16.

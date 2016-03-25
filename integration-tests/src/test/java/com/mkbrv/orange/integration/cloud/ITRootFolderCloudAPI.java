@@ -1,15 +1,15 @@
 package com.mkbrv.orange.integration.cloud;
 
-import com.mkbrv.orange.client.security.OrangeAccessToken;
+import com.mkbrv.orange.httpclient.security.OrangeAccessToken;
 import com.mkbrv.orange.cloud.OrangeCloudFoldersAPI;
 import com.mkbrv.orange.cloud.model.OrangeFolder;
 import com.mkbrv.orange.cloud.model.file.OrangeFileMetadata;
 import com.mkbrv.orange.cloud.model.file.OrangeFileType;
-import com.mkbrv.orange.cloud.request.OrangeFolderFilterParams;
+import com.mkbrv.orange.cloud.request.OptionalFolderParams;
 import com.mkbrv.orange.cloud.service.DefaultOrangeCloudFoldersAPI;
 import com.mkbrv.orange.integration.identity.AbstractIdentityIntegrationTest;
+import org.junit.Before;
 import org.junit.gen5.api.BeforeAll;
-import org.junit.gen5.api.BeforeEach;
 import org.junit.gen5.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,6 +32,7 @@ public class ITRootFolderCloudAPI extends AbstractIdentityIntegrationTest {
     OrangeCloudFoldersAPI orangeCloudFoldersAPI;
 
     @BeforeAll
+    @Before
     public void init() throws IOException {
         super.init();
         orangeCloudFoldersAPI = new DefaultOrangeCloudFoldersAPI(this.orangeContext);
@@ -51,7 +52,7 @@ public class ITRootFolderCloudAPI extends AbstractIdentityIntegrationTest {
         return orangeFolder;
     }
 
-    @Test
+    @Test @org.junit.Test
     public void rootFolderCanBeFetched() {
         //we were unable to generate this dynamically based on user & pwd. so we can only use temporary ones
         if (this.orangeAccountRefreshToken == null || this.orangeAccountRefreshToken.length() == 0) {
@@ -62,7 +63,7 @@ public class ITRootFolderCloudAPI extends AbstractIdentityIntegrationTest {
     }
 
 
-    @Test
+    @Test @org.junit.Test
     public void flatRootFolderReturnsAllFiles() {
         //we were unable to generate this dynamically based on user & pwd. so we can only use temporary ones
         if (this.orangeAccountRefreshToken == null || this.orangeAccountRefreshToken.length() == 0) {
@@ -71,10 +72,10 @@ public class ITRootFolderCloudAPI extends AbstractIdentityIntegrationTest {
         OrangeAccessToken orangeAccessToken = this.getOrangeAccessToken();
 
         OrangeFolder regularRootFolder = orangeCloudFoldersAPI.getRootFolder(orangeAccessToken,
-                new OrangeFolderFilterParams());
+                new OptionalFolderParams());
 
         OrangeFolder flatRootFolder = orangeCloudFoldersAPI.getRootFolder(orangeAccessToken,
-                new OrangeFolderFilterParams()
+                new OptionalFolderParams()
                         .setFlat(Boolean.TRUE));
         assertNotNull(flatRootFolder);
 
@@ -84,7 +85,7 @@ public class ITRootFolderCloudAPI extends AbstractIdentityIntegrationTest {
         assertTrue(flatRootFolder.getSubFolders().size() > regularRootFolder.getSubFolders().size());
     }
 
-    @Test
+    @Test @org.junit.Test
     public void restrictedModeReturnsAppFolderAsRoot() {
         //we were unable to generate this dynamically based on user & pwd. so we can only use temporary ones
         if (this.orangeAccountRefreshToken == null || this.orangeAccountRefreshToken.length() == 0) {
@@ -93,17 +94,17 @@ public class ITRootFolderCloudAPI extends AbstractIdentityIntegrationTest {
         OrangeAccessToken orangeAccessToken = this.getOrangeAccessToken();
 
         OrangeFolder regularRootFolder = orangeCloudFoldersAPI.getRootFolder(orangeAccessToken,
-                new OrangeFolderFilterParams());
+                new OptionalFolderParams());
 
         OrangeFolder restrictedFolder = orangeCloudFoldersAPI.getRootFolder(orangeAccessToken,
-                new OrangeFolderFilterParams()
+                new OptionalFolderParams()
                         .setRestrictedMode(""));
 
         assertNotNull(restrictedFolder);
         assertNotEquals(restrictedFolder.getId(), regularRootFolder.getId());
     }
 
-    @Test
+    @Test @org.junit.Test
     public void showThumbnailsReturnsFileThumbnail() {
         //we were unable to generate this dynamically based on user & pwd. so we can only use temporary ones
         if (this.orangeAccountRefreshToken == null || this.orangeAccountRefreshToken.length() == 0) {
@@ -112,7 +113,7 @@ public class ITRootFolderCloudAPI extends AbstractIdentityIntegrationTest {
         OrangeAccessToken orangeAccessToken = this.getOrangeAccessToken();
 
         OrangeFolder rootFolder = orangeCloudFoldersAPI.getRootFolder(orangeAccessToken,
-                new OrangeFolderFilterParams().setShowThumbnails(""));
+                new OptionalFolderParams().setShowThumbnails(""));
 
         //do they all have it? Expect at least one to have them might be better
         final AtomicInteger countHasPreviewUrl = new AtomicInteger(0);
@@ -130,7 +131,7 @@ public class ITRootFolderCloudAPI extends AbstractIdentityIntegrationTest {
     /**
      * Account must have audio files. Flat is set to true
      */
-    @Test
+    @Test @org.junit.Test
     public void filterReturnsOnlyAudioFiles() {
         //we were unable to generate this dynamically based on user & pwd. so we can only use temporary ones
         if (this.orangeAccountRefreshToken == null || this.orangeAccountRefreshToken.length() == 0) {
@@ -140,7 +141,7 @@ public class ITRootFolderCloudAPI extends AbstractIdentityIntegrationTest {
         OrangeAccessToken orangeAccessToken = this.getOrangeAccessToken();
 
         OrangeFolder rootFolder = orangeCloudFoldersAPI.getRootFolder(orangeAccessToken,
-                new OrangeFolderFilterParams().setFlat(Boolean.TRUE).setFilter(OrangeFileType.AUDIO));
+                new OptionalFolderParams().setFlat(Boolean.TRUE).setFilter(OrangeFileType.AUDIO));
 
         rootFolder.getFiles().forEach((file) -> {
             assertTrue(file.getType().equals(OrangeFileType.AUDIO));
@@ -151,7 +152,7 @@ public class ITRootFolderCloudAPI extends AbstractIdentityIntegrationTest {
     /**
      * Account must have audio files. Flat is set to true
      */
-    @Test
+    @Test @org.junit.Test
     public void filterReturnsOnlyVideoFiles() {
         //we were unable to generate this dynamically based on user & pwd. so we can only use temporary ones
         if (this.orangeAccountRefreshToken == null || this.orangeAccountRefreshToken.length() == 0) {
@@ -161,7 +162,7 @@ public class ITRootFolderCloudAPI extends AbstractIdentityIntegrationTest {
         OrangeAccessToken orangeAccessToken = this.getOrangeAccessToken();
 
         OrangeFolder rootFolder = orangeCloudFoldersAPI.getRootFolder(orangeAccessToken,
-                new OrangeFolderFilterParams().setFlat(Boolean.TRUE).setFilter(OrangeFileType.VIDEO));
+                new OptionalFolderParams().setFlat(Boolean.TRUE).setFilter(OrangeFileType.VIDEO));
 
         rootFolder.getFiles().forEach((file) -> {
             assertTrue(file.getType().equals(OrangeFileType.VIDEO));
@@ -170,7 +171,7 @@ public class ITRootFolderCloudAPI extends AbstractIdentityIntegrationTest {
     }
 
 
-    @Test
+    @Test @org.junit.Test
     public void treeReturnsOnlySubFolders() {
         //we were unable to generate this dynamically based on user & pwd. so we can only use temporary ones
         if (this.orangeAccountRefreshToken == null || this.orangeAccountRefreshToken.length() == 0) {
@@ -180,12 +181,12 @@ public class ITRootFolderCloudAPI extends AbstractIdentityIntegrationTest {
         OrangeAccessToken orangeAccessToken = this.getOrangeAccessToken();
 
         OrangeFolder rootFolder = orangeCloudFoldersAPI.getRootFolder(orangeAccessToken,
-                new OrangeFolderFilterParams().setTree(Boolean.TRUE));
+                new OptionalFolderParams().setTree(Boolean.TRUE));
 
         assertTrue(rootFolder.getFiles().size() == 0);
     }
 
-    @Test
+    @Test @org.junit.Test
     public void offsetSkipsExactNumberOfFolders() {
         //we were unable to generate this dynamically based on user & pwd. so we can only use temporary ones
         if (this.orangeAccountRefreshToken == null || this.orangeAccountRefreshToken.length() == 0) {
@@ -195,10 +196,10 @@ public class ITRootFolderCloudAPI extends AbstractIdentityIntegrationTest {
         OrangeAccessToken orangeAccessToken = this.getOrangeAccessToken();
 
         OrangeFolder rootFolder = orangeCloudFoldersAPI.getRootFolder(orangeAccessToken,
-                new OrangeFolderFilterParams().setFlat(Boolean.TRUE));
+                new OptionalFolderParams().setFlat(Boolean.TRUE));
 
         OrangeFolder folderWithOffset = orangeCloudFoldersAPI.getRootFolder(orangeAccessToken,
-                new OrangeFolderFilterParams().setFlat(Boolean.TRUE).setOffset(offset));
+                new OptionalFolderParams().setFlat(Boolean.TRUE).setOffset(offset));
         this.assertsOffsetSkipsExactNumberOfFolders(rootFolder, folderWithOffset, offset);
     }
 
@@ -219,7 +220,7 @@ public class ITRootFolderCloudAPI extends AbstractIdentityIntegrationTest {
         assertEquals(regularFolder.getSubFolders().get(offset), folderWithOffset.getSubFolders().get(0));
     }
 
-    @Test
+    @Test @org.junit.Test
     public void limitsBringExactlyNumberOfFolders() {
         //we were unable to generate this dynamically based on user & pwd. so we can only use temporary ones
         if (this.orangeAccountRefreshToken == null || this.orangeAccountRefreshToken.length() == 0) {
@@ -229,12 +230,12 @@ public class ITRootFolderCloudAPI extends AbstractIdentityIntegrationTest {
 
         OrangeAccessToken orangeAccessToken = this.getOrangeAccessToken();
         OrangeFolder folderWithLimit = orangeCloudFoldersAPI.getRootFolder(orangeAccessToken,
-                new OrangeFolderFilterParams().setFlat(Boolean.TRUE).setLimit(limit));
+                new OptionalFolderParams().setFlat(Boolean.TRUE).setLimit(limit));
 
         assertEquals(limit, Integer.valueOf(folderWithLimit.getSubFolders().size()));
     }
 
-    @Test
+    @Test @org.junit.Test
     public void limitAndOffsetBringsCorrect() {
         //we were unable to generate this dynamically based on user & pwd. so we can only use temporary ones
         if (this.orangeAccountRefreshToken == null || this.orangeAccountRefreshToken.length() == 0) {
@@ -245,10 +246,10 @@ public class ITRootFolderCloudAPI extends AbstractIdentityIntegrationTest {
 
         OrangeAccessToken orangeAccessToken = this.getOrangeAccessToken();
         OrangeFolder rootFolder = orangeCloudFoldersAPI.getRootFolder(orangeAccessToken,
-                new OrangeFolderFilterParams().setFlat(Boolean.TRUE));
+                new OptionalFolderParams().setFlat(Boolean.TRUE));
 
         OrangeFolder folderWithLimit = orangeCloudFoldersAPI.getRootFolder(orangeAccessToken,
-                new OrangeFolderFilterParams().setFlat(Boolean.TRUE).setOffset(offset).setLimit(limit));
+                new OptionalFolderParams().setFlat(Boolean.TRUE).setOffset(offset).setLimit(limit));
 
         this.assertLimitAndOffsetBringsCorrect(rootFolder, folderWithLimit, offset, limit);
     }

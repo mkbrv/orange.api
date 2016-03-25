@@ -1,9 +1,9 @@
 package com.mkbrv.orange.identity;
 
-import com.mkbrv.orange.client.OrangeHttpClient;
-import com.mkbrv.orange.client.response.OrangeResponse;
-import com.mkbrv.orange.client.security.OrangeAccessToken;
-import com.mkbrv.orange.client.security.OrangeRefreshToken;
+import com.mkbrv.orange.httpclient.OrangeHttpClient;
+import com.mkbrv.orange.httpclient.response.OrangeResponse;
+import com.mkbrv.orange.httpclient.security.OrangeAccessToken;
+import com.mkbrv.orange.httpclient.security.OrangeRefreshToken;
 import com.mkbrv.orange.configuration.OrangeClientConfiguration;
 import com.mkbrv.orange.configuration.OrangeURLs;
 import com.mkbrv.orange.identity.model.OrangeIdentityContext;
@@ -37,7 +37,7 @@ public class DefaultOrangeIdentityAPITest {
 
     private OrangeHttpClient orangeHttpClient;
 
-    @BeforeEach
+    @BeforeEach @org.junit.Before
     public void init() {
         orangeHttpClient = Mockito.mock(OrangeHttpClient.class);
 
@@ -56,8 +56,7 @@ public class DefaultOrangeIdentityAPITest {
      * Example of url:
      * orange.oauth.endpoint =https://api.orange.com/oauth/v2/authorize?scope=cloudfullread%20cloud%20openid&response_type=code&client_id={client_id}&prompt=login%20consent&state=state&redirect_uri={redirect_uri}
      */
-
-    @Test
+    @Test @org.junit.Test
     public void canBuildAuthorizeURL() {
 
         String authorizeUrl = orangeIdentityAPI.buildOauthAuthorizeURL();
@@ -80,7 +79,7 @@ public class DefaultOrangeIdentityAPITest {
     }
 
 
-    @Test
+    @Test @org.junit.Test
     public void canParseAccessTokenReply() {
         when(orangeHttpClient.doPost(any())).thenReturn(new OrangeResponse() {
             {
@@ -105,7 +104,7 @@ public class DefaultOrangeIdentityAPITest {
         assertTrue(orangeAccessToken.getExpirationTime().after(new Date()));
     }
 
-    @Test
+    @Test @org.junit.Test
     public void canParseRefreshedToken() {
         when(orangeHttpClient.doPost(any())).thenReturn(new OrangeResponse() {
             {

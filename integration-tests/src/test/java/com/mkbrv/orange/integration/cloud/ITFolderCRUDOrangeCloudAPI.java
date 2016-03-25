@@ -1,17 +1,16 @@
 package com.mkbrv.orange.integration.cloud;
 
-import com.mkbrv.orange.client.exception.OrangeException;
-import com.mkbrv.orange.client.security.OrangeAccessToken;
+import com.mkbrv.orange.httpclient.exception.OrangeException;
+import com.mkbrv.orange.httpclient.security.OrangeAccessToken;
 import com.mkbrv.orange.cloud.OrangeCloudFoldersAPI;
 import com.mkbrv.orange.cloud.model.OrangeFolder;
 import com.mkbrv.orange.cloud.model.folder.DefaultOrangeFolder;
-import com.mkbrv.orange.cloud.request.OrangeFolderFilterParams;
-import com.mkbrv.orange.cloud.request.OrangeFolderRequestParams;
-import com.mkbrv.orange.cloud.response.OrangeGenericResponse;
+import com.mkbrv.orange.cloud.request.OptionalFolderParams;
+import com.mkbrv.orange.cloud.response.GenericResponse;
 import com.mkbrv.orange.cloud.service.DefaultOrangeCloudFoldersAPI;
 import com.mkbrv.orange.integration.identity.AbstractIdentityIntegrationTest;
+import org.junit.Before;
 import org.junit.gen5.api.BeforeAll;
-import org.junit.gen5.api.BeforeEach;
 import org.junit.gen5.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,13 +28,14 @@ public class ITFolderCRUDOrangeCloudAPI extends AbstractIdentityIntegrationTest 
     OrangeCloudFoldersAPI orangeCloudFoldersAPI;
 
     @BeforeAll
+    @Before
     public void init() throws IOException {
         super.init();
         orangeCloudFoldersAPI = new DefaultOrangeCloudFoldersAPI(this.orangeContext);
     }
 
 
-    @Test
+    @Test @org.junit.Test
     public void canCreateOrangeFolder() {
         //we were unable to generate this dynamically based on user & pwd. so we can only use temporary ones
         if (this.orangeAccountRefreshToken == null || this.orangeAccountRefreshToken.length() == 0) {
@@ -44,7 +44,7 @@ public class ITFolderCRUDOrangeCloudAPI extends AbstractIdentityIntegrationTest 
         OrangeAccessToken orangeAccessToken = this.getOrangeAccessToken();
         final String name = "testName";
         OrangeFolder orangeFolder = orangeCloudFoldersAPI.createFolder(orangeAccessToken,
-                new OrangeFolderRequestParams().setName(name)
+                new DefaultOrangeFolder().setName(name)
                         .setParentFolderId("X191cGxvYWQvZGUgRVRJRU5ORS1BU1VTL2RlIG1hIGJvaXRlIGTigJllbnZvaS9tb3JlIHRoYW4gMTAwMCBwaWNzLw"));
         assertNotNull(orangeFolder);
         assertEquals(name, orangeFolder.getName());
@@ -60,7 +60,7 @@ public class ITFolderCRUDOrangeCloudAPI extends AbstractIdentityIntegrationTest 
      * tricky and problematic test.
      * It requires extra permissions and it is not transactional.
      */
-    @Test
+    @Test @org.junit.Test
     public void canRemoveFolderFromOrange() {
         //for this test I would rather not risk actually deleting folders, since there is no revert possible;
         //we were unable to generate this dynamically based on user & pwd. so we can only use temporary ones
@@ -75,10 +75,10 @@ public class ITFolderCRUDOrangeCloudAPI extends AbstractIdentityIntegrationTest 
         OrangeAccessToken orangeAccessToken = this.getOrangeAccessToken();
         OrangeFolder orangeFolder = orangeCloudFoldersAPI.getFolder(orangeAccessToken,
                 new DefaultOrangeFolder(orangeFolderToRemove),
-                new OrangeFolderFilterParams().setShowThumbnails(""));
+                new OptionalFolderParams().setShowThumbnails(""));
         if (orangeFolder != null) {
             try {
-                OrangeGenericResponse deleteFolderResponse =
+                GenericResponse deleteFolderResponse =
                         orangeCloudFoldersAPI.deleteFolder(orangeAccessToken, orangeFolder);
                 assertNotNull(deleteFolderResponse);
                 assertTrue(deleteFolderResponse.isOperationSuccessful());
@@ -90,7 +90,7 @@ public class ITFolderCRUDOrangeCloudAPI extends AbstractIdentityIntegrationTest 
         }
     }
 
-    @Test
+    @Test @org.junit.Test
     public void canUpdateOrangeFolder() {
         //we were unable to generate this dynamically based on user & pwd. so we can only use temporary ones
         if (this.orangeAccountRefreshToken == null || this.orangeAccountRefreshToken.length() == 0) {
@@ -100,7 +100,7 @@ public class ITFolderCRUDOrangeCloudAPI extends AbstractIdentityIntegrationTest 
 
         OrangeAccessToken orangeAccessToken = this.getOrangeAccessToken();
         OrangeFolder orangeRootFolder = orangeCloudFoldersAPI.getRootFolder(orangeAccessToken,
-                new OrangeFolderFilterParams().setRestrictedMode(""));
+                new OptionalFolderParams().setRestrictedMode(""));
 
         //let's update the first folder
         if (orangeRootFolder.getSubFolders().size() == 0) {
@@ -109,11 +109,11 @@ public class ITFolderCRUDOrangeCloudAPI extends AbstractIdentityIntegrationTest 
         OrangeFolder folderToUpdate = orangeRootFolder.getSubFolders().get(0);
 
         try {
-            orangeCloudFoldersAPI.updateFolder(orangeAccessToken, folderToUpdate, new OrangeFolderRequestParams()
-                    .setName(newName));
+            orangeCloudFoldersAPI.renameFolder(orangeAccessToken, folderToUpdate,
+                    newName);
 
             orangeRootFolder = orangeCloudFoldersAPI.getRootFolder(orangeAccessToken,
-                    new OrangeFolderFilterParams().setRestrictedMode(""));
+                    new OptionalFolderParams().setRestrictedMode(""));
 
             assertEquals(newName, orangeRootFolder.getSubFolders().get(0).getName());
         } catch (final OrangeException orangeException) {

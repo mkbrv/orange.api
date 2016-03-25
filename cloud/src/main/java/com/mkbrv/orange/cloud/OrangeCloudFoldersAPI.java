@@ -1,12 +1,11 @@
 package com.mkbrv.orange.cloud;
 
 import com.google.gson.JsonDeserializer;
-import com.mkbrv.orange.client.security.OrangeAccessToken;
+import com.mkbrv.orange.httpclient.security.OrangeAccessToken;
 import com.mkbrv.orange.cloud.model.OrangeFolder;
 import com.mkbrv.orange.cloud.model.freespace.OrangeFreeSpace;
-import com.mkbrv.orange.cloud.request.OrangeFolderFilterParams;
-import com.mkbrv.orange.cloud.request.OrangeFolderRequestParams;
-import com.mkbrv.orange.cloud.response.OrangeGenericResponse;
+import com.mkbrv.orange.cloud.request.OptionalFolderParams;
+import com.mkbrv.orange.cloud.response.GenericResponse;
 
 import java.lang.reflect.Type;
 import java.util.Map;
@@ -30,29 +29,29 @@ public interface OrangeCloudFoldersAPI {
     /**
      * Orange Cloud API: GET /folders
      *
-     * @param orangeAccessToken        Users Access Token used to validate his session;
-     * @param orangeFolderFilterParams Parameters which specify how the data should be returned;
-     * @return OrangeFolder root folder of the user with specifications described in the orangeFolderFilterParams
+     * @param orangeAccessToken    Users Access Token used to validate his session;
+     * @param optionalFolderParams Parameters which specify how the data should be returned;
+     * @return OrangeFolder root folder of the user with specifications described in the optionalFolderParams
      */
     OrangeFolder getRootFolder(final OrangeAccessToken orangeAccessToken,
-                               final OrangeFolderFilterParams orangeFolderFilterParams);
+                               final OptionalFolderParams optionalFolderParams);
 
     /**
-     * @param orangeAccessToken        Users Access Token used to validate his session;
-     * @param orangeFolder             Contains the id of the folder which is required
-     * @param orangeFolderFilterParams Parameters which specify how the data should be returned;
+     * @param orangeAccessToken    Users Access Token used to validate his session;
+     * @param orangeFolder         Contains the id of the folder which is required
+     * @param optionalFolderParams Parameters which specify how the data should be returned;
      * @return OrangeFolder returned folder
      * Will return null if not found;
      */
     OrangeFolder getFolder(final OrangeAccessToken orangeAccessToken,
-                           final OrangeFolder orangeFolder, final OrangeFolderFilterParams orangeFolderFilterParams);
+                           final OrangeFolder orangeFolder, final OptionalFolderParams optionalFolderParams);
 
     /**
      * @param orangeAccessToken Users Access Token used to validate his session;
      * @param orangeFolder      Contains the name of the created folder and his parent id
      * @return OrangeFolder created folder
      */
-    OrangeFolder createFolder(final OrangeAccessToken orangeAccessToken, final OrangeFolderRequestParams orangeFolder);
+    OrangeFolder createFolder(final OrangeAccessToken orangeAccessToken, final OrangeFolder orangeFolder);
 
     /**
      * Rename, move or copy a folder. To rename a folder, use the 'name' attribute. To move a folder,
@@ -60,18 +59,42 @@ public interface OrangeCloudFoldersAPI {
      *
      * @param orangeAccessToken Users Access Token used to validate his session;
      * @param orangeFolder      Folder to update
+     * @param newName           new name for the folder
      * @return OrangeFolder Updated Folder
      */
-    OrangeFolder updateFolder(final OrangeAccessToken orangeAccessToken, final OrangeFolder orangeFolder,
-                              final OrangeFolderRequestParams orangeFolderRequestParams);
+    OrangeFolder renameFolder(final OrangeAccessToken orangeAccessToken, final OrangeFolder orangeFolder,
+                              final String newName);
+
+
+    /**
+     * Copies the folder to a new folder while maintaining the original
+     *
+     * @param orangeAccessToken Users Access Token used to validate his session;
+     * @param folderToCopy      folder to be cloned (copied)
+     * @param newParentFolder   parent of the new folder after copy
+     * @return the new folder after it was cloned
+     */
+    OrangeFolder copyFolder(final OrangeAccessToken orangeAccessToken, final OrangeFolder folderToCopy,
+                            final OrangeFolder newParentFolder);
+
+    /**
+     * Clones the folder into a new parent folder;
+     *
+     * @param orangeAccessToken Users Access Token used to validate his session;
+     * @param folderToMove      folder to be moved
+     * @param newParentFolder   new parent folder
+     * @return the new folder after being moved
+     */
+    OrangeFolder moveFolder(final OrangeAccessToken orangeAccessToken, final OrangeFolder folderToMove,
+                            final OrangeFolder newParentFolder);
 
 
     /**
      * @param orangeAccessToken Users Access Token used to validate his session;
      * @param orangeFolder      Folder to be removed
-     * @return OrangeGenericResponse
+     * @return GenericResponse
      */
-    OrangeGenericResponse deleteFolder(final OrangeAccessToken orangeAccessToken, final OrangeFolder orangeFolder);
+    GenericResponse deleteFolder(final OrangeAccessToken orangeAccessToken, final OrangeFolder orangeFolder);
 
 
     /**
@@ -91,6 +114,8 @@ public interface OrangeCloudFoldersAPI {
         public static final String TREE = "tree";
         public static final String LIMIT = "limit";
         public static final String OFFSET = "offset";
+
+        public static final String FREESPACE = "freespace";
 
         public static final Integer ORANGE_DELETE_OK_STATUS = 204;
 
