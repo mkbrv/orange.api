@@ -29,13 +29,15 @@ public class ITFolderOrangeCloudAPI extends ITRootFolderCloudAPI {
 
     private static final Logger LOG = LoggerFactory.getLogger(ITFolderOrangeCloudAPI.class);
 
-    @BeforeEach @org.junit.Before
+    @BeforeEach
+    @org.junit.Before
     public void init() throws IOException {
         super.init();
     }
 
 
-    @Test @org.junit.Test
+    @Test
+    @org.junit.Test
     public void getOneSpecificFolder() {
         //we were unable to generate this dynamically based on user & pwd. so we can only use temporary ones
         if (this.orangeAccountRefreshToken == null || this.orangeAccountRefreshToken.length() == 0) {
@@ -53,7 +55,8 @@ public class ITFolderOrangeCloudAPI extends ITRootFolderCloudAPI {
         assertNotNull(orangeFolder);
     }
 
-    @Test @org.junit.Test
+    @Test
+    @org.junit.Test
     public void invalidFolderIdThrowsException() {
         //we were unable to generate this dynamically based on user & pwd. so we can only use temporary ones
         if (this.orangeAccountRefreshToken == null || this.orangeAccountRefreshToken.length() == 0) {
@@ -68,7 +71,8 @@ public class ITFolderOrangeCloudAPI extends ITRootFolderCloudAPI {
     }
 
 
-    @Test @org.junit.Test
+    @Test
+    @org.junit.Test
     public void flatRootFolderReturnsAllFiles() {
         //we were unable to generate this dynamically based on user & pwd. so we can only use temporary ones
         if (this.orangeAccountRefreshToken == null || this.orangeAccountRefreshToken.length() == 0) {
@@ -92,7 +96,8 @@ public class ITFolderOrangeCloudAPI extends ITRootFolderCloudAPI {
         assertTrue(flatFolder.getSubFolders().size() > regularFolder.getSubFolders().size());
     }
 
-    @Test @org.junit.Test
+    @Test
+    @org.junit.Test
     public void restrictedModeReturnsAppFolderAsRoot() {
         //we were unable to generate this dynamically based on user & pwd. so we can only use temporary ones
         if (this.orangeAccountRefreshToken == null || this.orangeAccountRefreshToken.length() == 0) {
@@ -113,7 +118,8 @@ public class ITFolderOrangeCloudAPI extends ITRootFolderCloudAPI {
         assertNotEquals(restrictedFolder.getId(), regularFolder.getId());
     }
 
-    @Test @org.junit.Test
+    @Test
+    @org.junit.Test
     public void showThumbnailsReturnsFileThumbnail() {
         //we were unable to generate this dynamically based on user & pwd. so we can only use temporary ones
         if (this.orangeAccountRefreshToken == null || this.orangeAccountRefreshToken.length() == 0) {
@@ -141,7 +147,8 @@ public class ITFolderOrangeCloudAPI extends ITRootFolderCloudAPI {
     /**
      * Account must have audio files. Flat is set to true
      */
-    @Test @org.junit.Test
+    @Test
+    @org.junit.Test
     public void filterReturnsOnlyAudioFiles() {
         //we were unable to generate this dynamically based on user & pwd. so we can only use temporary ones
         if (this.orangeAccountRefreshToken == null || this.orangeAccountRefreshToken.length() == 0) {
@@ -163,7 +170,8 @@ public class ITFolderOrangeCloudAPI extends ITRootFolderCloudAPI {
     /**
      * Account must have audio files. Flat is set to true
      */
-    @Test @org.junit.Test
+    @Test
+    @org.junit.Test
     public void filterReturnsOnlyVideoFiles() {
         //we were unable to generate this dynamically based on user & pwd. so we can only use temporary ones
         if (this.orangeAccountRefreshToken == null || this.orangeAccountRefreshToken.length() == 0) {
@@ -183,7 +191,8 @@ public class ITFolderOrangeCloudAPI extends ITRootFolderCloudAPI {
     }
 
 
-    @Test @org.junit.Test
+    @Test
+    @org.junit.Test
     public void treeReturnsOnlySubFolders() {
         //we were unable to generate this dynamically based on user & pwd. so we can only use temporary ones
         if (this.orangeAccountRefreshToken == null || this.orangeAccountRefreshToken.length() == 0) {
@@ -199,7 +208,8 @@ public class ITFolderOrangeCloudAPI extends ITRootFolderCloudAPI {
         assertTrue(orangeFolder.getFiles().size() == 0);
     }
 
-    @Test @org.junit.Test
+    @Test
+    @org.junit.Test
     public void offsetSkipsExactNumberOfFolders() {
         //we were unable to generate this dynamically based on user & pwd. so we can only use temporary ones
         if (this.orangeAccountRefreshToken == null || this.orangeAccountRefreshToken.length() == 0) {
@@ -219,7 +229,8 @@ public class ITFolderOrangeCloudAPI extends ITRootFolderCloudAPI {
     }
 
 
-    @Test @org.junit.Test
+    @Test
+    @org.junit.Test
     public void limitsBringExactlyNumberOfFolders() {
         //we were unable to generate this dynamically based on user & pwd. so we can only use temporary ones
         if (this.orangeAccountRefreshToken == null || this.orangeAccountRefreshToken.length() == 0) {
@@ -235,14 +246,15 @@ public class ITFolderOrangeCloudAPI extends ITRootFolderCloudAPI {
         assertEquals(limit, Integer.valueOf(orangeFolder.getSubFolders().size()));
     }
 
-    @Test @org.junit.Test
+    @Test
+    @org.junit.Test
     public void limitAndOffsetBringsCorrect() {
         //we were unable to generate this dynamically based on user & pwd. so we can only use temporary ones
         if (this.orangeAccountRefreshToken == null || this.orangeAccountRefreshToken.length() == 0) {
             return;
         }
-        final Integer limit = 10;
-        final Integer offset = 10;
+        final Integer limit = 2;
+        final Integer offset = 2;
 
         OrangeAccessToken orangeAccessToken = this.getOrangeAccessToken();
         OrangeFolder orangeFolder = orangeCloudFoldersAPI.getFolder(orangeAccessToken,
@@ -257,7 +269,8 @@ public class ITFolderOrangeCloudAPI extends ITRootFolderCloudAPI {
     }
 
 
-    @Test @org.junit.Test
+    @Test
+    @org.junit.Test
     public void getAvailableFreeSpace() {
         //we were unable to generate this dynamically based on user & pwd. so we can only use temporary ones
         if (this.orangeAccountRefreshToken == null || this.orangeAccountRefreshToken.length() == 0) {

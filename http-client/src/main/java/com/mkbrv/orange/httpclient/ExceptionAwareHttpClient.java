@@ -9,6 +9,9 @@ import com.mkbrv.orange.httpclient.response.OrangeResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
+import java.io.InputStream;
+
 /**
  * Decorator for the http httpclient. aware of orange errors (can parse them)
  * Throws exceptions based on orange errors
@@ -52,6 +55,11 @@ public class ExceptionAwareHttpClient implements OrangeHttpClient {
     @Override
     public OrangeResponse delete(final OrangeRequest request) {
         return this.verifyResponse(this.actualClient.delete(request));
+    }
+
+    @Override
+    public InputStream downloadFile(OrangeRequest request) throws IOException {
+        return this.actualClient.downloadFile(request);
     }
 
     /**

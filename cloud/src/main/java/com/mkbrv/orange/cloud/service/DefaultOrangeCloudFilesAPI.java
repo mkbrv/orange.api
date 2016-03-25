@@ -2,10 +2,14 @@ package com.mkbrv.orange.cloud.service;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.mkbrv.orange.cloud.OrangeCloudFoldersAPI;
+import com.mkbrv.orange.cloud.model.OrangeFolder;
+import com.mkbrv.orange.cloud.request.UpdateRequestBody;
 import com.mkbrv.orange.httpclient.ExceptionAwareHttpClient;
 import com.mkbrv.orange.httpclient.OrangeContext;
 import com.mkbrv.orange.httpclient.OrangeHttpClient;
 import com.mkbrv.orange.httpclient.SimpleHttpClient;
+import com.mkbrv.orange.httpclient.exception.OrangeException;
 import com.mkbrv.orange.httpclient.request.OrangeRequest;
 import com.mkbrv.orange.httpclient.response.OrangeResponse;
 import com.mkbrv.orange.httpclient.security.OrangeAccessToken;
@@ -19,6 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 
 /**
@@ -83,9 +88,44 @@ public class DefaultOrangeCloudFilesAPI implements OrangeCloudFilesAPI {
      * {@inheritDoc}
      */
     @Override
-    public OrangeFile updateFile(OrangeAccessToken orangeAccessToken, OrangeFile orangeFile) {
-        return null;
+    public OrangeFile moveFile(final OrangeAccessToken orangeAccessToken, final OrangeFile orangeFile,
+                               final OrangeFolder folderWhereToMove) {
+        OrangeRequest orangeRequest = new OrangeRequest()
+                .setUrl(this.orangeContext.getOrangeURLs().getFiles() + "/" + orangeFile.getId())
+                .setOrangeAccessToken(orangeAccessToken);
+        orangeRequest.setBody(new UpdateRequestBody().buildMoveRequestBody(folderWhereToMove));
+        OrangeResponse orangeResponse = this.orangeHttpClient.doPost(orangeRequest);
+        return gson.fromJson(orangeResponse.getBody().toString(), OrangeFile.class);
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public OrangeFile copyFile(final OrangeAccessToken orangeAccessToken, final OrangeFile orangeFile,
+                               final OrangeFolder folderWhereToMove) {
+        OrangeRequest orangeRequest = new OrangeRequest()
+                .setUrl(this.orangeContext.getOrangeURLs().getFiles() + "/" + orangeFile.getId())
+                .setOrangeAccessToken(orangeAccessToken);
+        orangeRequest.setBody(new UpdateRequestBody().buildCopyRequestBody(folderWhereToMove));
+        OrangeResponse orangeResponse = this.orangeHttpClient.doPost(orangeRequest);
+        return gson.fromJson(orangeResponse.getBody().toString(), OrangeFile.class);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public OrangeFile renameFile(final OrangeAccessToken orangeAccessToken, final OrangeFile orangeFile,
+                                 final String newName) {
+        OrangeRequest orangeRequest = new OrangeRequest()
+                .setUrl(this.orangeContext.getOrangeURLs().getFiles() + "/" + orangeFile.getId())
+                .setOrangeAccessToken(orangeAccessToken);
+        orangeRequest.setBody(new UpdateRequestBody().buildRenameRequestBody(newName));
+        OrangeResponse orangeResponse = this.orangeHttpClient.doPost(orangeRequest);
+        return gson.fromJson(orangeResponse.getBody().toString(), OrangeFile.class);
+    }
+
 
     /**
      * {@inheritDoc}
@@ -102,7 +142,18 @@ public class DefaultOrangeCloudFilesAPI implements OrangeCloudFilesAPI {
 
     @Override
     public InputStream downloadFile(OrangeAccessToken orangeAccessToken, OrangeFile orangeFile) {
-        return null;
+        if (orangeFile.getDownloadUrl() == null) {
+            throw new OrangeException("Downlad url is not supposed to be empty", new NullPointerException());
+        }
+        OrangeRequest orangeRequest = new OrangeRequest()
+                .setUrl(orangeFile.getDownloadUrl())
+                .setOrangeAccessToken(orangeAccessToken);
+        try {
+            return this.orangeHttpClient.downloadFile(orangeRequest);
+        } catch (IOException e) {
+            LOG.error(e.getMessage(), e);
+            throw new OrangeException(e.getMessage(), e);
+        }
     }
 
     /**
@@ -110,6 +161,12 @@ public class DefaultOrangeCloudFilesAPI implements OrangeCloudFilesAPI {
      */
     @Override
     public GenericResponse deleteFile(OrangeAccessToken orangeAccessToken, OrangeFile orangeFile) {
-        return null;
+        OrangeRequest orangeRequest = new OrangeRequest()
+                .setUrl(this.orangeContext.getOrangeURLs().getFiles() + "/" + orangeFile.getId())
+                .setOrangeAccessToken(orangeAccessToken);
+        OrangeResponse orangeResponse = this.orangeHttpClient.delete(orangeRequest);
+        return new GenericResponse(orangeResponse,
+                OrangeCloudFoldersAPI.Constants.ORANGE_DELETE_OK_STATUS.equals(orangeResponse.getStatus()));
     }
+
 }

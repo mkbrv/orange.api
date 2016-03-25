@@ -10,15 +10,15 @@ import static org.junit.gen5.api.Assertions.assertTrue;
 /**
  * Created by mkbrv on 25/03/16.
  */
-public class UpdateFolderRequestTest {
+public class UpdateRequestBodyTest {
 
-    final UpdateFolderRequest updateFolderRequest = new UpdateFolderRequest();
+    final UpdateRequestBody updateRequestBody = new UpdateRequestBody();
 
     @Test
     @org.junit.gen5.api.Test
     public void renameFolderRequestBodyTest() {
         OrangeFolder folderToUpdate = new DefaultOrangeFolder().setName("the new name");
-        String actual = updateFolderRequest.buildRenameFolderRequest(folderToUpdate.getName());
+        String actual = updateRequestBody.buildRenameRequestBody(folderToUpdate.getName());
         assertTrue(actual.contains(folderToUpdate.getName()));
     }
 
@@ -26,7 +26,7 @@ public class UpdateFolderRequestTest {
     @Test
     public void copyFolderRequestBodyTest() {
         OrangeFolder newParentFolder = new DefaultOrangeFolder("someId");
-        String actual = updateFolderRequest.buildCopyFolderRequest(newParentFolder);
+        String actual = updateRequestBody.buildCopyRequestBody(newParentFolder);
         assertTrue(actual.contains("clone"));
         assertTrue(actual.contains(newParentFolder.getId()));
     }
@@ -35,7 +35,7 @@ public class UpdateFolderRequestTest {
     @Test
     public void moveFolderRequestBodyTest() {
         OrangeFolder newParentFolder = new DefaultOrangeFolder("someId");
-        String actual = updateFolderRequest.buildMoveFolderRequest(newParentFolder);
+        String actual = updateRequestBody.buildMoveRequestBody(newParentFolder);
         assertFalse(actual.contains("clone"));
         assertTrue(actual.contains(newParentFolder.getId()));
 

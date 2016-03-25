@@ -1,5 +1,6 @@
 package com.mkbrv.orange.cloud;
 
+import com.mkbrv.orange.cloud.model.OrangeFolder;
 import com.mkbrv.orange.httpclient.security.OrangeAccessToken;
 import com.mkbrv.orange.cloud.model.OrangeFile;
 import com.mkbrv.orange.cloud.model.folder.DefaultOrangeFolder;
@@ -23,14 +24,34 @@ public interface OrangeCloudFilesAPI {
     OrangeFile uploadFile(final OrangeAccessToken orangeAccessToken,
                           final DefaultOrangeFolder orangeFolder, final File file);
 
+
     /**
-     * Update a file.
-     *
      * @param orangeAccessToken
      * @param orangeFile
+     * @param folderWhereToMove
      * @return
      */
-    OrangeFile updateFile(final OrangeAccessToken orangeAccessToken, final OrangeFile orangeFile);
+    OrangeFile moveFile(final OrangeAccessToken orangeAccessToken, final OrangeFile orangeFile,
+                        final OrangeFolder folderWhereToMove);
+
+    /**
+     * @param orangeAccessToken
+     * @param orangeFile
+     * @param folderWhereToMove
+     * @return
+     */
+    OrangeFile copyFile(final OrangeAccessToken orangeAccessToken, final OrangeFile orangeFile,
+                        final OrangeFolder folderWhereToMove);
+
+
+    /**
+     * @param orangeAccessToken
+     * @param orangeFile
+     * @param newName
+     * @return
+     */
+    OrangeFile renameFile(final OrangeAccessToken orangeAccessToken, final OrangeFile orangeFile,
+                          final String newName);
 
     /**
      * @param orangeAccessToken

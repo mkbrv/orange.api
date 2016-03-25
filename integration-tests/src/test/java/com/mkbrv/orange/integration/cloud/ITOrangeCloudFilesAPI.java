@@ -9,6 +9,7 @@ import com.mkbrv.orange.cloud.request.OptionalFolderParams;
 import com.mkbrv.orange.cloud.service.DefaultOrangeCloudFilesAPI;
 import com.mkbrv.orange.cloud.service.DefaultOrangeCloudFoldersAPI;
 import com.mkbrv.orange.integration.identity.AbstractIdentityIntegrationTest;
+import org.junit.Before;
 import org.junit.gen5.api.BeforeAll;
 import org.junit.gen5.api.Test;
 import org.slf4j.Logger;
@@ -25,10 +26,11 @@ import static org.junit.gen5.api.Assertions.assertNotNull;
 public class ITOrangeCloudFilesAPI extends AbstractIdentityIntegrationTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(ITOrangeCloudFilesAPI.class);
-    OrangeCloudFilesAPI orangeCloudFilesAPI;
-    OrangeCloudFoldersAPI orangeCloudFoldersAPI;
+    protected OrangeCloudFilesAPI orangeCloudFilesAPI;
+    protected OrangeCloudFoldersAPI orangeCloudFoldersAPI;
 
     @BeforeAll
+    @Before
     public void init() throws IOException {
         super.init();
         orangeCloudFilesAPI = new DefaultOrangeCloudFilesAPI(this.orangeContext);
@@ -43,7 +45,6 @@ public class ITOrangeCloudFilesAPI extends AbstractIdentityIntegrationTest {
             return;
         }
         OrangeAccessToken orangeAccessToken = this.getOrangeAccessToken();
-
         OrangeFolder rootFolder = orangeCloudFoldersAPI.getRootFolder(orangeAccessToken,
                 new OptionalFolderParams());
 
@@ -52,6 +53,4 @@ public class ITOrangeCloudFilesAPI extends AbstractIdentityIntegrationTest {
         assertNotNull(orangeFile);
         assertNotNull(orangeFile.getDownloadUrl());
     }
-
-
 }

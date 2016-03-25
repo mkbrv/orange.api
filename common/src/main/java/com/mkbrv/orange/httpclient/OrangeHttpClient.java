@@ -3,6 +3,9 @@ package com.mkbrv.orange.httpclient;
 import com.mkbrv.orange.httpclient.request.OrangeRequest;
 import com.mkbrv.orange.httpclient.response.OrangeResponse;
 
+import java.io.IOException;
+import java.io.InputStream;
+
 /**
  * Implementation required in order to send an HTTP request to Orange API.
  * Default implementation can be found in the http-httpclient module which uses Apache HTTP Client;
@@ -31,4 +34,10 @@ public interface OrangeHttpClient {
      */
     OrangeResponse delete(final OrangeRequest request);
 
+
+    /**
+     * @param request OrangeRequest
+     * @return InputStream
+     */
+    InputStream downloadFile(final OrangeRequest request) throws IOException;
 }

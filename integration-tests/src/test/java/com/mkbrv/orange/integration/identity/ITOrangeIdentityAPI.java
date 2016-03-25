@@ -7,6 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.junit.Before;
 import org.junit.gen5.api.BeforeAll;
 import org.junit.gen5.api.Test;
 import org.slf4j.Logger;
@@ -35,6 +36,7 @@ public class ITOrangeIdentityAPI extends AbstractIdentityIntegrationTest {
     }
 
     @BeforeAll
+    @Before
     public void init() throws IOException {
         super.init();
     }

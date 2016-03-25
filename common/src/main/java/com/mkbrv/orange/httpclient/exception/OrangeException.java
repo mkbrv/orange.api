@@ -24,6 +24,12 @@ public class OrangeException extends RuntimeException {
         this.clientException = null;
     }
 
+    public OrangeException(final String message, final Exception clientException) {
+        this.clientException = clientException;
+        this.setName(message);
+    }
+
+
     public OrangeException(final Exception clientException) {
         this.clientException = clientException;
     }

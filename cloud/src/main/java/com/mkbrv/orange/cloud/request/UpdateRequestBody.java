@@ -5,9 +5,10 @@ import com.google.gson.JsonPrimitive;
 import com.mkbrv.orange.cloud.model.OrangeFolder;
 
 /**
+ * Helps building the json body for update/move/rename of files and folders
  * Created by mkbrv on 25/03/16.
  */
-public class UpdateFolderRequest {
+public class UpdateRequestBody {
 
     private static final String NAME = "name";
     private static final String CLONE = "clone";
@@ -17,7 +18,7 @@ public class UpdateFolderRequest {
      * @param newParentFolder
      * @return
      */
-    public String buildMoveFolderRequest(final OrangeFolder newParentFolder) {
+    public String buildMoveRequestBody(final OrangeFolder newParentFolder) {
         JsonObject requestBody = new JsonObject();
         requestBody.add(PARENT_FOLDER_ID, new JsonPrimitive(newParentFolder.getId()));
         return requestBody.toString();
@@ -27,7 +28,7 @@ public class UpdateFolderRequest {
      * @param newParentFolder
      * @return
      */
-    public String buildCopyFolderRequest(final OrangeFolder newParentFolder) {
+    public String buildCopyRequestBody(final OrangeFolder newParentFolder) {
         JsonObject requestBody = new JsonObject();
         requestBody.add(CLONE, new JsonPrimitive(Boolean.TRUE));
         requestBody.add(PARENT_FOLDER_ID, new JsonPrimitive(newParentFolder.getId()));
@@ -40,7 +41,7 @@ public class UpdateFolderRequest {
      * @param name
      * @return
      */
-    public String buildRenameFolderRequest(final String name) {
+    public String buildRenameRequestBody(final String name) {
         JsonObject requestBody = new JsonObject();
         requestBody.add(NAME, new JsonPrimitive(name));
         return requestBody.toString();

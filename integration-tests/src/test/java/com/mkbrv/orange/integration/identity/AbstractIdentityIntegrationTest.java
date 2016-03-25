@@ -10,6 +10,7 @@ import com.mkbrv.orange.identity.model.OrangePrompt;
 import com.mkbrv.orange.identity.model.OrangeScope;
 import com.mkbrv.orange.identity.service.DefaultOrangeIdentityAPI;
 import com.mkbrv.orange.integration.AbstractIntegrationTest;
+import org.junit.Before;
 import org.junit.gen5.api.BeforeAll;
 
 import java.io.IOException;
@@ -36,6 +37,7 @@ public class AbstractIdentityIntegrationTest extends AbstractIntegrationTest {
 
 
     @BeforeAll
+    @Before
     public void init() throws IOException {
         this.loadProperties();
         orangeContext = new OrangeIdentityContext();

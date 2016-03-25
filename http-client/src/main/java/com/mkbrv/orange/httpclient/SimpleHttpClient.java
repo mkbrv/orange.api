@@ -21,6 +21,7 @@ import org.slf4j.Logger;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
@@ -119,6 +120,14 @@ public class SimpleHttpClient implements OrangeHttpClient {
         this.addAuthParameterToHeaderIfRequired(request);
         request.getHeaders().forEach(httpDelete::addHeader);
         return executeRequestAndReadResponse(httpDelete).setOrangeRequest(request);
+    }
+
+    @Override
+    public InputStream downloadFile(OrangeRequest request) throws IOException {
+        HttpGet httpGet = new HttpGet(request.getUrl());
+        this.addAuthParameterToHeaderIfRequired(request);
+        request.getHeaders().forEach(httpGet::addHeader);
+        return this.client.execute(httpGet).getEntity().getContent();
     }
 
     /**
