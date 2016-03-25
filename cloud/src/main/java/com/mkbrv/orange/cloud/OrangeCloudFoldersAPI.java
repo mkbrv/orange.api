@@ -6,6 +6,7 @@ import com.mkbrv.orange.cloud.model.OrangeFolder;
 import com.mkbrv.orange.cloud.model.freespace.OrangeFreeSpace;
 import com.mkbrv.orange.cloud.request.OptionalFolderParams;
 import com.mkbrv.orange.cloud.response.GenericResponse;
+
 import java.lang.reflect.Type;
 import java.util.Map;
 
@@ -28,7 +29,7 @@ public interface OrangeCloudFoldersAPI {
     /**
      * Orange Cloud API: GET /folders
      *
-     * @param orangeAccessToken        Users Access Token used to validate his session;
+     * @param orangeAccessToken    Users Access Token used to validate his session;
      * @param optionalFolderParams Parameters which specify how the data should be returned;
      * @return OrangeFolder root folder of the user with specifications described in the optionalFolderParams
      */
@@ -36,8 +37,8 @@ public interface OrangeCloudFoldersAPI {
                                final OptionalFolderParams optionalFolderParams);
 
     /**
-     * @param orangeAccessToken        Users Access Token used to validate his session;
-     * @param orangeFolder             Contains the id of the folder which is required
+     * @param orangeAccessToken    Users Access Token used to validate his session;
+     * @param orangeFolder         Contains the id of the folder which is required
      * @param optionalFolderParams Parameters which specify how the data should be returned;
      * @return OrangeFolder returned folder
      * Will return null if not found;
@@ -69,22 +70,22 @@ public interface OrangeCloudFoldersAPI {
      * Copies the folder to a new folder while maintaining the original
      *
      * @param orangeAccessToken Users Access Token used to validate his session;
-     * @param orangeFolder      folder to be cloned (copied)
+     * @param folderToCopy      folder to be cloned (copied)
      * @param newParentFolder   parent of the new folder after copy
      * @return the new folder after it was cloned
      */
-    OrangeFolder copyFolder(final OrangeAccessToken orangeAccessToken, final OrangeFolder orangeFolder,
+    OrangeFolder copyFolder(final OrangeAccessToken orangeAccessToken, final OrangeFolder folderToCopy,
                             final OrangeFolder newParentFolder);
 
     /**
      * Clones the folder into a new parent folder;
      *
      * @param orangeAccessToken Users Access Token used to validate his session;
-     * @param orangeFolder      folder to be moved
+     * @param folderToMove      folder to be moved
      * @param newParentFolder   new parent folder
      * @return the new folder after being moved
      */
-    OrangeFolder moveFolder(final OrangeAccessToken orangeAccessToken, final OrangeFolder orangeFolder,
+    OrangeFolder moveFolder(final OrangeAccessToken orangeAccessToken, final OrangeFolder folderToMove,
                             final OrangeFolder newParentFolder);
 
 

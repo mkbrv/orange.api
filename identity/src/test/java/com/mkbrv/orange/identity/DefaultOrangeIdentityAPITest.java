@@ -56,7 +56,6 @@ public class DefaultOrangeIdentityAPITest {
      * Example of url:
      * orange.oauth.endpoint =https://api.orange.com/oauth/v2/authorize?scope=cloudfullread%20cloud%20openid&response_type=code&client_id={client_id}&prompt=login%20consent&state=state&redirect_uri={redirect_uri}
      */
-
     @Test @org.junit.Test
     public void canBuildAuthorizeURL() {
 

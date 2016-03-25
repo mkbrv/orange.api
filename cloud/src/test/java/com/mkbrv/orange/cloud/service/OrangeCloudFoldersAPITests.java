@@ -34,7 +34,8 @@ import static org.mockito.Mockito.when;
 public class OrangeCloudFoldersAPITests extends AbstractOrangeCloudAPITests {
 
 
-    @Test @org.junit.Test
+    @Test
+    @org.junit.Test
     public void getAvailableSpaceTest() {
         final Long expectedSize = 200L;
         when(orangeHttpClient.doGet(any())).thenReturn(new OrangeResponse() {
@@ -53,7 +54,8 @@ public class OrangeCloudFoldersAPITests extends AbstractOrangeCloudAPITests {
     }
 
 
-    @Test @org.junit.Test
+    @Test
+    @org.junit.Test
     public void getRootFolderTest() {
         when(orangeHttpClient.doGet(any())).thenReturn(new OrangeResponse() {
             {
@@ -72,7 +74,8 @@ public class OrangeCloudFoldersAPITests extends AbstractOrangeCloudAPITests {
     }
 
 
-    @Test @org.junit.Test
+    @Test
+    @org.junit.Test
     public void createFolderTest() {
         when(orangeHttpClient.doPost(any())).thenReturn(new OrangeResponse() {
             {
@@ -87,7 +90,8 @@ public class OrangeCloudFoldersAPITests extends AbstractOrangeCloudAPITests {
     }
 
 
-    @Test @org.junit.Test
+    @Test
+    @org.junit.Test
     public void getFolderTest() {
         when(orangeHttpClient.doGet(any())).thenReturn(new OrangeResponse() {
             {
@@ -107,7 +111,8 @@ public class OrangeCloudFoldersAPITests extends AbstractOrangeCloudAPITests {
     }
 
 
-    @Test @org.junit.Test
+    @Test
+    @org.junit.Test
     public void deleteFolderTest() {
         when(orangeHttpClient.delete(any())).thenReturn(new OrangeResponse() {
             {
@@ -123,7 +128,8 @@ public class OrangeCloudFoldersAPITests extends AbstractOrangeCloudAPITests {
         assertTrue(response.isOperationSuccessful());
     }
 
-    @Test @org.junit.Test
+    @Test
+    @org.junit.Test
     public void deleteFolderFailureTest() {
         when(orangeHttpClient.delete(any())).thenReturn(new OrangeResponse() {
             {
@@ -144,7 +150,8 @@ public class OrangeCloudFoldersAPITests extends AbstractOrangeCloudAPITests {
         assertFalse(response.isOperationSuccessful());
     }
 
-    @Test @org.junit.Test
+    @Test
+    @org.junit.Test
     public void setGsonTypeAdaptersTest() throws IOException {
         DefaultOrangeCloudFoldersAPI orangeCloudFoldersAPI =
                 new DefaultOrangeCloudFoldersAPI(this.orangeContext, this.orangeHttpClient);

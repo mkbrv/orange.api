@@ -19,8 +19,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.io.InputStream;
 
 /**
+ * Orange Cloud Files API
  * Created by mkbrv on 09/03/16.
  */
 public class DefaultOrangeCloudFilesAPI implements OrangeCloudFilesAPI {
@@ -89,12 +91,18 @@ public class DefaultOrangeCloudFilesAPI implements OrangeCloudFilesAPI {
      * {@inheritDoc}
      */
     @Override
-    public OrangeFile getFile(OrangeAccessToken orangeAccessToken, OrangeFile orangeFile) {
+    public OrangeFile getFile(final OrangeAccessToken orangeAccessToken, final String fileId) {
         OrangeRequest orangeRequest = new OrangeRequest()
-                .setUrl(this.orangeContext.getOrangeURLs().getFiles() + "/" + orangeFile.getId())
+                .setUrl(this.orangeContext.getOrangeURLs().getFiles() + "/" + fileId)
                 .setOrangeAccessToken(orangeAccessToken);
         OrangeResponse orangeResponse = this.orangeHttpClient.doGet(orangeRequest);
         return gson.fromJson(orangeResponse.getBody().toString(), OrangeFile.class);
+
+    }
+
+    @Override
+    public InputStream downloadFile(OrangeAccessToken orangeAccessToken, OrangeFile orangeFile) {
+        return null;
     }
 
     /**

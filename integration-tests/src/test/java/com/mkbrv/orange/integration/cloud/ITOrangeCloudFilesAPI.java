@@ -35,7 +35,8 @@ public class ITOrangeCloudFilesAPI extends AbstractIdentityIntegrationTest {
         orangeCloudFoldersAPI = new DefaultOrangeCloudFoldersAPI(this.orangeContext);
     }
 
-    @Test @org.junit.Test
+    @Test
+    @org.junit.Test
     public void retrieveFileFromRootFolder() {
         //we were unable to generate this dynamically based on user & pwd. so we can only use temporary ones
         if (this.orangeAccountRefreshToken == null || this.orangeAccountRefreshToken.length() == 0) {
@@ -47,7 +48,7 @@ public class ITOrangeCloudFilesAPI extends AbstractIdentityIntegrationTest {
                 new OptionalFolderParams());
 
         OrangeFile orangeFile = rootFolder.getFiles().get(0);
-        orangeFile = orangeCloudFilesAPI.getFile(orangeAccessToken, orangeFile);
+        orangeFile = orangeCloudFilesAPI.getFile(orangeAccessToken, orangeFile.getId());
         assertNotNull(orangeFile);
         assertNotNull(orangeFile.getDownloadUrl());
     }

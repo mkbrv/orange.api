@@ -3,6 +3,7 @@ package com.mkbrv.orange.cloud.service;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializer;
+import com.mkbrv.orange.cloud.request.UpdateFolderRequest;
 import com.mkbrv.orange.httpclient.ExceptionAwareHttpClient;
 import com.mkbrv.orange.httpclient.OrangeContext;
 import com.mkbrv.orange.httpclient.OrangeHttpClient;
@@ -106,7 +107,7 @@ public class DefaultOrangeCloudFoldersAPI implements OrangeCloudFoldersAPI {
     }
 
     /**
-     * @param orangeRequest            orange request where parameters are added
+     * @param orangeRequest        orange request where parameters are added
      * @param optionalFolderParams orange optional parameters;
      */
     protected void buildParametersListForRootFolder(final OrangeRequest orangeRequest, final OptionalFolderParams
@@ -173,20 +174,38 @@ public class DefaultOrangeCloudFoldersAPI implements OrangeCloudFoldersAPI {
     }
 
     @Override
-    public OrangeFolder renameFolder(OrangeAccessToken orangeAccessToken, OrangeFolder orangeFolder, String newName) {
-        return null;
+    public OrangeFolder renameFolder(OrangeAccessToken orangeAccessToken,
+                                     OrangeFolder orangeFolder, String newName) {
+
+        OrangeRequest orangeRequest = new OrangeRequest()
+                .setUrl(this.orangeContext.getOrangeURLs().getFolders() + "/" + orangeFolder.getId())
+                .setOrangeAccessToken(orangeAccessToken);
+        orangeRequest.setBody(new UpdateFolderRequest().buildRenameFolderRequest(newName));
+        OrangeResponse orangeResponse = this.orangeHttpClient.doPost(orangeRequest);
+        return gson.fromJson(orangeResponse.getBody().toString(), OrangeFolder.class);
     }
 
     @Override
-    public OrangeFolder copyFolder(OrangeAccessToken orangeAccessToken, OrangeFolder orangeFolder, OrangeFolder newParentFolder) {
-        return null;
+    public OrangeFolder copyFolder(OrangeAccessToken orangeAccessToken,
+                                   OrangeFolder orangeFolder, OrangeFolder newParentFolder) {
+
+        OrangeRequest orangeRequest = new OrangeRequest()
+                .setUrl(this.orangeContext.getOrangeURLs().getFolders() + "/" + orangeFolder.getId())
+                .setOrangeAccessToken(orangeAccessToken);
+        orangeRequest.setBody(new UpdateFolderRequest().buildCopyFolderRequest(newParentFolder));
+        OrangeResponse orangeResponse = this.orangeHttpClient.doPost(orangeRequest);
+        return gson.fromJson(orangeResponse.getBody().toString(), OrangeFolder.class);
     }
 
     @Override
-    public OrangeFolder moveFolder(OrangeAccessToken orangeAccessToken, OrangeFolder orangeFolder, OrangeFolder newParentFolder) {
-
-
-        return null;
+    public OrangeFolder moveFolder(OrangeAccessToken orangeAccessToken,
+                                   OrangeFolder orangeFolder, OrangeFolder newParentFolder) {
+        OrangeRequest orangeRequest = new OrangeRequest()
+                .setUrl(this.orangeContext.getOrangeURLs().getFolders() + "/" + orangeFolder.getId())
+                .setOrangeAccessToken(orangeAccessToken);
+        orangeRequest.setBody(new UpdateFolderRequest().buildMoveFolderRequest(newParentFolder));
+        OrangeResponse orangeResponse = this.orangeHttpClient.doPost(orangeRequest);
+        return gson.fromJson(orangeResponse.getBody().toString(), OrangeFolder.class);
     }
 
     /**

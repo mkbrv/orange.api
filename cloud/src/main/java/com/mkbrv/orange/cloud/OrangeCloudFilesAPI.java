@@ -6,6 +6,7 @@ import com.mkbrv.orange.cloud.model.folder.DefaultOrangeFolder;
 import com.mkbrv.orange.cloud.response.GenericResponse;
 
 import java.io.File;
+import java.io.InputStream;
 
 /**
  * Created by mkbrv on 20/02/16.
@@ -20,7 +21,7 @@ public interface OrangeCloudFilesAPI {
      * @return
      */
     OrangeFile uploadFile(final OrangeAccessToken orangeAccessToken,
-                                     final DefaultOrangeFolder orangeFolder, final File file);
+                          final DefaultOrangeFolder orangeFolder, final File file);
 
     /**
      * Update a file.
@@ -33,10 +34,17 @@ public interface OrangeCloudFilesAPI {
 
     /**
      * @param orangeAccessToken
+     * @return
+     */
+    OrangeFile getFile(final OrangeAccessToken orangeAccessToken, final String fileId);
+
+
+    /**
+     * @param orangeAccessToken
      * @param orangeFile
      * @return
      */
-    OrangeFile getFile(final OrangeAccessToken orangeAccessToken, final OrangeFile orangeFile);
+    InputStream downloadFile(final OrangeAccessToken orangeAccessToken, final OrangeFile orangeFile);
 
     /**
      * @param orangeAccessToken
