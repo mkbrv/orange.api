@@ -70,11 +70,11 @@ public class ExceptionAwareHttpClient implements OrangeHttpClient {
      */
     private OrangeResponse verifyResponse(final OrangeResponse orangeResponse) {
         switch (this.computeStatusBasedOnValue(orangeResponse.getStatus())) {
-            case OK:
+            case OK://do nothing
                 return orangeResponse;
             case NOT_OK:
             default:
-                throw attemptToParseException(orangeResponse);
+                throw this.parseApiException(orangeResponse);
         }
     }
 
@@ -84,7 +84,7 @@ public class ExceptionAwareHttpClient implements OrangeHttpClient {
      * @param orangeResponse contains the body json
      * @return OrangeException from the json
      */
-    protected OrangeException attemptToParseException(final OrangeResponse orangeResponse) {
+    protected OrangeException parseApiException(final OrangeResponse orangeResponse) {
         OrangeException orangeException;
         try {
             orangeException = gson.fromJson(orangeResponse.getBody().toString(), OrangeException.class)

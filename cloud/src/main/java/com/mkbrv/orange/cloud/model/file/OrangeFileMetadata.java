@@ -1,6 +1,8 @@
 package com.mkbrv.orange.cloud.model.file;
 
 
+import org.apache.commons.lang3.math.NumberUtils;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -89,13 +91,9 @@ public class OrangeFileMetadata {
      * @return
      */
     public Integer getMetaAsInteger(final String key) {
-        try {
-            if (has(key)) {
-                return Integer.valueOf(getMetaData(key));
-            }
-
-        } catch (NumberFormatException e) {
-
+        String value = getMetaData(key);
+        if (NumberUtils.isNumber(value)) {
+            return Integer.parseInt(value);
         }
         return null;
     }
