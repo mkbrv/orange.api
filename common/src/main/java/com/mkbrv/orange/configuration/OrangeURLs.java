@@ -24,6 +24,8 @@ public class OrangeURLs {
 
     protected String files;
 
+    protected String uploadFile;
+
     public String getDomain() {
         return domain;
     }
@@ -53,6 +55,10 @@ public class OrangeURLs {
         return this.domain + files;
     }
 
+    public String getUploadFile() {
+        return uploadFile;
+    }
+
     public static final OrangeURLs DEFAULT = new OrangeURLs() {
 
         public static final String DEFAULT_DOMAIN = "https://api.orange.com";
@@ -65,6 +71,8 @@ public class OrangeURLs {
 
         public static final String DEFAULT_FILES = "/cloud/v1/files";
 
+        public static final String DEFAULT_UPLOAD_FILE = "/cloud/v1/files/content";
+
 
         {
             this.domain = DEFAULT_DOMAIN;
@@ -74,6 +82,7 @@ public class OrangeURLs {
             this.freeSpace = DEFAULT_FREESPACE;
             this.folders = DEFAULT_ROOT_FOLDER;
             this.files = DEFAULT_FILES;
+            this.uploadFile = DEFAULT_UPLOAD_FILE;
         }
     };
 
