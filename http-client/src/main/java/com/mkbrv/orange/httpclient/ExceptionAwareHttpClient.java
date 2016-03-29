@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.mkbrv.orange.httpclient.exception.OrangeException;
 import com.mkbrv.orange.httpclient.exception.OrangeExceptionDeserializer;
 import com.mkbrv.orange.httpclient.request.OrangeRequest;
+import com.mkbrv.orange.httpclient.request.OrangeUploadFileRequest;
 import com.mkbrv.orange.httpclient.response.OrangeResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,6 +61,11 @@ public class ExceptionAwareHttpClient implements OrangeHttpClient {
     @Override
     public InputStream downloadFile(OrangeRequest request) throws IOException {
         return this.actualClient.downloadFile(request);
+    }
+
+    @Override
+    public OrangeResponse uploadFile(OrangeUploadFileRequest request) {
+        return this.verifyResponse(this.actualClient.uploadFile(request));
     }
 
     /**
