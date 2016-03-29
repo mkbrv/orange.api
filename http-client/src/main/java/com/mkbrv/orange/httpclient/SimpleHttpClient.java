@@ -1,9 +1,12 @@
 package com.mkbrv.orange.httpclient;
 
+import com.google.gson.JsonObject;
 import com.mkbrv.orange.httpclient.exception.OrangeException;
 import com.mkbrv.orange.httpclient.request.OrangeRequest;
+import com.mkbrv.orange.httpclient.request.OrangeUploadFileRequest;
 import com.mkbrv.orange.httpclient.response.OrangeResponse;
 import com.mkbrv.orange.httpclient.security.OrangeAccessTokenHeader;
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
@@ -15,6 +18,8 @@ import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
+import org.apache.http.entity.mime.HttpMultipartMode;
+import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
 import org.slf4j.Logger;
@@ -25,6 +30,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -128,6 +135,27 @@ public class SimpleHttpClient implements OrangeHttpClient {
         this.addAuthParameterToHeaderIfRequired(request);
         request.getHeaders().forEach(httpGet::addHeader);
         return this.client.execute(httpGet).getEntity().getContent();
+    }
+
+    @Override
+    public OrangeResponse uploadFile(final OrangeUploadFileRequest request) {
+        this.addAuthParameterToHeaderIfRequired(request);
+        HttpPost uploadMethod = new HttpPost(request.getUrl());
+
+        MultipartEntityBuilder builder = MultipartEntityBuilder.create();
+        builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
+        builder.addTextBody("description", request.getBody());
+        builder.addBinaryBody("file", request.getFile(),
+                ContentType.DEFAULT_BINARY, request.getParameters().get("name"));
+
+        HttpEntity entity = builder.build();
+        uploadMethod.setEntity(entity);
+        request.getHeaders().forEach(uploadMethod::addHeader);
+        OrangeResponse orangeResponse = new OrangeResponse();
+        HttpResponse response = this.executeRequest(uploadMethod);
+        orangeResponse.setStatus(response.getStatusLine().getStatusCode());
+        orangeResponse.setBody(this.readResponseBody(response));
+        return orangeResponse;
     }
 
     /**

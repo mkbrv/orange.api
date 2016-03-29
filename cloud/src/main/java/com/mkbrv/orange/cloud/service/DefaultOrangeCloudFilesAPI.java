@@ -2,15 +2,19 @@ package com.mkbrv.orange.cloud.service;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.mkbrv.orange.cloud.OrangeCloudFoldersAPI;
 import com.mkbrv.orange.cloud.model.OrangeFolder;
 import com.mkbrv.orange.cloud.request.UpdateRequestBody;
+import com.mkbrv.orange.cloud.request.UploadFileRequest;
 import com.mkbrv.orange.httpclient.ExceptionAwareHttpClient;
 import com.mkbrv.orange.httpclient.OrangeContext;
 import com.mkbrv.orange.httpclient.OrangeHttpClient;
 import com.mkbrv.orange.httpclient.SimpleHttpClient;
 import com.mkbrv.orange.httpclient.exception.OrangeException;
 import com.mkbrv.orange.httpclient.request.OrangeRequest;
+import com.mkbrv.orange.httpclient.request.OrangeUploadFileRequest;
 import com.mkbrv.orange.httpclient.response.OrangeResponse;
 import com.mkbrv.orange.httpclient.security.OrangeAccessToken;
 import com.mkbrv.orange.cloud.OrangeCloudFilesAPI;
@@ -80,10 +84,20 @@ public class DefaultOrangeCloudFilesAPI implements OrangeCloudFilesAPI {
      * {@inheritDoc}
      */
     @Override
-    public OrangeFile uploadFile(OrangeAccessToken orangeAccessToken, DefaultOrangeFolder orangeFolder, File file) {
+    public OrangeFile uploadFile(final OrangeAccessToken orangeAccessToken, final UploadFileRequest uploadFileRequest) {
+        JsonObject jsonBody = new JsonObject();
+        jsonBody.addProperty("name", uploadFileRequest.getName());
+        jsonBody.addProperty("size", uploadFileRequest.getFileSize());
+        jsonBody.addProperty("folder", uploadFileRequest.getParentFolder().getId());
 
-
-        return new DefaultOrangeFile();
+        OrangeRequest orangeRequest = new OrangeUploadFileRequest()
+                .setFile(uploadFileRequest.getFile())
+                .setUrl(orangeContext.getOrangeURLs().getUploadFile())
+                .setOrangeAccessToken(orangeAccessToken)
+                .setBody(jsonBody.toString());
+        orangeRequest.addParameter("name", uploadFileRequest.getName());
+        OrangeResponse orangeResponse = this.orangeHttpClient.uploadFile((OrangeUploadFileRequest) orangeRequest);
+        return gson.fromJson(orangeResponse.getBody().toString(), OrangeFile.class);
     }
 
     /**

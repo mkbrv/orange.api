@@ -1,6 +1,7 @@
 package com.mkbrv.orange.httpclient;
 
 import com.mkbrv.orange.httpclient.request.OrangeRequest;
+import com.mkbrv.orange.httpclient.request.OrangeUploadFileRequest;
 import com.mkbrv.orange.httpclient.response.OrangeResponse;
 
 import java.io.IOException;
@@ -40,4 +41,12 @@ public interface OrangeHttpClient {
      * @return InputStream
      */
     InputStream downloadFile(final OrangeRequest request) throws IOException;
+
+
+    /**
+     *
+     * @param request
+     * @return
+     */
+    OrangeResponse uploadFile(final OrangeUploadFileRequest request);
 }
